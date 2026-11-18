@@ -54,6 +54,32 @@ def nav_html(active):
     return "\n          ".join(out)
 
 
+_SIZES = {}
+
+
+def add_img_dimensions(html):
+    """Give every local <img> intrinsic width/height so lazy loading never shifts layout."""
+    from PIL import Image
+
+    def fix(m):
+        tag = m.group(0)
+        if " width=" in tag:
+            return tag
+        src = re.search(r'src="(assets/img/[^"]+)"', tag)
+        if not src:
+            return tag
+        path = ROOT / src.group(1)
+        if path not in _SIZES:
+            try:
+                _SIZES[path] = Image.open(path).size
+            except OSError:
+                return tag
+        w, h = _SIZES[path]
+        return tag[:-1].rstrip("/").rstrip() + f' width="{w}" height="{h}">'
+
+    return re.sub(r"<img\b[^>]*>", fix, html)
+
+
 def expand_icons(html):
     return re.sub(r"\{\{icon:([\w-]+)\}\}", lambda m: ICONS[m.group(1)], html)
 
@@ -86,7 +112,7 @@ def build():
         html = partials["head"] + partials["header"] + body + partials["footer"]
         for k, v in ctx.items():
             html = html.replace("{{" + k + "}}", v)
-        html = expand_icons(html)
+        html = add_img_dimensions(expand_icons(html))
         (ROOT / slug).write_text(html)
         if not meta.get("noindex"):
             sitemap.append(canonical)

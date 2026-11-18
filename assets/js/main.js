@@ -221,6 +221,12 @@
       if (d && (d.event === "play" || d.event === "timeupdate")) holder.classList.add("is-ready");
     });
     holder.appendChild(iframe);
+    // Pause the background film while the hero is off-screen (saves GPU/CPU while scrolling).
+    ST.create({
+      trigger: ".hero", start: "top top", end: "bottom top",
+      onLeave: () => post({ method: "pause" }),
+      onEnterBack: () => post({ method: "play" }),
+    });
   }
 
   const enterFromWipe = () => {
@@ -330,7 +336,8 @@
       const track = $(".reel__track", reel);
       const pinEl = $(".reel__pin", reel) || reel;
       const dist = () => track.scrollWidth - track.clientWidth;
-      const st = { trigger: pinEl, start: "center 54%", end: () => "+=" + dist(), invalidateOnRefresh: true };
+      // Horizontal travel happens over ~65% of its width in vertical scroll, so the pin never feels stuck.
+      const st = { trigger: pinEl, start: "center 54%", end: () => "+=" + Math.round(dist() * 0.65), invalidateOnRefresh: true };
       const tw = gsap.to(track, { x: () => -dist(), ease: "none", scrollTrigger: { ...st, pin: true, scrub: 0.8, anticipatePin: 1 } });
       const bar = $(".reel__progress i", reel);
       if (bar) gsap.to(bar, { scaleX: 1, ease: "none", scrollTrigger: { ...st, scrub: true } });
@@ -382,14 +389,31 @@
     const xTo = gsap.quickTo(float, "x", { duration: 0.6, ease: "power3" });
     const yTo = gsap.quickTo(float, "y", { duration: 0.6, ease: "power3" });
     const imgs = $$("img", float);
+    let shown = false;
+    const hide = () => { if (!shown) return; shown = false; gsap.to(float, { autoAlpha: 0, scale: 0.8, duration: 0.3, overwrite: true }); };
+    const show = (row, e) => {
+      imgs.forEach((i) => i.classList.toggle("is-active", i.dataset.key === row.dataset.key));
+      if (e) { gsap.set(float, { x: e.clientX - float.offsetWidth / 2, y: e.clientY - float.offsetHeight / 2 }); }
+      if (shown) return;
+      shown = true;
+      gsap.to(float, { autoAlpha: 1, scale: 1, rotate: gsap.utils.random(-5, 5), duration: 0.5, ease: "expo.out", overwrite: true });
+    };
     $$(".svc__row").forEach((row) => {
-      row.addEventListener("pointerenter", () => {
-        imgs.forEach((i) => i.classList.toggle("is-active", i.dataset.key === row.dataset.key));
-        gsap.to(float, { autoAlpha: 1, scale: 1, rotate: gsap.utils.random(-6, 6), duration: 0.6, ease: "expo.out" });
-      });
-      row.addEventListener("pointerleave", () => gsap.to(float, { autoAlpha: 0, scale: 0.8, duration: 0.4 }));
-      row.addEventListener("pointermove", (e) => { xTo(e.clientX - float.offsetWidth / 2); yTo(e.clientY - float.offsetHeight / 2); });
+      row.addEventListener("pointerenter", (e) => show(row, e));
+      row.addEventListener("pointerleave", hide);
+      row.addEventListener("pointermove", (e) => { if (!shown) show(row); xTo(e.clientX - float.offsetWidth / 2); yTo(e.clientY - float.offsetHeight / 2); });
     });
+    // Wheel scrolling moves rows out from under a still pointer without firing pointerleave,
+    // so on scroll re-check what is actually under the pointer.
+    let px = -1, py = -1;
+    window.addEventListener("pointermove", (e) => { px = e.clientX; py = e.clientY; }, { passive: true });
+    const recheck = () => {
+      if (px < 0) return;
+      const el = document.elementFromPoint(px, py);
+      const row = el && el.closest(".svc__row");
+      row ? show(row) : hide();
+    };
+    if (lenis) lenis.on("scroll", recheck); else window.addEventListener("scroll", recheck, { passive: true });
   };
 
   /* ---------- Lightbox (video + images) ---------- */
@@ -648,10 +672,7 @@ ${val("details")}`;
   if (document.fonts && document.fonts.ready) {
     Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]).then(boot);
   } else boot();
+  // Every <img> carries width/height (added at build time), so lazy images never shift layout;
+  // one re-measure after load is enough and avoids mid-scroll jumps.
   window.addEventListener("load", () => ST.refresh());
-  // Lazy images can change layout after boot: re-measure triggers (debounced)
-  let refreshTimer;
-  $$("img[loading=lazy]").forEach((img) => {
-    if (!img.complete) img.addEventListener("load", () => { clearTimeout(refreshTimer); refreshTimer = setTimeout(() => ST.refresh(), 250); }, { once: true });
-  });
 })();
