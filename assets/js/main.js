@@ -416,6 +416,21 @@
     if (lenis) lenis.on("scroll", recheck); else window.addEventListener("scroll", recheck, { passive: true });
   };
 
+  /* ---------- Services split (list drives the stage) ---------- */
+  $$("[data-svx]").forEach((root) => {
+    const items = $$(".svx__item", root);
+    const panels = $$(".svx__panel", root);
+    const set = (i) => {
+      items.forEach((it, j) => { it.classList.toggle("is-active", j === i); it.setAttribute("aria-selected", String(j === i)); });
+      panels.forEach((pn, j) => pn.classList.toggle("is-active", j === i));
+    };
+    items.forEach((it, i) => {
+      if (finePointer) it.addEventListener("pointerenter", () => set(i));
+      it.addEventListener("focus", () => set(i));
+      it.addEventListener("click", () => set(i));
+    });
+  });
+
   /* ---------- Lightbox (video + images) ---------- */
   const lb = $(".lb");
   const lbFrame = lb ? $(".lb__frame", lb) : null;

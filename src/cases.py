@@ -95,11 +95,13 @@ def render(i):
           <a class="link-arrow" href="work.html">← All films</a>
           <span class="mono muted">Case {i+1:02d} / {len(CASES):02d}</span>
         </div>
+        <div class="phero__top">
         <h1 class="h1 phero__title" data-split>
 {lines}
         </h1>
-        <div class="phero__foot">
           <p class="lead phero__lede" data-hero-fade>{c["lede"]}</p>
+        </div>
+        <div class="phero__foot">
           <dl class="phero__meta mono" data-hero-fade>
             <div class="meta-item"><dt>Client</dt><dd>{c["client"]}</dd></div>
             <div class="meta-item"><dt>Industry</dt><dd>{c["industry"]}</dd></div>
