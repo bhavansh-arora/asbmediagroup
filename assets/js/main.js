@@ -297,11 +297,6 @@
       gsap.to(rail, { scaleY: 1, ease: "none", scrollTrigger: { trigger: ".process__steps", start: "top 60%", end: "bottom 60%", scrub: true } });
       $$(".step").forEach((s) => ST.create({ trigger: s, start: "top 62%", onToggle: (self) => s.classList.toggle("is-on", self.isActive || self.progress === 1), end: "max" }));
     }
-
-    // Collage drift
-    $$(".collage figure").forEach((f, i) => {
-      gsap.fromTo(f, { y: (i % 2 ? 1 : -1) * 80 }, { y: (i % 2 ? -1 : 1) * 80, ease: "none", scrollTrigger: { trigger: ".statement", start: "top bottom", end: "bottom top", scrub: true } });
-    });
   };
 
   /* ---------- Marquees (velocity aware) ---------- */
@@ -654,4 +649,9 @@ ${val("details")}`;
     Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]).then(boot);
   } else boot();
   window.addEventListener("load", () => ST.refresh());
+  // Lazy images can change layout after boot: re-measure triggers (debounced)
+  let refreshTimer;
+  $$("img[loading=lazy]").forEach((img) => {
+    if (!img.complete) img.addEventListener("load", () => { clearTimeout(refreshTimer); refreshTimer = setTimeout(() => ST.refresh(), 250); }, { once: true });
+  });
 })();
