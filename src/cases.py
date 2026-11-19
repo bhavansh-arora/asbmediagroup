@@ -63,18 +63,19 @@ CASES = [
 
 def ratio_box(w, h):
     scale = 64 / max(w, h)
-    return f'<span class="ratio"><i style="width:{w*scale:.0f}px;height:{h*scale:.0f}px"></i></span>'
+    return f'<span class="format__box"><i style="width:{w*scale:.0f}px;height:{h*scale:.0f}px"></i></span>'
 
 
 def render(i):
     c = CASES[i]
     nxt = CASES[(i + 1) % len(CASES)]
-    lines = "\n".join(f'            <span class="line"><span>{l}</span></span>' for l in c["title_lines"])
+    title = " ".join(c["title_lines"])
+    poster = "film-mary-crop" if c["img"] == "film-mary" else c["img"]
     where = "\n".join(
-        f'''          <div class="deliv__item" data-reveal>
+        f"""          <div class="format" data-r style="--d:{k*0.05:.2f}s">
             {ratio_box(w, h)}
-            <div><p class="mono accent">{r}</p><p style="margin-top:6px">{label}</p></div>
-          </div>''' for r, label, w, h in c["where"])
+            <div><p class="mono accent">{r}</p><p>{label}</p></div>
+          </div>""" for k, (r, label, w, h) in enumerate(c["where"]))
     tags = "".join(f'<span class="chip">{t}</span>' for t in c["tags"])
     schema = {
         "@context": "https://schema.org", "@type": "VideoObject", "name": c["name"], "description": c["desc"],
@@ -86,97 +87,87 @@ def render(i):
         "title": f"{c['name']} — Case Study | ASB Media Group",
         "desc": c["desc"], "nav": "work", "og": f"assets/img/{c['img']}.webp",
         "schema": '<script type="application/ld+json">' + json.dumps(schema) + "</script>",
+        "cta": "Your story, <em>next.</em>",
     }
-    return f'''<!--meta {json.dumps(meta)} -->
+    return f"""<!--meta {json.dumps(meta)} -->
 
-    <section class="phero">
+    <header class="phead">
       <div class="wrap">
-        <div class="phero__eyebrow">
-          <a class="link-arrow" href="work.html">← All films</a>
-          <span class="mono muted">Case {i+1:02d} / {len(CASES):02d}</span>
+        <div class="eyebrow-row mono" data-r><a class="crumb" href="work.html">← All films</a><span>Case {i+1:02d} / {len(CASES):02d}</span></div>
+        <div class="phead__grid">
+          <h1 class="h1" data-r>{title}</h1>
+          <div class="phead__aside" data-r style="--d:.08s"><p class="lead">{c["lede"]}</p></div>
         </div>
-        <div class="phero__top">
-        <h1 class="h1 phero__title" data-split>
-{lines}
-        </h1>
-          <p class="lead phero__lede" data-hero-fade>{c["lede"]}</p>
-        </div>
-        <div class="phero__foot">
-          <dl class="phero__meta mono" data-hero-fade>
-            <div class="meta-item"><dt>Client</dt><dd>{c["client"]}</dd></div>
-            <div class="meta-item"><dt>Industry</dt><dd>{c["industry"]}</dd></div>
-            <div class="meta-item"><dt>Location</dt><dd>{c["location"]}</dd></div>
-            <div class="meta-item"><dt>Format · Runtime</dt><dd>{c["format"]} · {c["runtime"]}</dd></div>
-          </dl>
-        </div>
+        <dl class="phead__meta" data-r style="--d:.12s">
+          <div><dt class="mono">Client</dt><dd>{c["client"]}</dd></div>
+          <div><dt class="mono">Industry</dt><dd>{c["industry"]}</dd></div>
+          <div><dt class="mono">Location</dt><dd>{c["location"]}</dd></div>
+          <div><dt class="mono">Format · Runtime</dt><dd>{c["format"]} · {c["runtime"]}</dd></div>
+        </dl>
       </div>
-    </section>
+    </header>
 
-    <section class="section--flush-top">
+    <section>
       <div class="wrap">
-        <div class="case-player" data-player="{c["vimeo"]}" data-title="{c["name"]}" data-cursor="Play" data-clip role="button" tabindex="0" aria-label="Play the {c["name"]} film">
-          <img src="assets/img/{c["img"]}.webp" alt="Still from the {c["name"]} film">
-          <div class="vf"><i></i><i></i><i></i><i></i></div>
-          <span class="case-player__btn"><span>{{{{icon:play}}}}</span></span>
-          <div class="case-player__hud mono"><span><span class="rec-dot"></span>&nbsp; Play film</span><span>{c["runtime"]}</span></div>
-        </div>
+        <button class="player" type="button" data-player="{c["vimeo"]}" data-title="{c["name"]}" aria-label="Play the {c["name"]} film" data-r>
+          <img src="assets/img/{c["img"]}.webp" alt="Still from the {c["name"]} film" fetchpriority="high" sizes="100vw">
+          <span class="player__ui"><span class="player__play"><span class="circle circle--solid">{{{{icon:play}}}}</span>Play the film</span><span class="mono">{c["runtime"]}</span></span>
+        </button>
       </div>
     </section>
 
     <section class="section">
       <div class="wrap">
+        <div class="eyebrow-row mono" data-r><span><span class="num">(01)</span> — The project</span><span>{c["format"]}</span></div>
         <div class="cols3">
-          <div data-reveal><p class="eyebrow eyebrow--plain accent" style="margin-bottom:18px">01 — The brief</p><p class="muted">{c["brief"]}</p></div>
-          <div data-reveal><p class="eyebrow eyebrow--plain accent" style="margin-bottom:18px">02 — The approach</p><p class="muted">{c["approach"]}</p></div>
-          <div data-reveal><p class="eyebrow eyebrow--plain accent" style="margin-bottom:18px">03 — Built for</p><p class="muted">{c["audience"]}</p></div>
+          <div class="tile" data-r><p class="mono accent">The brief</p><p>{c["brief"]}</p></div>
+          <div class="tile" data-r style="--d:.06s"><p class="mono accent">The approach</p><p>{c["approach"]}</p></div>
+          <div class="tile" data-r style="--d:.12s"><p class="mono accent">Built for</p><p>{c["audience"]}</p></div>
         </div>
-        <div class="finder__chips" style="margin-top:clamp(40px,5vw,72px)" data-reveal>{tags}</div>
-      </div>
-    </section>
-
-    <section class="section section--light">
-      <div class="wrap">
-        <p class="eyebrow" style="margin-bottom:32px" data-reveal><span class="num">—</span> The idea in one line</p>
-        <p class="pull" data-reveal>{c["pull"]}</p>
+        <div class="chips" style="margin-top:18px" data-r>{tags}</div>
       </div>
     </section>
 
     <section class="section">
       <div class="wrap">
-        <div class="sec-head">
-          <div class="sec-head__eyebrow"><span class="eyebrow"><span class="num">(04)</span> Where it works</span><span class="mono muted">One shoot · every screen</span></div>
-          <h2 class="h2 sec-head__title" data-lines><span class="split-line"><span>Cut for every</span></span><span class="split-line"><span><em>screen.</em></span></span></h2>
-          <p class="sec-head__aside" data-reveal>The master film is just the start. Each project is planned so the same footage can be re-cut for the channels your audience already uses.</p>
+        <div class="rule"></div>
+        <div class="head" style="align-items:start">
+          <p class="quote" data-r>“{c["pull"]}”</p>
+          <div class="head__aside" data-r>
+            <p class="mono" style="color:var(--faint)">The idea in one line</p>
+            <p class="muted">Every ASB film starts with one sentence everyone agrees on. Every shot, cut and note of music answers to it.</p>
+          </div>
         </div>
-        <div class="deliv">
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="rule"></div>
+        <div class="eyebrow-row mono" data-r><span><span class="num">(02)</span> — Where it works</span><span>One shoot · every screen</span></div>
+        <div class="formats">
 {where}
         </div>
       </div>
     </section>
 
-    <a class="next" href="{nxt["slug"]}.html" data-cursor="Next">
-      <div class="next__img" aria-hidden="true"><img src="assets/img/{nxt["img"]}.webp" alt="" loading="lazy"></div>
+    <section class="section">
       <div class="wrap">
-        <p class="eyebrow eyebrow--plain" style="justify-content:center;margin-bottom:28px">Next film</p>
-        <p class="h1">{nxt["title_lines"][0]} {nxt["title_lines"][1]}</p>
-        <p class="mono muted" style="margin-top:28px">{nxt["industry"]} · {nxt["runtime"]}</p>
-      </div>
-    </a>
-
-    <section class="section cta section--ink2">
-      <div class="wrap">
-        <h2 class="h1 cta__title" data-lines><span class="split-line"><span>Your story,</span></span><span class="split-line"><span><em>next.</em></span></span></h2>
-        <div class="cta__row">
-          <div class="cta__btn-wrap" data-reveal><a class="btn" href="contact.html" data-magnetic=".3">Start your film {{{{icon:arrow}}}}</a></div>
-          <div class="cta__info">
-            <div data-reveal><p class="mono muted">Email</p><a href="mailto:aramisbooker@asbmediagroup.com">aramisbooker@<br>asbmediagroup.com</a></div>
-            <div data-reveal><p class="mono muted">Phone</p><a href="tel:+18136070444">(813) 607-0444</a></div>
-            <div data-reveal><p class="mono muted">Based in</p><p style="margin-top:8px">Tampa Bay, FL</p></div>
+        <div class="next">
+          <div class="next__text" data-r>
+            <span class="mono" style="color:var(--faint)">Next film</span>
+            <p class="h2">{" ".join(nxt["title_lines"])}</p>
+            <p class="muted">{nxt["lede"]}</p>
+            <a class="btn" href="{nxt["slug"]}.html"><span>Watch the case study</span><span class="btn__i">{{{{icon:arrow-ur}}}}</span></a>
           </div>
+          <a class="mcard" href="{nxt["slug"]}.html" data-r style="--d:.08s">
+            <span class="mcard__img" style="display:block;height:100%;min-height:320px"><img src="assets/img/{"film-mary-crop" if nxt["img"] == "film-mary" else nxt["img"]}.webp" alt="" loading="lazy" style="height:100%"></span>
+            <span class="mcard__tag"><span class="dot"></span> {nxt["format"]} · {nxt["runtime"]}</span>
+          </a>
         </div>
       </div>
     </section>
-'''
+"""
 
 
 def generate(pages_dir):

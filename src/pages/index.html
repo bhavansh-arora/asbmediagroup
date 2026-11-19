@@ -1,231 +1,198 @@
-<!--meta {"title": "ASB Media Group — Brand Films & Commercial Video Production, Tampa Bay", "desc": "Tampa Bay commercial video studio. Brand anthem films, product showcases and social ad campaigns crafted with cinematic visuals and built to drive measurable growth.", "nav": "home", "loader": true, "bodyclass": "page-home"} -->
+<!--meta {"title": "ASB Media Group — Brand Films & Commercial Video, Tampa Bay", "desc": "Tampa Bay commercial video studio. Brand anthem films, product showcases and social ad campaigns, shot like cinema and built to grow your business.", "nav": "home"} -->
 
-    <!-- ============ HERO ============ -->
-    <section class="hero" aria-label="Introduction">
-      <div class="hero__media">
-        <img src="assets/img/film-funbike.webp" alt="" fetchpriority="high">
-        <div class="vimeo-bg" data-vimeo="1210003802" data-title="Fun Bike Center promotional film"></div>
+    <!-- HERO -->
+    <section class="hero" data-slides aria-label="Introduction">
+      <div class="hero__slides" aria-hidden="true">
+        <figure class="is-on" data-label="Fun Bike Center · Lakeland"><img src="assets/img/film-funbike.webp" alt="" fetchpriority="high" sizes="100vw"></figure>
+        <figure data-label="Mary Lee’s House · Tampa"><img src="assets/img/film-mary.webp" alt="" loading="lazy" sizes="100vw"></figure>
+        <figure data-label="The Dance Room · Sarasota"><img src="assets/img/film-dance.webp" alt="" loading="lazy" sizes="100vw"></figure>
+        <figure data-label="Tampa Electric · Tampa Bay"><img src="assets/img/film-teco.webp" alt="" loading="lazy" sizes="100vw"></figure>
       </div>
-      <div class="hero__shade"></div>
 
-      <div class="hero__hud mono">
-        <div class="wrap">
-          <span class="hud-rec" data-hero-fade><span class="rec-dot"></span> REC <span data-timecode>00:00:03:00</span></span>
-          <span data-hero-fade>4K · 24 FPS · Tampa Bay, FL</span>
+      <button class="float-card" type="button" data-video="1209681619" data-title="Mary Lee’s House" data-r style="--d:.5s">
+        <span class="float-card__img"><img src="assets/img/film-mary-crop.webp" alt="" sizes="280px"><span class="circle">{{icon:play}}</span></span>
+        <span class="float-card__body"><p><span class="mono">Latest film · 04:03</span>Mary Lee’s House: a child advocacy story, told with care</p></span>
+      </button>
+
+      <div class="hero__inner">
+        <p class="hero__kicker mono" data-r><span class="dot dot--live"></span> Commercial video · Tampa Bay, Florida</p>
+        <h1 class="hero-title" data-r style="--d:.08s">We film what<br>makes you <em>different.</em></h1>
+        <div class="hero__foot" data-r style="--d:.16s">
+          <p class="hero__lede"><strong>ASB Media Group</strong> makes brand anthem films, product showcases and social campaigns that look like cinema and work like marketing.</p>
+          <div class="btn-row">
+            <a class="btn btn--accent" href="contact.html"><span>Start your film</span><span class="btn__i">{{icon:arrow-ur}}</span></a>
+            <button class="btn btn--ghost" type="button" data-video="1210003802" data-title="Fun Bike Center — Promotional Film"><span>Watch the reel</span><span class="btn__i">{{icon:play}}</span></button>
+          </div>
+        </div>
+        <div class="hero__meta mono" data-r style="--d:.24s">
+          <span class="hero__count"><span class="hero__num">01</span><i></i><span>04</span></span>
+          <span class="hero__label">Fun Bike Center · Lakeland</span>
+          <span>4K · 24 fps</span>
         </div>
       </div>
+    </section>
 
-      <div class="hero__body">
-        <div class="wrap">
-          <h1 class="display hero__title" data-split>
-            <span class="line"><span>We film what makes</span></span>
-            <span class="line"><span>you <em>different.</em></span></span>
-          </h1>
-          <div class="hero__foot">
-            <p class="hero__lede" data-hero-fade><strong>ASB Media Group</strong> is a Tampa Bay commercial video studio. Brand anthem films, product showcases and social campaigns, shot like cinema and cut to grow your business.</p>
-            <div class="hero__actions" data-hero-fade>
-              <button class="play-btn" type="button" data-video="1210003802" data-title="Fun Bike Center — Promotional Film" data-cursor="Play">
-                <span class="play-btn__ring">{{icon:play}}</span> Watch the reel
-              </button>
-              <a class="btn" href="contact.html" data-magnetic=".3">Start your film {{icon:arrow}}</a>
-            </div>
+    <!-- 01 INTRO -->
+    <section class="section">
+      <div class="wrap">
+        <div class="eyebrow-row mono" data-r><span><span class="num">(01)</span> — The studio</span><span>Tampa · St. Pete · Clearwater</span></div>
+        <p class="statement" data-r>We’re a Tampa Bay studio making brand films <span class="pill"><img src="assets/img/film-mary-crop.webp" alt="" loading="lazy" sizes="80px"></span>, product showcases <span class="pill"><img src="assets/img/prod-04-sm.webp" alt="" loading="lazy" sizes="80px"></span> and social campaigns <span class="pill"><img src="assets/img/film-funbike-sm.webp" alt="" loading="lazy" sizes="80px"></span> that feel like <em>cinema,</em> <span class="dim">so the right people remember your name and pick up the phone.</span></p>
+        <div class="intro__foot" data-r>
+          <div class="chips"><span class="chip">Strategy to final cut</span><span class="chip">4K cinema capture</span><span class="chip">Cut for every screen</span></div>
+          <a class="link" href="about.html">Meet the studio {{icon:arrow-ur}}</a>
+        </div>
+        <div class="credits-row" data-r>
+          <span class="mono">Recent films for</span>
+          <ul>
+            <li><a href="film-mary-lees-house.html">Mary Lee’s House</a></li>
+            <li><a href="film-fun-bike-center.html">Fun Bike Center</a></li>
+            <li><a href="film-teco-energy-audit.html">Tampa Electric</a></li>
+            <li><a href="film-the-dance-room.html">The Dance Room</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 FILMS -->
+    <section class="section" id="films">
+      <div class="wrap">
+        <div class="rule"></div>
+        <div class="eyebrow-row mono" data-r><span><span class="num">(02)</span> — Selected films</span><span>Press play · every film is real</span></div>
+        <div class="head">
+          <h2 class="h2" data-r>Stories that <em>move</em> people.</h2>
+          <div class="head__aside" data-r>
+            <p class="muted">A child advocacy centre, an energy utility, a powersports dealership and a ballroom. Different worlds, one standard.</p>
+            <a class="link" href="work.html">All films {{icon:arrow-ur}}</a>
           </div>
-          <div class="hero__credits" data-hero-fade>
-            <span class="mono">Recent films for</span>
-            <ul>
-              <li><a href="film-mary-lees-house.html">Mary Lee’s House</a></li>
-              <li><a href="film-fun-bike-center.html">Fun Bike Center</a></li>
-              <li><a href="film-teco-energy-audit.html">Tampa Electric</a></li>
-              <li><a href="film-the-dance-room.html">The Dance Room</a></li>
-            </ul>
+        </div>
+        <div class="grid-2">
+          <article class="mcard" data-r>
+            <a href="film-mary-lees-house.html" class="mcard__img" aria-label="Mary Lee’s House case study"><img src="assets/img/film-mary-crop.webp" style="object-position:50% 30%" alt="Interview at Mary Lee’s House" loading="lazy"></a>
+            <span class="mcard__tag"><span class="dot"></span> Brand film · 04:03</span>
+            <div class="mcard__body"><div><span class="mono">01 — Nonprofit · Tampa</span><h3 class="mcard__title">Mary Lee’s House, <em>told with care.</em></h3></div>
+              <div class="mcard__actions"><button class="circle play" type="button" data-video="1209681619" data-title="Mary Lee’s House" aria-label="Play film">{{icon:play}}</button><a class="circle" href="film-mary-lees-house.html" aria-label="Case study">{{icon:arrow-ur}}</a></div></div>
+          </article>
+          <article class="mcard" data-r style="--d:.08s">
+            <a href="film-fun-bike-center.html" class="mcard__img" aria-label="Fun Bike Center case study"><img src="assets/img/film-funbike.webp" alt="Fun Bike Center showroom" loading="lazy"></a>
+            <span class="mcard__tag"><span class="dot"></span> Showcase · 01:07</span>
+            <div class="mcard__body"><div><span class="mono">02 — Powersports · Lakeland</span><h3 class="mcard__title">Fun Bike Center, <em>full throttle.</em></h3></div>
+              <div class="mcard__actions"><button class="circle play" type="button" data-video="1210003802" data-title="Fun Bike Center" aria-label="Play film">{{icon:play}}</button><a class="circle" href="film-fun-bike-center.html" aria-label="Case study">{{icon:arrow-ur}}</a></div></div>
+          </article>
+          <article class="mcard" data-r>
+            <a href="film-teco-energy-audit.html" class="mcard__img" aria-label="TECO case study"><img src="assets/img/film-teco.webp" alt="TECO energy analyst on site" loading="lazy"></a>
+            <span class="mcard__tag"><span class="dot"></span> Field feature · 00:29</span>
+            <div class="mcard__body"><div><span class="mono">03 — Utility · Tampa Bay</span><h3 class="mcard__title">Tampa Electric, <em>made clear.</em></h3></div>
+              <div class="mcard__actions"><button class="circle play" type="button" data-video="1210011258" data-title="TECO — Energy Audit" aria-label="Play film">{{icon:play}}</button><a class="circle" href="film-teco-energy-audit.html" aria-label="Case study">{{icon:arrow-ur}}</a></div></div>
+          </article>
+          <article class="mcard" data-r style="--d:.08s">
+            <a href="film-the-dance-room.html" class="mcard__img" aria-label="The Dance Room case study"><img src="assets/img/film-dance.webp" alt="Instructor at The Dance Room" loading="lazy"></a>
+            <span class="mcard__tag"><span class="dot"></span> Brand film · 01:26</span>
+            <div class="mcard__body"><div><span class="mono">04 — Dance studio · Sarasota</span><h3 class="mcard__title">The Dance Room, <em>in motion.</em></h3></div>
+              <div class="mcard__actions"><button class="circle play" type="button" data-video="1209998926" data-title="The Dance Room" aria-label="Play film">{{icon:play}}</button><a class="circle" href="film-the-dance-room.html" aria-label="Case study">{{icon:arrow-ur}}</a></div></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 WHY (bento) -->
+    <section class="section">
+      <div class="wrap">
+        <div class="rule"></div>
+        <div class="eyebrow-row mono" data-r><span><span class="num">(03)</span> — Why ASB</span><span>One team · start to finish</span></div>
+        <div class="head">
+          <h2 class="h2" data-r>Cinema craft, <em>marketing</em> brain.</h2>
+          <p class="head__aside muted" data-r>Every project starts with what you need people to feel, and what you need them to do next. Then we make it beautiful.</p>
+        </div>
+        <div class="bento">
+          <div class="tile" style="grid-column: span 4" data-r>
+            <div class="tile__top mono"><span>Capture</span><span class="chip">Every shoot</span></div>
+            <p class="tile__big">4K<em>cinema</em></p>
+            <p class="small">Cinema cameras, considered light and clean sound, graded for every screen.</p>
+          </div>
+          <div class="tile" style="grid-column: span 4; --d:.06s" data-r>
+            <div class="tile__top mono"><span>Formats</span><span>One shoot</span></div>
+            <p class="tile__t">Cut for <em>every</em> screen.</p>
+            <div class="ratios" aria-hidden="true"><span style="width:84px;height:48px">16:9</span><span style="width:34px;height:60px">9:16</span><span style="width:46px;height:58px">4:5</span><span style="width:50px;height:50px">1:1</span></div>
+            <p class="small">Website, Reels, TikTok, YouTube and paid ads from one production.</p>
+          </div>
+          <a class="tile tile--accent" href="#finder" style="grid-column: span 4; --d:.12s" data-r>
+            <div class="tile__top mono"><span>Film finder</span><span class="circle">{{icon:arrow-ur}}</span></div>
+            <p class="tile__t" style="margin-top:auto">Not sure what you need? <em>Answer three questions.</em></p>
+            <p class="small">Twenty seconds, no email needed. We’ll point you to the right format.</p>
+          </a>
+          <div class="tile tile--img tile--wide" style="grid-column: span 8; min-height: clamp(260px, 26vw, 360px)" data-r>
+            <img src="assets/img/film-teco.webp" alt="Field crew filming an energy audit on site" loading="lazy">
+            <div class="tile__inner"><span class="mono">On location</span><p class="tile__t">We go where the work happens, <em>and make it human.</em></p></div>
+          </div>
+          <div class="tile" style="grid-column: span 4; --d:.06s" data-r>
+            <div class="tile__top mono"><span>Reply time</span><span class="dot dot--live"></span></div>
+            <p class="tile__big">48<em>hours</em></p>
+            <p class="small">At most. Usually the next business day, straight from the person directing your film.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============ MARQUEE ============ -->
-    <div class="marquee" data-marquee aria-hidden="true">
-      <div class="marquee__track">
-        <div class="marquee__group">
-          <span class="marquee__item">Brand anthem films {{icon:star}}</span>
-          <span class="marquee__item marquee__item--outline">Product showcases {{icon:star}}</span>
-          <span class="marquee__item">Social ad <em>campaigns</em> {{icon:star}}</span>
-          <span class="marquee__item marquee__item--outline">Field features {{icon:star}}</span>
+    <!-- 04 SERVICES (dark panel) -->
+    <div class="panel dark" id="services">
+      <section class="section">
+        <div class="wrap">
+          <div class="eyebrow-row mono" data-r><span><span class="num">(04)</span> — What we make</span><span>Commercial video</span></div>
+          <div class="head">
+            <h2 class="h2" data-r>Four ways to be <em>unforgettable.</em></h2>
+            <div class="head__aside" data-r>
+              <p class="muted">From a single product launch to a full brand film. Every project gets strategy, cinematic visuals and polished post.</p>
+              <a class="link" href="services.html">Services & packages {{icon:arrow-ur}}</a>
+            </div>
+          </div>
+          <div class="svc">
+            <a class="svc__card" href="services.html#anthem" data-r>
+              <div class="svc__img"><img src="assets/img/film-mary-crop.webp" alt="Brand anthem film interview" loading="lazy" sizes="(max-width: 640px) 100vw, 25vw"></div>
+              <div class="svc__body"><div class="svc__top mono"><span>01</span><span>60–180s</span></div><h3 class="svc__t">Brand anthem <em>films</em></h3><p>Who you are and why it matters. The centrepiece of your website, pitches and launches.</p>
+                <div class="svc__foot"><span>Explore</span><span class="circle">{{icon:arrow-ur}}</span></div></div>
+            </a>
+            <a class="svc__card" href="services.html#showcase" data-r style="--d:.06s">
+              <div class="svc__img"><img src="assets/img/prod-06-sm.webp" alt="Cigars and whiskey lit for a product shoot" loading="lazy" sizes="(max-width: 640px) 100vw, 25vw"></div>
+              <div class="svc__body"><div class="svc__top mono"><span>02</span><span>30–90s</span></div><h3 class="svc__t">Product <em>showcases</em></h3><p>Light, motion and detail that make your product look as good on screen as in hand.</p>
+                <div class="svc__foot"><span>Explore</span><span class="circle">{{icon:arrow-ur}}</span></div></div>
+            </a>
+            <a class="svc__card" href="services.html#social" data-r style="--d:.12s">
+              <div class="svc__img"><img src="assets/img/film-funbike-sm.webp" alt="Showroom footage for social ads" loading="lazy" sizes="(max-width: 640px) 100vw, 25vw"></div>
+              <div class="svc__body"><div class="svc__top mono"><span>03</span><span>6+ edits</span></div><h3 class="svc__t">Social ad <em>campaigns</em></h3><p>Hook-first, vertical-native edits that stop the scroll and scale paid acquisition.</p>
+                <div class="svc__foot"><span>Explore</span><span class="circle">{{icon:arrow-ur}}</span></div></div>
+            </a>
+            <a class="svc__card" href="services.html#feature" data-r style="--d:.18s">
+              <div class="svc__img"><img src="assets/img/film-teco-sm.webp" alt="Field feature filmed on site" loading="lazy" sizes="(max-width: 640px) 100vw, 25vw"></div>
+              <div class="svc__body"><div class="svc__top mono"><span>04</span><span>On site</span></div><h3 class="svc__t">Field <em>features</em></h3><p>Documentary capture that makes technical, complex work feel clear and human.</p>
+                <div class="svc__foot"><span>Explore</span><span class="circle">{{icon:arrow-ur}}</span></div></div>
+            </a>
+          </div>
         </div>
-        <div class="marquee__group">
-          <span class="marquee__item">Brand anthem films {{icon:star}}</span>
-          <span class="marquee__item marquee__item--outline">Product showcases {{icon:star}}</span>
-          <span class="marquee__item">Social ad <em>campaigns</em> {{icon:star}}</span>
-          <span class="marquee__item marquee__item--outline">Field features {{icon:star}}</span>
-        </div>
+      </section>
+    </div>
+
+    <!-- TICKER -->
+    <div class="ticker" aria-hidden="true" style="margin-top: var(--section)">
+      <div class="ticker__track">
+        <div class="ticker__group"><span class="ticker__item">Strategy</span><span class="ticker__item"><em>Script</em></span><span class="ticker__item">Shoot</span><span class="ticker__item"><em>Edit</em></span><span class="ticker__item">Colour</span><span class="ticker__item"><em>Sound</em></span><span class="ticker__item">Deliver</span></div>
+        <div class="ticker__group"><span class="ticker__item">Strategy</span><span class="ticker__item"><em>Script</em></span><span class="ticker__item">Shoot</span><span class="ticker__item"><em>Edit</em></span><span class="ticker__item">Colour</span><span class="ticker__item"><em>Sound</em></span><span class="ticker__item">Deliver</span></div>
       </div>
     </div>
 
-    <!-- ============ 01 MANIFESTO ============ -->
-    <section class="section manifesto">
-      <div class="wrap">
-        <div class="manifesto__layout">
-          <p class="eyebrow manifesto__eyebrow"><span class="num">(01)</span> The studio</p>
-          <p class="manifesto__text" data-words>Your audience decides in three seconds <span class="pill" aria-hidden="true"><img src="assets/img/film-funbike-sm.webp" alt="" loading="lazy"></span> whether to keep watching. We make those seconds <em>unmissable</em> <span class="pill" aria-hidden="true"><img src="assets/img/prod-04-sm.webp" alt="" loading="lazy"></span> and the next three minutes <em>unforgettable,</em> so the right people remember your name <span class="pill" aria-hidden="true"><img src="assets/img/film-mary-crop.webp" alt="" loading="lazy"></span> and pick up the phone.</p>
-        </div>
-        <div class="manifesto__foot">
-          <div class="manifesto__how" data-reveal>
-            <p class="muted">Clear creative strategy, cinematic visuals and polished post-production under one roof. One team, from the first call to the final colour grade.</p>
-            <a class="link-arrow" href="about.html">Meet the studio {{icon:arrow-ur}}</a>
-          </div>
-          <dl class="kpis">
-            <div class="kpi" data-reveal><dt class="mono">Capture</dt><dd>4<em>K</em></dd><p>Cinema cameras, graded for every screen</p></div>
-            <div class="kpi" data-reveal><dt class="mono">Formats</dt><dd>4<em>×</em></dd><p>16:9, 9:16, 4:5 and 1:1 from one shoot</p></div>
-            <div class="kpi" data-reveal><dt class="mono">Reply</dt><dd><span data-count="48">48</span><em>h</em></dd><p>At most. Usually the next business day</p></div>
-          </dl>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 02 SELECTED FILMS (horizontal) ============ -->
-    <section class="section section--flush-top reel" data-hscroll id="films">
-      <div class="wrap">
-        <div class="reel__head">
-          <div>
-            <p class="eyebrow" style="margin-bottom:24px"><span class="num">(02)</span> Selected films</p>
-            <h2 class="h2" data-lines><span class="split-line"><span>Stories that</span></span><span class="split-line"><span><em>move</em> markets.</span></span></h2>
-          </div>
-          <a class="link-arrow" href="work.html">All films {{icon:arrow-ur}}</a>
-        </div>
-        <div class="reel__pin">
-        <div class="reel__track">
-          <article class="film-card">
-            <a href="film-mary-lees-house.html" class="film-card__media" data-cursor="View" aria-label="Mary Lee’s House case study">
-              <img src="assets/img/film-mary.webp" alt="Interview subject in a softly lit room at Mary Lee’s House" loading="lazy">
-              <span class="film-card__badge mono">Brand film</span>
-              <span class="film-card__time mono">04:03</span>
-            </a>
-            <button class="film-card__play" type="button" data-video="1209681619" data-title="Mary Lee’s House" aria-label="Play Mary Lee’s House film">{{icon:play}}</button>
-            <div class="film-card__info">
-              <span class="film-card__idx mono">01</span>
-              <h3 class="film-card__title"><a href="film-mary-lees-house.html">Mary Lee’s House</a></h3>
-              <span class="film-card__cat mono">Nonprofit · Tampa</span>
-              <p class="film-card__desc">A compassionate brand story for a child advocacy centre, made to move donors, partners and families.</p>
-            </div>
-          </article>
-          <article class="film-card">
-            <a href="film-fun-bike-center.html" class="film-card__media" data-cursor="View" aria-label="Fun Bike Center case study">
-              <img src="assets/img/film-funbike.webp" alt="Fun Bike Center team member standing in the powersports showroom" loading="lazy">
-              <span class="film-card__badge mono">Showcase</span>
-              <span class="film-card__time mono">01:07</span>
-            </a>
-            <button class="film-card__play" type="button" data-video="1210003802" data-title="Fun Bike Center" aria-label="Play Fun Bike Center film">{{icon:play}}</button>
-            <div class="film-card__info">
-              <span class="film-card__idx mono">02</span>
-              <h3 class="film-card__title"><a href="film-fun-bike-center.html">Fun Bike Center</a></h3>
-              <span class="film-card__cat mono">Retail · Lakeland</span>
-              <p class="film-card__desc">A high-energy showcase for Central Florida’s premier powersports dealership, built for social, digital and showroom screens.</p>
-            </div>
-          </article>
-          <article class="film-card">
-            <a href="film-teco-energy-audit.html" class="film-card__media" data-cursor="View" aria-label="TECO energy audit case study">
-              <img src="assets/img/film-teco.webp" alt="TECO energy analyst in hi-vis vest speaking with a business owner" loading="lazy">
-              <span class="film-card__badge mono">Field feature</span>
-              <span class="film-card__time mono">00:29</span>
-            </a>
-            <button class="film-card__play" type="button" data-video="1210011258" data-title="TECO — Energy Audit" aria-label="Play TECO film">{{icon:play}}</button>
-            <div class="film-card__info">
-              <span class="film-card__idx mono">03</span>
-              <h3 class="film-card__title"><a href="film-teco-energy-audit.html">TECO Energy Audit</a></h3>
-              <span class="film-card__cat mono">Utility · Tampa Bay</span>
-              <p class="film-card__desc">Making utility energy audits clear and human, with on-site field capture of the real work.</p>
-            </div>
-          </article>
-          <article class="film-card">
-            <a href="film-the-dance-room.html" class="film-card__media" data-cursor="View" aria-label="The Dance Room case study">
-              <img src="assets/img/film-dance.webp" alt="Instructor at The Dance Room speaking to camera in the studio" loading="lazy">
-              <span class="film-card__badge mono">Brand film</span>
-              <span class="film-card__time mono">01:26</span>
-            </a>
-            <button class="film-card__play" type="button" data-video="1209998926" data-title="The Dance Room" aria-label="Play The Dance Room film">{{icon:play}}</button>
-            <div class="film-card__info">
-              <span class="film-card__idx mono">04</span>
-              <h3 class="film-card__title"><a href="film-the-dance-room.html">The Dance Room</a></h3>
-              <span class="film-card__cat mono">Lifestyle · Sarasota</span>
-              <p class="film-card__desc">An elegant spotlight on Sarasota’s premier ballroom and Latin studio, welcoming new dancers through the door.</p>
-            </div>
-          </article>
-          <div class="reel__end">
-            <p class="eyebrow eyebrow--plain" style="justify-content:center">Your brand, next</p>
-            <p class="h3">Your film <em>goes here.</em></p>
-            <div><a class="btn" href="contact.html">Start your film {{icon:arrow}}</a></div>
-          </div>
-        </div>
-        <div class="reel__progress"><i></i></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 03 SERVICES ============ -->
-    <section class="section section--light" id="services">
-      <div class="wrap">
-        <div class="svx" data-svx>
-          <div class="svx__intro">
-            <p class="eyebrow" style="margin-bottom:22px"><span class="num">(03)</span> What we make</p>
-            <h2 class="h2" data-lines><span class="split-line"><span>Four ways to be</span></span><span class="split-line"><span><em>unforgettable.</em></span></span></h2>
-          </div>
-          <div class="svx__list" role="tablist" aria-label="Services">
-            <button class="svx__item is-active" type="button" role="tab" aria-selected="true" data-i="0"><span class="mono">01</span><span class="svx__t">Brand anthem films</span><span class="svx__len mono">60–180s</span></button>
-            <button class="svx__item" type="button" role="tab" aria-selected="false" data-i="1"><span class="mono">02</span><span class="svx__t">Product showcases</span><span class="svx__len mono">30–90s</span></button>
-            <button class="svx__item" type="button" role="tab" aria-selected="false" data-i="2"><span class="mono">03</span><span class="svx__t">Social ad campaigns</span><span class="svx__len mono">6+ edits</span></button>
-            <button class="svx__item" type="button" role="tab" aria-selected="false" data-i="3"><span class="mono">04</span><span class="svx__t">Field features</span><span class="svx__len mono">On site</span></button>
-            <a class="btn btn--ghost svx__all" href="services.html">All services & packages {{icon:arrow}}</a>
-          </div>
-          <div class="svx__stage">
-            <figure class="svx__panel is-active" data-i="0">
-              <img src="assets/img/film-mary-crop.webp" alt="Interview-led brand film for Mary Lee’s House" loading="lazy">
-              <figcaption><p>The story of who you are and why it matters. The centrepiece of your website, pitches and launches.</p><div class="svx__chips"><span>Interviews</span><span>Story</span><span>Cut-downs</span></div><a class="link-arrow" href="services.html#anthem">Explore {{icon:arrow-ur}}</a></figcaption>
-            </figure>
-            <figure class="svx__panel" data-i="1">
-              <img src="assets/img/prod-06-sm.webp" alt="Premium cigars and whiskey lit for a product showcase" loading="lazy">
-              <figcaption><p>Light, motion and detail that make your product look as good on screen as it does in hand.</p><div class="svx__chips"><span>Studio</span><span>Macro</span><span>Stills</span></div><a class="link-arrow" href="services.html#showcase">Explore {{icon:arrow-ur}}</a></figcaption>
-            </figure>
-            <figure class="svx__panel" data-i="2">
-              <img src="assets/img/film-funbike-sm.webp" alt="Showroom footage for a social ad campaign" loading="lazy">
-              <figcaption><p>Hook-first, vertical-native edits that stop the scroll and scale paid acquisition.</p><div class="svx__chips"><span>9:16</span><span>Hooks</span><span>A/B variants</span></div><a class="link-arrow" href="services.html#social">Explore {{icon:arrow-ur}}</a></figcaption>
-            </figure>
-            <figure class="svx__panel" data-i="3">
-              <img src="assets/img/film-teco-sm.webp" alt="On-site field capture with an energy analyst" loading="lazy">
-              <figcaption><p>On-site documentary capture that makes technical, complex work feel clear and human.</p><div class="svx__chips"><span>Field crew</span><span>Interviews</span><span>Graphics</span></div><a class="link-arrow" href="services.html#feature">Explore {{icon:arrow-ur}}</a></figcaption>
-            </figure>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ RED MARQUEE ============ -->
-    <div class="marquee marquee--rec marquee--sm" data-marquee="right" data-marquee-speed="30" aria-hidden="true">
-      <div class="marquee__track">
-        <div class="marquee__group">
-          <span class="marquee__item">Strategy {{icon:star}}</span><span class="marquee__item">Script {{icon:star}}</span><span class="marquee__item">Shoot {{icon:star}}</span><span class="marquee__item">Edit {{icon:star}}</span><span class="marquee__item">Colour {{icon:star}}</span><span class="marquee__item">Sound {{icon:star}}</span><span class="marquee__item">Deliver {{icon:star}}</span>
-        </div>
-        <div class="marquee__group">
-          <span class="marquee__item">Strategy {{icon:star}}</span><span class="marquee__item">Script {{icon:star}}</span><span class="marquee__item">Shoot {{icon:star}}</span><span class="marquee__item">Edit {{icon:star}}</span><span class="marquee__item">Colour {{icon:star}}</span><span class="marquee__item">Sound {{icon:star}}</span><span class="marquee__item">Deliver {{icon:star}}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ============ 04 FILM FINDER ============ -->
+    <!-- 05 FINDER -->
     <section class="section" id="finder">
       <div class="wrap">
+        <div class="eyebrow-row mono" data-r><span><span class="num">(05)</span> — Film finder</span><span>3 questions · 20 seconds</span></div>
         <div class="finder">
-          <div>
-            <p class="eyebrow" style="margin-bottom:24px"><span class="num">(04)</span> Film finder</p>
-            <h2 class="h2" data-lines><span class="split-line"><span>Not sure</span></span><span class="split-line"><span>what you</span></span><span class="split-line"><span><em>need?</em></span></span></h2>
-            <p class="muted measure-sm" style="margin-top:28px" data-reveal>Answer three quick questions. We’ll point you to the format that fits your goal, then carry your answers into a ready-made brief.</p>
-            <div class="finder__chips" style="margin-top:28px" data-reveal><span class="chip">3 questions</span><span class="chip">20 seconds</span><span class="chip">No email needed</span></div>
+          <div class="finder__intro" data-r>
+            <h2 class="h2">Not sure what you <em>need?</em></h2>
+            <p class="muted measure">Answer three quick questions. We’ll recommend the right format and carry your answers into a ready-made brief.</p>
+            <div class="chips"><span class="chip">No email needed</span><span class="chip">Instant answer</span></div>
           </div>
-
-          <div class="finder__panel" data-finder data-reveal>
-            <div class="finder__progress" aria-hidden="true"><i></i><i></i><i></i></div>
-
+          <div class="finder__card" data-finder data-r style="--d:.08s">
+            <div class="finder__bar" aria-hidden="true"><i></i><i></i><i></i></div>
             <div class="finder__step">
-              <p class="mono muted">Question 01 / 03</p>
+              <p class="mono accent">Question 01 / 03</p>
               <p class="finder__q">What should this film do for your business?</p>
               <div class="opts">
                 <button class="opt" type="button" data-v="anthem"><span class="opt__t">Build trust & emotion</span><span class="opt__d">Show who we are and why it matters</span></button>
@@ -234,148 +201,84 @@
                 <button class="opt" type="button" data-v="explainer"><span class="opt__t">Explain how it works</span><span class="opt__d">Make a complex service simple</span></button>
               </div>
             </div>
-
             <div class="finder__step">
-              <p class="mono muted">Question 02 / 03</p>
+              <p class="mono accent">Question 02 / 03</p>
               <p class="finder__q">Where will people watch it most?</p>
               <div class="opts">
-                <button class="opt" type="button" data-v="anthem,explainer"><span class="opt__t">Website & pitches</span><span class="opt__d">Homepage hero, investor & donor decks</span></button>
-                <button class="opt" type="button" data-v="social"><span class="opt__t">Instagram, TikTok, Reels</span><span class="opt__d">Vertical, sound-off, scroll-first</span></button>
+                <button class="opt" type="button" data-v="anthem,explainer"><span class="opt__t">Website & pitches</span><span class="opt__d">Homepage, donor and sales decks</span></button>
+                <button class="opt" type="button" data-v="social"><span class="opt__t">Reels & TikTok</span><span class="opt__d">Vertical, sound-off, scroll-first</span></button>
                 <button class="opt" type="button" data-v="product"><span class="opt__t">Store & showroom</span><span class="opt__d">Screens, product pages, marketplaces</span></button>
                 <button class="opt" type="button" data-v="anthem,social"><span class="opt__t">Everywhere</span><span class="opt__d">One shoot, cut for every channel</span></button>
               </div>
             </div>
-
             <div class="finder__step">
-              <p class="mono muted">Question 03 / 03</p>
+              <p class="mono accent">Question 03 / 03</p>
               <p class="finder__q">Who needs to be on camera?</p>
               <div class="opts">
-                <button class="opt" type="button" data-v="anthem"><span class="opt__t">Our people & customers</span><span class="opt__d">Founders, staff, real testimonials</span></button>
+                <button class="opt" type="button" data-v="anthem"><span class="opt__t">Our people & customers</span><span class="opt__d">Founders, staff, real stories</span></button>
                 <button class="opt" type="button" data-v="product"><span class="opt__t">The product itself</span><span class="opt__d">Detail, texture, hero shots</span></button>
-                <button class="opt" type="button" data-v="explainer"><span class="opt__t">Experts at work</span><span class="opt__d">Technicians, analysts, on-site</span></button>
+                <button class="opt" type="button" data-v="explainer"><span class="opt__t">Experts at work</span><span class="opt__d">Technicians, analysts, on site</span></button>
                 <button class="opt" type="button" data-v="social"><span class="opt__t">Fast-paced energy</span><span class="opt__d">Action, lifestyle, quick cuts</span></button>
               </div>
             </div>
-
             <div class="finder__result" aria-live="polite">
-              <p class="mono accent">Your recommended format</p>
-              <p class="h2" data-r-name>Brand Anthem <em>Film</em></p>
-              <p class="mono muted" data-r-run>60–180 sec</p>
+              <p class="mono accent">Our recommendation</p>
+              <p class="h2" data-r-name>A brand anthem <em>film.</em></p>
+              <p class="mono" data-r-run style="color:var(--faint)"></p>
               <p class="muted" data-r-why></p>
-              <div class="finder__chips" data-r-chips></div>
-              <div class="btn-row" style="margin-top:8px">
-                <a class="btn" href="contact.html" data-r-cta>Build my brief {{icon:arrow}}</a>
-                <a class="link-arrow" href="work.html" data-r-ref><span>See it in action</span> {{icon:arrow-ur}}</a>
+              <div class="chips" data-r-chips></div>
+              <div class="btn-row" style="margin-top:6px">
+                <a class="btn btn--accent" href="contact.html" data-r-cta><span>Build my brief</span><span class="btn__i">{{icon:arrow-ur}}</span></a>
+                <a class="link" href="work.html" data-r-ref>See it {{icon:arrow-ur}}</a>
               </div>
             </div>
-
             <div class="finder__nav">
-              <button class="link-arrow" type="button" data-finder-back hidden>← Back</button>
-              <button class="link-arrow" type="button" data-finder-restart hidden>↺ Start over</button>
+              <button class="textbtn" type="button" data-back hidden>← Back</button>
+              <button class="textbtn" type="button" data-again hidden>↺ Start over</button>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============ 05 PROCESS ============ -->
-    <section class="section section--light" id="process">
-      <div class="wrap">
-        <div class="strip-head">
-          <div>
-            <p class="eyebrow" style="margin-bottom:22px"><span class="num">(05)</span> How it works</p>
-            <h2 class="h2" data-lines><span class="split-line"><span>First call to</span></span><span class="split-line"><span><em>final cut.</em></span></span></h2>
-          </div>
-          <div class="strip-head__aside" data-reveal>
-            <p class="muted">A calm, clear process with one point of contact. You always know what happens next, and when.</p>
-            <a class="btn" href="contact.html">Book a discovery call {{icon:arrow}}</a>
-          </div>
-        </div>
-        <ol class="strip" data-reveal>
-          <li class="frame"><div class="frame__top mono"><span>01</span><span>Week 1</span></div><h3 class="frame__t">Discovery</h3><p>Your business, your audience and the one action viewers should take.</p></li>
-          <li class="frame"><div class="frame__top mono"><span>02</span><span>Week 1–2</span></div><h3 class="frame__t">Strategy</h3><p>Concept, script, shot list and schedule, approved before we shoot.</p></li>
-          <li class="frame"><div class="frame__top mono"><span>03</span><span>Shoot day</span></div><h3 class="frame__t">Production</h3><p>Cinema cameras, light and sound. Real people, directed to look like themselves.</p></li>
-          <li class="frame"><div class="frame__top mono"><span>04</span><span>Week 3–4</span></div><h3 class="frame__t">Post</h3><p>Edit, colour, sound and licensed music, with two revision rounds.</p></li>
-          <li class="frame"><div class="frame__top mono"><span>05</span><span>Launch</span></div><h3 class="frame__t">Delivery</h3><p>The master film plus cut-downs for every screen and channel.</p></li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ============ 06 CREDITS ============ -->
-    <section class="section credits" id="industries">
-      <div class="wrap">
-        <div class="credits__head">
-          <p class="eyebrow eyebrow--plain" data-reveal><span class="num">(06)</span>&nbsp; Who we film for</p>
-          <h2 class="h2" data-lines><span class="split-line"><span>Different worlds.</span></span><span class="split-line"><span><em>Same standard.</em></span></span></h2>
-        </div>
-        <div class="credits__list">
-          <a class="credit" href="film-mary-lees-house.html" data-reveal><span class="credit__role mono">Nonprofit & advocacy</span><span class="credit__name">Mary Lee’s House</span><span class="credit__go">{{icon:arrow-ur}}</span></a>
-          <a class="credit" href="film-teco-energy-audit.html" data-reveal><span class="credit__role mono">Utility & energy</span><span class="credit__name">Tampa Electric <em>(TECO)</em></span><span class="credit__go">{{icon:arrow-ur}}</span></a>
-          <a class="credit" href="film-fun-bike-center.html" data-reveal><span class="credit__role mono">Retail & powersports</span><span class="credit__name">Fun Bike Center</span><span class="credit__go">{{icon:arrow-ur}}</span></a>
-          <a class="credit" href="film-the-dance-room.html" data-reveal><span class="credit__role mono">Dance & lifestyle</span><span class="credit__name">The Dance Room</span><span class="credit__go">{{icon:arrow-ur}}</span></a>
-          <a class="credit" href="photography.html#product" data-reveal><span class="credit__role mono">Product brands</span><span class="credit__name">Cosmetics, fragrance <em>& apparel</em></span><span class="credit__go">{{icon:arrow-ur}}</span></a>
-          <a class="credit" href="photography.html#sports" data-reveal><span class="credit__role mono">Sports</span><span class="credit__name">Club & academy football</span><span class="credit__go">{{icon:arrow-ur}}</span></a>
-          <a class="credit" href="weddings.html" data-reveal><span class="credit__role mono">Weddings</span><span class="credit__name">Couples across <em>Central Florida</em></span><span class="credit__go">{{icon:arrow-ur}}</span></a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ STATEMENT ============ -->
-    <section class="statement" aria-label="Statement">
-      <div class="statement__bg" aria-hidden="true"><img src="assets/img/film-dance.webp" alt="" loading="lazy" data-speed=".2"></div>
-      <div class="wrap">
-        <p class="eyebrow eyebrow--plain" style="justify-content:center;margin-bottom:28px" data-reveal>Our standard</p>
-        <h2 class="h1 statement__title" data-lines><span class="split-line"><span>Every frame</span></span><span class="split-line"><span><em>earns</em> its place.</span></span></h2>
-        <p class="lead statement__sub" data-reveal>No filler shots, no stock footage, no wasted seconds. Just your people, your product and your story, crafted to be watched to the end.</p>
-      </div>
-    </section>
-
-    <!-- ============ 07 BEYOND ============ -->
+    <!-- 06 PROCESS -->
     <section class="section">
       <div class="wrap">
-        <div class="bento">
-          <div class="bento__intro">
-            <p class="eyebrow" style="margin-bottom:22px"><span class="num">(07)</span> Beyond commercial</p>
-            <h2 class="h2" data-lines><span class="split-line"><span>Same eye.</span></span><span class="split-line"><span>Every <em>occasion.</em></span></span></h2>
-            <p class="muted" data-reveal>The craft behind the brand films, brought to weddings, game days and the studio table.</p>
-            <a class="link-arrow bento__link" href="photography.html" data-reveal>Browse all stills {{icon:arrow-ur}}</a>
+        <div class="rule"></div>
+        <div class="split">
+          <div class="split__aside">
+            <p class="mono" style="color:var(--faint)" data-r><span class="accent">(06)</span> — How it works</p>
+            <h2 class="h2" data-r>First call to <em>final cut.</em></h2>
+            <p class="muted measure" data-r>A calm, clear process with one point of contact. You always know what happens next, and when.</p>
+            <a class="btn" href="contact.html" data-r><span>Book a discovery call</span><span class="btn__i">{{icon:arrow-ur}}</span></a>
           </div>
-          <a class="bcard bcard--tall" href="weddings.html" data-reveal>
-            <img src="assets/img/wed-04.webp" alt="Bride and groom on a Florida beach at sunset" loading="lazy">
-            <div class="bcard__body"><span class="mono">Photo & film</span><h3 class="bcard__t">Weddings</h3></div>
-            <span class="bcard__go">{{icon:arrow}}</span>
-          </a>
-          <a class="bcard" href="photography.html#sports" data-reveal>
-            <img src="assets/img/sport-09-sm.webp" alt="Soccer players competing for the ball under stadium lights" loading="lazy">
-            <div class="bcard__body"><span class="mono">Game day</span><h3 class="bcard__t">Sports</h3></div>
-            <span class="bcard__go">{{icon:arrow}}</span>
-          </a>
-          <a class="bcard" href="photography.html#product" data-reveal>
-            <img src="assets/img/prod-15-sm.webp" alt="Amber fragrance bottle lit against a warm backdrop" loading="lazy">
-            <div class="bcard__body"><span class="mono">Studio</span><h3 class="bcard__t">Products</h3></div>
-            <span class="bcard__go">{{icon:arrow}}</span>
-          </a>
+          <ol class="steps">
+            <li data-r><span class="steps__n mono">01</span><span class="steps__t">Discovery</span><span class="steps__when mono">Week 1</span><span class="steps__d">Your business, your audience and the one action viewers should take.</span></li>
+            <li data-r><span class="steps__n mono">02</span><span class="steps__t">Creative <em>strategy</em></span><span class="steps__when mono">Week 1–2</span><span class="steps__d">Concept, script, shot list and schedule, approved before we shoot.</span></li>
+            <li data-r><span class="steps__n mono">03</span><span class="steps__t">Production</span><span class="steps__when mono">Shoot day</span><span class="steps__d">Cinema cameras, light and sound. Real people, directed to look like themselves.</span></li>
+            <li data-r><span class="steps__n mono">04</span><span class="steps__t">Post-<em>production</em></span><span class="steps__when mono">Week 3–4</span><span class="steps__d">Edit, colour, sound design and licensed music, with two revision rounds.</span></li>
+            <li data-r><span class="steps__n mono">05</span><span class="steps__t">Delivery</span><span class="steps__when mono">Launch</span><span class="steps__d">The master film plus cut-downs in 16:9, 9:16, 4:5 and 1:1.</span></li>
+          </ol>
         </div>
       </div>
     </section>
 
-    <!-- ============ CTA ============ -->
-    <section class="section cta section--ink2">
+    <!-- 07 BEYOND -->
+    <section class="section">
       <div class="wrap">
-        <p class="eyebrow" style="margin-bottom:28px" data-reveal><span class="num">(08)</span> Let’s roll</p>
-        <h2 class="display cta__title" data-lines><span class="split-line"><span>Let’s make</span></span><span class="split-line"><span>something</span></span><span class="split-line"><span><em>loud.</em></span></span></h2>
-        <div class="cta__row">
-          <div class="cta__btn-wrap" data-reveal>
-            <a class="orb" href="contact.html" data-magnetic=".4" data-cursor="Let’s go">
-              <svg class="orb__ring" viewBox="0 0 200 200" aria-hidden="true"><defs><path id="orbp" d="M100,100 m-88,0 a88,88 0 1,1 176,0 a88,88 0 1,1 -176,0"/></defs><text font-family="JetBrains Mono" font-size="10.5" letter-spacing="5.2" fill="currentColor"><textPath href="#orbp">START A PROJECT · START A PROJECT · START A PROJECT ·</textPath></text></svg>
-              Start<br>your film
-            </a>
+        <div class="rule"></div>
+        <div class="eyebrow-row mono" data-r><span><span class="num">(07)</span> — Beyond commercial</span><span>Photo + film</span></div>
+        <div class="head">
+          <h2 class="h2" data-r>Same eye. <em>Every occasion.</em></h2>
+          <div class="head__aside" data-r>
+            <p class="muted">The craft behind the brand films, brought to weddings, game days and the studio table.</p>
+            <a class="link" href="photography.html">Browse all stills {{icon:arrow-ur}}</a>
           </div>
-          <div class="cta__info">
-            <div data-reveal><p class="mono muted">Email</p><a href="mailto:aramisbooker@asbmediagroup.com">aramisbooker@<br>asbmediagroup.com</a></div>
-            <div data-reveal><p class="mono muted">Phone</p><a href="tel:+18136070444">(813) 607-0444</a></div>
-            <div data-reveal><p class="mono muted">Reply time</p><p style="margin-top:8px">Usually within one business day</p></div>
-          </div>
+        </div>
+        <div class="polaroids">
+          <a class="polaroid" href="weddings.html" data-r><figure><div class="polaroid__img"><img src="assets/img/wed-04-sm.webp" alt="Couple on a Florida beach at sunset" loading="lazy" sizes="(max-width: 640px) 50vw, 30vw"></div><figcaption><span>Weddings</span><span class="mono">01 ↗</span></figcaption></figure></a>
+          <a class="polaroid" href="photography.html#sports" data-r style="--d:.06s"><figure><div class="polaroid__img"><img src="assets/img/sport-09-sm.webp" alt="Soccer players under stadium lights" loading="lazy" sizes="(max-width: 640px) 50vw, 30vw"></div><figcaption><span>Game day</span><span class="mono">02 ↗</span></figcaption></figure></a>
+          <a class="polaroid" href="photography.html#product" data-r style="--d:.12s"><figure><div class="polaroid__img"><img src="assets/img/prod-15-sm.webp" alt="Fragrance bottle in warm light" loading="lazy" sizes="(max-width: 640px) 50vw, 30vw"></div><figcaption><span>Studio products</span><span class="mono">03 ↗</span></figcaption></figure></a>
         </div>
       </div>
     </section>

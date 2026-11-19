@@ -24,11 +24,12 @@ Pages are generated. **Edit the files in `src/`, then rebuild:**
 python3 build.py
 ```
 
-- `src/partials/`: shared head, header, menu, footer and preloader
+- `src/partials/`: shared head, nav, mobile menu and the closing panel/footer (each page sets its closing headline with `"cta"` in its meta line)
 - `src/pages/`: the body of each page. The first line is a JSON meta comment with title, description and nav.
 - `src/cases.py`: all four case studies come from one data list and one template. To add a film, add an entry here.
 - `assets/css/styles.css`: the design system (tokens are at the top)
-- `assets/js/main.js`: interactions (GSAP, ScrollTrigger and Lenis are vendored in `assets/vendor/`)
+- `assets/js/main.js`: all interactions in ~14 KB of plain JavaScript (no libraries). Scrolling is native; reveals use IntersectionObserver + CSS.
+- Images: `build.py` adds width/height and a `-sm`/full `srcset` to every image automatically, so phones download the small versions.
 
 ## Preview locally
 

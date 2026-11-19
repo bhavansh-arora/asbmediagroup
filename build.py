@@ -50,8 +50,16 @@ def nav_html(active):
     out = []
     for key, href, label in NAV:
         cur = ' aria-current="page"' if key == active else ""
-        out.append(f'<a class="nav__link" href="{href}"{cur}>{label}</a>')
-    return "\n          ".join(out)
+        out.append(f'<a href="{href}"{cur}>{label}</a>')
+    return "\n        ".join(out)
+
+
+def sheet_html():
+    rows = [("index.html", "Home")] + [(h, l) for _, h, l in NAV]
+    return "\n      ".join(f'<a href="{h}">{l}<span>{i:02d}</span></a>' for i, (h, l) in enumerate(rows, 1))
+
+
+DEFAULT_CTA = "Let’s make something <em>worth watching.</em>"
 
 
 _SIZES = {}
@@ -75,7 +83,19 @@ def add_img_dimensions(html):
             except OSError:
                 return tag
         w, h = _SIZES[path]
-        return tag[:-1].rstrip("/").rstrip() + f' width="{w}" height="{h}">'
+        extra = f' width="{w}" height="{h}"'
+        # Pair full-size and -sm variants into a srcset so phones never download 1800px images.
+        rel = src.group(1)
+        if "srcset=" not in tag and rel.endswith(".webp"):
+            base = rel[:-8] if rel.endswith("-sm.webp") else rel[:-5]
+            sm, full = ROOT / f"{base}-sm.webp", ROOT / f"{base}.webp"
+            if sm.exists() and full.exists():
+                sw = Image.open(sm).size[0]
+                fw = Image.open(full).size[0]
+                extra += f' srcset="{base}-sm.webp {sw}w, {base}.webp {fw}w"'
+                if "sizes=" not in tag:
+                    extra += ' sizes="(max-width: 640px) 100vw, (max-width: 1100px) 70vw, 50vw"'
+        return tag[:-1].rstrip("/").rstrip() + extra + ">"
 
     return re.sub(r"<img\b[^>]*>", fix, html)
 
@@ -106,7 +126,8 @@ def build():
             "canonical": canonical,
             "nav": nav_html(meta.get("nav")),
             "schema": meta.get("schema", ""),
-            "loader": partials["loader"] if meta.get("loader") else "",
+            "sheet": sheet_html(),
+            "cta": meta.get("cta", DEFAULT_CTA),
             "bodyclass": meta.get("bodyclass", ""),
         }
         html = partials["head"] + partials["header"] + body + partials["footer"]
