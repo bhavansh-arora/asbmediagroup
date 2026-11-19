@@ -88,6 +88,7 @@ def render(i):
         "desc": c["desc"], "nav": "work", "og": f"assets/img/{c['img']}.webp",
         "schema": '<script type="application/ld+json">' + json.dumps(schema) + "</script>",
         "cta": "Your story, <em>next.</em>",
+        "layout": "noir",
     }
     return f"""<!--meta {json.dumps(meta)} -->
 

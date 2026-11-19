@@ -314,20 +314,23 @@
 
   /* Count-up for big stat numbers (4K, 48h) when they reveal */
   if (!reduce) {
-    $$(".tile__big").forEach((el) => {
+    $$(".tile__big, [data-countup]").forEach((el) => {
       const tn = Array.from(el.childNodes).find((n) => n.nodeType === 3 && /\d/.test(n.textContent));
       if (!tn) return;
       const m = tn.textContent.match(/^(\D*)(\d+)(.*)$/);
       if (!m) return;
       const end = +m[2];
-      tn.textContent = m[1] + "0" + m[3];
+      const width = m[2].length;                       // keep leading zeros ("04")
+      const fmt = (v) => String(v).padStart(width, "0");
+      m[2] = null;
+      tn.textContent = m[1] + fmt(0) + m[3];
       const io = new IntersectionObserver(([en]) => {
         if (!en.isIntersecting) return;
         io.disconnect();
         const t0 = performance.now();
         const step = (t) => {
           const k = Math.min(1, (t - t0) / 1400);
-          tn.textContent = m[1] + Math.round(end * (1 - Math.pow(1 - k, 3))) + m[3];
+          tn.textContent = m[1] + fmt(Math.round(end * (1 - Math.pow(1 - k, 3)))) + m[3];
           if (k < 1) requestAnimationFrame(step);
         };
         requestAnimationFrame(step);

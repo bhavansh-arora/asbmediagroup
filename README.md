@@ -27,7 +27,9 @@ python3 build.py
 - `src/partials/`: shared head, nav, mobile menu and the closing panel/footer (each page sets its closing headline with `"cta"` in its meta line)
 - `src/pages/`: the body of each page. The first line is a JSON meta comment with title, description and nav.
 - `src/cases.py`: all four case studies come from one data list and one template. To add a film, add an entry here.
-- `assets/css/styles.css`: the design system (tokens are at the top)
+- `assets/css/noir.css`: the current dark "Noir" design system used by every page (pages opt in with `"layout": "noir"` in their meta line). `assets/css/styles.css` is the previous cream design, kept for reference.
+- `src/partials/header_noir.html` / `footer_noir.html`: the Noir shell (loader, cursor, blended nav, closing statement, footer)
+- `assets/js/noir.js`: loader, custom cursor, the WebGL hover preview on the film list, background reel, magnetic buttons
 - `assets/js/main.js`: interactions in plain JavaScript (no libraries): word-mask headline reveals, count-ups, cursor spotlight/tilt, magnetic buttons, quiz, brief builder, lightbox. Scrolling is native.
 - `assets/js/gl-hero.js`: the WebGL hero (film-burn transitions, light leak, grain, mouse parallax). It pauses off-screen, lowers its own resolution on slow GPUs and falls back to the CSS slideshow if needed; reduced-motion visitors get the CSS version.
 - Scroll-linked motion (parallax, statement highlight, panel/polaroid entrances, nav progress line) is pure CSS scroll timelines at the end of `styles.css`, so it runs off the main thread; browsers without support just show the static layout.

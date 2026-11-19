@@ -156,6 +156,7 @@ void main(){
   const frame = (now) => {
     raf = 0;
     if (!visible || document.hidden || !ready) { lastFrame = 0; return; }
+    if (hero.classList.contains("video-on")) { lastFrame = 0; return; }   // real reel is playing on top
     watchPerf(now);
     // ease mouse toward target
     mouse.x += (mouse.tx - mouse.x) * .06; mouse.y += (mouse.ty - mouse.y) * .06;

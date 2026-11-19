@@ -130,7 +130,11 @@ def build():
             "cta": meta.get("cta", DEFAULT_CTA),
             "bodyclass": meta.get("bodyclass", ""),
         }
-        html = partials["head"] + partials["header"] + body + partials["footer"]
+        layout = meta.get("layout")
+        header = partials.get(f"header_{layout}", partials["header"]) if layout else partials["header"]
+        footer = partials.get(f"footer_{layout}", partials["footer"]) if layout else partials["footer"]
+        ctx["css"] = f"{layout}.css" if layout else "styles.css"
+        html = partials["head"] + header + body + footer
         for k, v in ctx.items():
             html = html.replace("{{" + k + "}}", v)
         html = add_img_dimensions(expand_icons(html))
