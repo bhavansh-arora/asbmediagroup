@@ -65,7 +65,7 @@
             <a class="link" href="work.html">All films {{icon:arrow-ur}}</a>
           </div>
         </div>
-        <div class="grid-2">
+        <div class="films">
           <article class="mcard" data-r>
             <a href="film-mary-lees-house.html" class="mcard__img" aria-label="Mary Lee’s House case study"><img src="assets/img/film-mary-crop.webp" style="object-position:50% 30%" alt="Interview at Mary Lee’s House" loading="lazy"></a>
             <span class="mcard__tag"><span class="dot"></span> Brand film · 04:03</span>
@@ -105,7 +105,7 @@
         </div>
         <div class="bento">
           <div class="tile" style="grid-column: span 4" data-r>
-            <div class="tile__top mono"><span>Capture</span><span class="chip">Every shoot</span></div>
+            <div class="tile__top mono"><span>Capture</span><span>Every shoot</span></div>
             <p class="tile__big">4K<em>cinema</em></p>
             <p class="small">Cinema cameras, considered light and clean sound, graded for every screen.</p>
           </div>
@@ -126,6 +126,7 @@
           </div>
           <div class="tile" style="grid-column: span 4; --d:.06s" data-r>
             <div class="tile__top mono"><span>Reply time</span><span class="dot dot--live"></span></div>
+            <div class="replyrow"><span class="replyrow__av">AB</span><span><b>Aramis Booker</b><small>Founder · replies personally</small></span></div>
             <p class="tile__big">48<em>hours</em></p>
             <p class="small">At most. Usually the next business day, straight from the person directing your film.</p>
           </div>
@@ -169,13 +170,12 @@
           </div>
         </div>
       </section>
-    </div>
-
-    <!-- TICKER -->
-    <div class="ticker" aria-hidden="true" style="margin-top: var(--section)">
-      <div class="ticker__track">
-        <div class="ticker__group"><span class="ticker__item">Strategy</span><span class="ticker__item"><em>Script</em></span><span class="ticker__item">Shoot</span><span class="ticker__item"><em>Edit</em></span><span class="ticker__item">Colour</span><span class="ticker__item"><em>Sound</em></span><span class="ticker__item">Deliver</span></div>
-        <div class="ticker__group"><span class="ticker__item">Strategy</span><span class="ticker__item"><em>Script</em></span><span class="ticker__item">Shoot</span><span class="ticker__item"><em>Edit</em></span><span class="ticker__item">Colour</span><span class="ticker__item"><em>Sound</em></span><span class="ticker__item">Deliver</span></div>
+        <!-- ticker closes the dark panel -->
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker__track">
+          <div class="ticker__group"><span class="ticker__item">Strategy</span><span class="ticker__item"><em>Script</em></span><span class="ticker__item">Shoot</span><span class="ticker__item"><em>Edit</em></span><span class="ticker__item">Colour</span><span class="ticker__item"><em>Sound</em></span><span class="ticker__item">Deliver</span></div>
+          <div class="ticker__group"><span class="ticker__item">Strategy</span><span class="ticker__item"><em>Script</em></span><span class="ticker__item">Shoot</span><span class="ticker__item"><em>Edit</em></span><span class="ticker__item">Colour</span><span class="ticker__item"><em>Sound</em></span><span class="ticker__item">Deliver</span></div>
+        </div>
       </div>
     </div>
 
@@ -186,8 +186,9 @@
         <div class="finder">
           <div class="finder__intro" data-r>
             <h2 class="h2">Not sure what you <em>need?</em></h2>
-            <p class="muted measure">Answer three quick questions. We’ll recommend the right format and carry your answers into a ready-made brief.</p>
-            <div class="chips"><span class="chip">No email needed</span><span class="chip">Instant answer</span></div>
+            <p class="muted measure">Answer three quick questions. We’ll match you to one of four formats and carry your answers into a ready-made brief.</p>
+            <p class="mono finder__hint">3 questions · 20 seconds · no email needed</p>
+            <p class="small muted" style="margin-top:auto">Your match lights up below, with a real ASB film to watch as an example.</p>
           </div>
           <div class="finder__card" data-finder data-r style="--d:.08s">
             <div class="finder__bar" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -238,6 +239,13 @@
             </div>
           </div>
         </div>
+        <div class="outcomes" data-outcomes data-r>
+          <div class="outcome" data-outcome="anthem"><img src="assets/img/film-mary-crop.webp" alt="" loading="lazy" sizes="240px"><b>Your match</b><span>Brand anthem film</span></div>
+          <div class="outcome" data-outcome="product"><img src="assets/img/prod-06-sm.webp" alt="" loading="lazy" sizes="240px"><b>Your match</b><span>Product showcase</span></div>
+          <div class="outcome" data-outcome="social"><img src="assets/img/film-funbike-sm.webp" alt="" loading="lazy" sizes="240px"><b>Your match</b><span>Social ad campaign</span></div>
+          <div class="outcome" data-outcome="explainer"><img src="assets/img/film-teco-sm.webp" alt="" loading="lazy" sizes="240px"><b>Your match</b><span>Field feature</span></div>
+        </div>
+
       </div>
     </section>
 

@@ -159,6 +159,7 @@
       tabs.forEach((t) => { t.classList.toggle("is-active", t === tab); t.setAttribute("aria-pressed", String(t === tab)); });
       const f = tab.dataset.filter;
       $$("[data-cat]", scope).forEach((it) => it.classList.toggle("is-hidden", !(f === "all" || it.dataset.cat.split(" ").includes(f))));
+      scope.classList.toggle("is-filtered", f !== "all");
     };
     tabs.forEach((t) => t.addEventListener("click", () => apply(t)));
     const deep = location.hash && tabs.find((t) => t.dataset.filter === location.hash.slice(1));
@@ -194,8 +195,15 @@
       result.classList.toggle("is-active", done);
       back.hidden = n === 0 || done;
       again.hidden = !done;
+      // Light up the matching format tile beside the quiz
+      const key = done ? decide() : null;
+      const outs = $("[data-outcomes]");
+      if (outs) {
+        outs.classList.toggle("has-match", done);
+        $$("[data-outcome]", outs).forEach((o) => o.classList.toggle("is-match", o.dataset.outcome === key));
+      }
       if (done) {
-        const r = RECS[decide()];
+        const r = RECS[key];
         $("[data-r-name]", result).innerHTML = r.name;
         $("[data-r-run]", result).textContent = r.run;
         $("[data-r-why]", result).textContent = r.why;
