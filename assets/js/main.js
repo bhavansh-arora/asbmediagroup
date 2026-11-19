@@ -67,7 +67,7 @@
       if (!h.closest("[data-r]")) h.setAttribute("data-r", "");
     });
     // Statement paragraphs light up word by word as they scroll through (CSS scroll timeline)
-    $$(".statement").forEach((p) => splitWords(p, (word) => { const s = document.createElement("span"); s.className = "sw"; s.textContent = word; return s; }));
+    $$(".statement").forEach((p) => splitWords(p, (word, i) => { const s = document.createElement("span"); s.className = "sw"; s.textContent = word; s.style.setProperty("--i", i); return s; }));
   }
 
   /* Reveal on enter (once) */
@@ -75,6 +75,8 @@
     entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); revealIO.unobserve(en.target); } });
   }, { rootMargin: "0px 0px -8% 0px" });
   $$("[data-r]").forEach((el) => revealIO.observe(el));
+  // One-shot accents (rules, statement highlight, footer wordmark): get .in once, no hiding
+  $$(".label, .steps, .foot__mark, .statement").forEach((el) => revealIO.observe(el));
 
   /* Pause CSS tickers while off-screen */
   const tickIO = new IntersectionObserver((entries) => entries.forEach((en) => en.target.classList.toggle("is-paused", !en.isIntersecting)));
@@ -346,15 +348,12 @@
       el.addEventListener("pointermove", (e) => { ev = e; if (!raf) raf = requestAnimationFrame(() => { raf = 0; onMove(ev, el.getBoundingClientRect()); }); });
       el.addEventListener("pointerleave", () => { cancelAnimationFrame(raf); raf = 0; onLeave(); });
     };
-    $$(".svc__card, .tile, .pkg, .format, .story, .frow__body, .finder__card").forEach((card) => {
-      const tilt = card.matches(".svc__card, .pkg");
-      card.classList.add("spot");
+    // 3D tilt on package cards only (one transform write per frame; no per-card style vars)
+    $$(".pkg").forEach((card) => {
       track(card, (e, r) => {
         const x = e.clientX - r.left, y = e.clientY - r.top;
-        card.style.setProperty("--mx", x + "px");
-        card.style.setProperty("--my", y + "px");
-        if (tilt) card.style.transform = `perspective(900px) rotateX(${((r.height / 2 - y) / r.height) * 7}deg) rotateY(${((x - r.width / 2) / r.width) * 7}deg) translateY(-4px)`;
-      }, () => { if (tilt) card.style.transform = ""; });
+        card.style.transform = `perspective(900px) rotateX(${((r.height / 2 - y) / r.height) * 6}deg) rotateY(${((x - r.width / 2) / r.width) * 6}deg) translateY(-4px)`;
+      }, () => { card.style.transform = ""; });
     });
     $$(".btn, .mcard .circle").forEach((b) => {
       const k = .22;

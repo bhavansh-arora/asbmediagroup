@@ -14,6 +14,15 @@
   canvas.setAttribute("aria-hidden", "true");
   const gl = canvas.getContext("webgl", { antialias: false, alpha: false, depth: false, stencil: false, powerPreference: "high-performance" });
   if (!gl) return;
+  // Software WebGL (hardware acceleration off, blocklisted driver, VMs) renders the shader on
+  // the CPU and stutters; those visitors keep the CSS cross-fade. ?gl=force overrides for testing.
+  if (!/[?&]gl=force/.test(location.search)) {
+    try {
+      const dbg = gl.getExtension("WEBGL_debug_renderer_info");
+      const renderer = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : "";
+      if (/swiftshader|llvmpipe|softpipe|software|basic render/i.test(renderer)) { hero.dataset.gl = "software"; return; }
+    } catch (e) {}
+  }
 
   const VERT = `attribute vec2 p; varying vec2 vUv; void main(){ vUv = p * .5 + .5; gl_Position = vec4(p, 0., 1.); }`;
   const FRAG = `
@@ -113,14 +122,12 @@ void main(){
 
   /* State */
   let cur = 0, next = 0, prog = 0, transStart = 0, seed = 0;
-  let slideStart = [performance.now(), performance.now()];
-  const mouse = { x: .5, y: .5, tx: .5, ty: .5 };
-  let visible = true, raf = 0, lastGrain = 0, grainT = 0, ready = false, lastDraw = 0;
+  let visible = true, raf = 0, ready = false, dirty = true;
   const TRANS = 1700;
   const ease = (t) => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
-  /* Adaptive quality: render scale starts near device resolution (capped), drops if the GPU
-     struggles, and the CSS slideshow takes back over if even the lowest scale is too slow. */
+  /* Adaptive quality: render scale starts near device resolution (capped) and drops if the GPU
+     can't hold the transition at frame rate; below the floor the CSS slideshow takes over. */
   let scale = Math.min(window.devicePixelRatio || 1, 1.25);
   const MIN_SCALE = .5;
   let ema = 16.7, lastFrame = 0, sampled = 0;
@@ -128,10 +135,11 @@ void main(){
     const r = hero.getBoundingClientRect();
     let s = scale;
     const px = r.width * r.height * s * s;
-    if (px > 2.4e6) s *= Math.sqrt(2.4e6 / px);                 // never shade more than ~2.4MP
+    if (px > 2.2e6) s *= Math.sqrt(2.2e6 / px);                 // never shade more than ~2.2MP
     canvas.width = Math.max(1, Math.round(r.width * s));
     canvas.height = Math.max(1, Math.round(r.height * s));
     gl.viewport(0, 0, canvas.width, canvas.height);
+    dirty = true; kick();
   };
   new ResizeObserver(resize).observe(hero);
   const giveUp = () => {
@@ -142,50 +150,52 @@ void main(){
   };
   const watchPerf = (now) => {
     if (lastFrame) {
-      const dt = Math.min(now - lastFrame, 250);
-      if (dt < 120) { ema = ema * .92 + dt * .08; sampled++; }      // ignore tab-switch gaps
+      const dt = now - lastFrame;
+      if (dt < 120) { ema = ema * .85 + dt * .15; sampled++; }
     }
     lastFrame = now;
-    if (sampled > 45 && ema > 26) {
+    if (sampled > 10 && ema > 22) {                            // slowness is remembered across transitions
       sampled = 0;
-      if (scale > MIN_SCALE) { scale = Math.max(MIN_SCALE, scale * .7); resize(); ema = 20; hero.dataset.gl = scale.toFixed(2); }
+      if (scale > MIN_SCALE) { scale = Math.max(MIN_SCALE, scale * .7); resize(); ema = 18; hero.dataset.gl = scale.toFixed(2); }
       else giveUp();
     }
   };
 
-  const frame = (now) => {
-    raf = 0;
-    if (!visible || document.hidden || !ready) { lastFrame = 0; return; }
-    if (hero.classList.contains("video-on")) { lastFrame = 0; return; }   // real reel is playing on top
-    watchPerf(now);
-    // ease mouse toward target
-    mouse.x += (mouse.tx - mouse.x) * .06; mouse.y += (mouse.ty - mouse.y) * .06;
-    // When nothing is moving, redraw at ~30fps (grain only changes at 24fps anyway)
-    const idle = next === cur && Math.abs(mouse.tx - mouse.x) + Math.abs(mouse.ty - mouse.y) < .002;
-    if (idle && now - lastDraw < 32) { raf = requestAnimationFrame(frame); return; }
-    lastDraw = now;
-    if (next !== cur) {
+  /* Event-driven rendering: the shader only runs while a transition is in progress, plus one
+     frame when something changes (first paint, resize, slide settled). Between transitions the
+     GPU does nothing; the slow zoom and the mouse parallax are CSS transforms on the canvas. */
+  const draw = (now) => {
+    const moving = next !== cur;
+    if (moving) {
       prog = Math.min(1, (now - transStart) / TRANS);
-      if (prog >= 1) { cur = next; prog = 0; slideStart[0] = slideStart[1]; }
+      if (prog >= 1) { cur = next; prog = 0; }
     }
-    if (now - lastGrain > 1000 / 24) { grainT = Math.random() * 100; lastGrain = now; }   // grain ticks at 24fps
     const a = slides[cur], b = slides[next];
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, a.tex);
     gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, (b.tex || a.tex));
     gl.uniform2f(U.uRes, canvas.width, canvas.height);
     gl.uniform2f(U.uI0, a.w, a.h);
     gl.uniform2f(U.uI1, b.w, b.h);
-    gl.uniform2f(U.uMouse, mouse.x, 1 - mouse.y);
-    gl.uniform1f(U.uTime, now / 1000);
+    gl.uniform2f(U.uMouse, .5, .5);
+    gl.uniform1f(U.uTime, 7.0 + seed);                        // light-leak position varies per slide
     gl.uniform1f(U.uProg, next !== cur ? ease(prog) : 0);
-    gl.uniform1f(U.uK0, (now - slideStart[0]) / 1000);
-    gl.uniform1f(U.uK1, (now - slideStart[1]) / 1000);
+    gl.uniform1f(U.uK0, 9.0); gl.uniform1f(U.uK1, 9.0);       // fixed framing; CSS does the zoom
     gl.uniform1f(U.uSeed, seed);
-    gl.uniform1f(U.uGrainT, grainT);
+    gl.uniform1f(U.uGrainT, seed * 13.0);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    raf = requestAnimationFrame(frame);
+    return next !== cur;
   };
-  const kick = () => { if (!raf && visible && !document.hidden && ready) raf = requestAnimationFrame(frame); };
+  const frame = (now) => {
+    raf = 0;
+    if (!visible || document.hidden || !ready) { lastFrame = 0; return; }
+    const moving = next !== cur;
+    if (!moving && !dirty) { lastFrame = 0; return; }
+    if (moving) watchPerf(now); else lastFrame = 0;
+    dirty = false;
+    if (draw(now)) raf = requestAnimationFrame(frame);
+    else lastFrame = 0;
+  };
+  function kick() { if (!raf && visible && !document.hidden && ready) raf = requestAnimationFrame(frame); }
 
   /* Slide changes come from main.js (same timer drives labels + counter) */
   hero.addEventListener("hero:slide", async (e) => {
@@ -193,30 +203,36 @@ void main(){
     if (i === next) return;
     const s = await load(slides[i]);
     if (!s || !s.tex) return;
-    if (next !== cur) { cur = next; slideStart[0] = slideStart[1]; }   // finish any running transition instantly
-    next = i; transStart = performance.now(); slideStart[1] = transStart; seed = Math.random() * 10;
+    if (next !== cur) cur = next;                             // finish any running transition instantly
+    next = i; transStart = performance.now(); seed = Math.random() * 10;
     kick();
   });
 
+  /* Mouse parallax on the compositor: one style write per frame while the pointer moves */
   if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    let pr = 0, ev = null;
     hero.addEventListener("pointermove", (e) => {
-      const r = hero.getBoundingClientRect();
-      mouse.tx = (e.clientX - r.left) / r.width; mouse.ty = (e.clientY - r.top) / r.height;
+      ev = e;
+      if (pr) return;
+      pr = requestAnimationFrame(() => {
+        pr = 0;
+        const r = hero.getBoundingClientRect();
+        const x = (ev.clientX - r.left) / r.width - .5, y = (ev.clientY - r.top) / r.height - .5;
+        canvas.style.translate = `${(-x * 26).toFixed(1)}px ${(-y * 18).toFixed(1)}px`;
+      });
     }, { passive: true });
-    hero.addEventListener("pointerleave", () => { mouse.tx = .5; mouse.ty = .5; });
+    hero.addEventListener("pointerleave", () => { canvas.style.translate = ""; });
   }
-  new IntersectionObserver(([en]) => { visible = en.isIntersecting; kick(); }).observe(hero);
-  document.addEventListener("visibilitychange", kick);
+  new IntersectionObserver(([en]) => { visible = en.isIntersecting; if (visible) dirty = true; kick(); }).observe(hero);
+  document.addEventListener("visibilitychange", () => { dirty = true; kick(); });
   canvas.addEventListener("webglcontextlost", (e) => { e.preventDefault(); ready = false; hero.classList.remove("is-gl"); });
 
   /* Boot: first still, then the rest in the background */
   load(slides[0]).then((s) => {
     if (!s || !s.tex) return;
     hero.querySelector(".hero__slides").appendChild(canvas);
-    resize();
     ready = true;
-    slideStart = [performance.now(), performance.now()];
-    kick();
+    resize();
     requestAnimationFrame(() => hero.classList.add("is-gl"));
     const rest = () => slides.slice(1).forEach(load);
     "requestIdleCallback" in window ? requestIdleCallback(rest, { timeout: 2500 }) : setTimeout(rest, 1200);

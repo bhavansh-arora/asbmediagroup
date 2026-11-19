@@ -82,30 +82,24 @@
   /* ---------- Custom cursor ---------- */
   const cur = $(".cur");
   let mx = innerWidth / 2, my = innerHeight / 2;
+  // The real cursor always stays (no trailing replacement that feels laggy). Over films a
+  // "View" / "Play" bubble sits exactly at the pointer; it is positioned once per frame, only
+  // while it is visible.
   if (cur) {
     root.classList.add("has-cur");
-    const ring = $(".cur__ring", cur), dot = $(".cur__dot", cur), label = $(".cur__label", cur);
-    let rx = mx, ry = my, seen = false, raf = 0;
-    const tick = () => {
-      rx += (mx - rx) * .2; ry += (my - ry) * .2;
-      dot.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
-      ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
-      raf = Math.abs(mx - rx) + Math.abs(my - ry) > .2 ? requestAnimationFrame(tick) : 0;
-    };
+    const label = $(".cur__label", cur);
+    let on = false, raf = 0;
+    const place = () => { raf = 0; cur.style.transform = `translate3d(${mx}px, ${my}px, 0)`; };
     addEventListener("pointermove", (e) => {
       mx = e.clientX; my = e.clientY;
-      if (!seen) { seen = true; rx = mx; ry = my; cur.style.opacity = 1; }
-      if (!raf) raf = requestAnimationFrame(tick);
+      if (on && !raf) raf = requestAnimationFrame(place);
     }, { passive: true });
-    document.addEventListener("pointerleave", () => (cur.style.opacity = 0));
-    document.addEventListener("pointerenter", () => (cur.style.opacity = 1));
-    cur.style.opacity = 0;
     document.addEventListener("pointerover", (e) => {
-      const t = e.target.closest("a, button, summary, label, .opt, [data-cursor]");
-      cur.classList.remove("is-hover", "is-label");
-      if (!t) return;
-      if (t.dataset.cursor) { cur.classList.add("is-label"); label.textContent = t.dataset.cursor; }
-      else cur.classList.add("is-hover");
+      // nearest interactive element wins, so buttons inside the hero don't get the bubble
+      const t = e.target.closest("a, button, summary, label, input, textarea, [data-cursor]");
+      on = !!(t && t.dataset.cursor);
+      cur.classList.toggle("is-label", on);
+      if (on) { label.textContent = t.dataset.cursor; place(); }
     });
   }
 

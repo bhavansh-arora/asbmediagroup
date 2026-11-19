@@ -31,8 +31,8 @@ python3 build.py
 - `src/partials/header_noir.html` / `footer_noir.html`: the Noir shell (loader, cursor, blended nav, closing statement, footer)
 - `assets/js/noir.js`: loader, custom cursor, the WebGL hover preview on the film list, background reel, magnetic buttons
 - `assets/js/main.js`: interactions in plain JavaScript (no libraries): word-mask headline reveals, count-ups, cursor spotlight/tilt, magnetic buttons, quiz, brief builder, lightbox. Scrolling is native.
-- `assets/js/gl-hero.js`: the WebGL hero (film-burn transitions, light leak, grain, mouse parallax). It pauses off-screen, lowers its own resolution on slow GPUs and falls back to the CSS slideshow if needed; reduced-motion visitors get the CSS version.
-- Scroll-linked motion (parallax, statement highlight, panel/polaroid entrances, nav progress line) is pure CSS scroll timelines at the end of `styles.css`, so it runs off the main thread; browsers without support just show the static layout.
+- `assets/js/gl-hero.js`: the WebGL hero (film-burn transitions). It only draws while a transition runs; the slow zoom and mouse parallax are CSS transforms on the canvas. It lowers its own resolution on slow GPUs, and browsers rendering WebGL in software (hardware acceleration off) get the CSS cross-fade instead. Add `?gl=force` to a URL to force the shader on for testing.
+- Performance rule for Noir: scroll-timeline animations keep a GPU layer alive permanently, so only the hero exit and the pinned photo strip use them. Everything else is a one-shot reveal (main.js adds `.in` once).
 - Images: `build.py` adds width/height and a `-sm`/full `srcset` to every image automatically, so phones download the small versions.
 
 ## Preview locally
