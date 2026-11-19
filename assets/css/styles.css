@@ -34,7 +34,7 @@
 
   --gutter: clamp(16px, 2.2vw, 32px);
   --inner: clamp(20px, 3.4vw, 56px);
-  --section: clamp(56px, 6.6vw, 96px);
+  --section: clamp(48px, 5.4vw, 78px);
   --gap: clamp(10px, 1vw, 14px);
   --r-xl: clamp(18px, 1.8vw, 28px);
   --r-lg: clamp(14px, 1.3vw, 20px);
@@ -80,7 +80,7 @@ main { padding-bottom: var(--section); }
 .panel .wrap { padding-inline: var(--inner); }
 .panel::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(60% 50% at 85% 0%, rgba(255, 107, 71, .12), transparent 70%), radial-gradient(50% 60% at 0% 100%, rgba(242, 237, 228, .05), transparent 70%); }
 .panel { margin-top: var(--section); }
-.panel .section { padding-block: clamp(44px, 5.2vw, 76px); }
+.panel .section { padding-block: clamp(36px, 4.2vw, 60px); }
 
 /* ---------- Type ---------- */
 .hero-title, .h1, .h2, .h3 { font-family: var(--f-sans); font-weight: 500; text-wrap: balance; }
@@ -211,7 +211,7 @@ em, .serif { font-family: var(--f-serif); font-style: italic; font-weight: 400; 
 .float-card__body .mono { color: var(--accent-light); display: block; margin-bottom: 4px; font-size: .6rem; }
 
 /* Inner page header (on cream) */
-.phead { padding: calc(var(--gutter) + 56px + clamp(56px, 7vw, 104px)) 0 clamp(36px, 4vw, 56px); }
+.phead { padding: calc(var(--gutter) + 56px + clamp(40px, 5vw, 76px)) 0 clamp(28px, 3vw, 44px); }
 .phead__grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 24px var(--inner); align-items: end; }
 .phead__aside { display: grid; gap: 20px; justify-items: start; padding-bottom: .4em; }
 .phead__meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: clamp(32px, 4vw, 52px); padding-top: 18px; border-top: 1px solid var(--line); }
@@ -242,8 +242,8 @@ em, .serif { font-family: var(--f-serif); font-style: italic; font-weight: 400; 
 .mcard__img { aspect-ratio: 16 / 11; }
 .mcard--wide .mcard__img { aspect-ratio: 16 / 9; }
 .mcard--tall .mcard__img { aspect-ratio: 4 / 5; }
-.mcard__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
-.mcard:hover .mcard__img img { transform: scale(1.035); }
+.mcard__img img { width: 100%; height: 100%; object-fit: cover; transition: scale 1.2s var(--ease); }
+.mcard:hover .mcard__img img { scale: 1.04; }
 .mcard::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: linear-gradient(180deg, rgba(21, 18, 15, 0) 45%, rgba(21, 18, 15, .78)); }
 .mcard__tag { position: absolute; z-index: 1; top: 14px; left: 14px; display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; border-radius: 999px; background: rgba(21, 18, 15, .55); font-size: .74rem; color: var(--on-dark); }
 .mcard__body { position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; padding: clamp(16px, 1.8vw, 26px); display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; }
@@ -413,8 +413,8 @@ em, .serif { font-family: var(--f-serif); font-style: italic; font-weight: 400; 
 
 /* ---------- Case study ---------- */
 .player { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--r-xl); overflow: hidden; background: #000; color: var(--on-dark); }
-.player img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
-.player:hover img { transform: scale(1.02); }
+.player img { width: 100%; height: 100%; object-fit: cover; transition: scale 1.2s var(--ease); }
+.player:hover img { scale: 1.03; }
 .player::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(21, 18, 15, .7)); }
 .player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 3; }
 .player__ui { position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; padding: clamp(18px, 2.4vw, 32px); display: flex; justify-content: space-between; align-items: center; gap: 16px; }
@@ -632,3 +632,94 @@ textarea.input { height: auto; min-height: 120px; padding: 14px 16px; resize: ve
   .svc::-webkit-scrollbar { display: none; }
   .svc__card { flex: 0 0 80%; scroll-snap-align: start; }
 }
+
+
+/* ==========================================================================
+   Motion layer — every effect animates transform/opacity only (GPU-composited).
+   Scroll-linked effects use CSS scroll timelines (run off the main thread) and
+   simply don't apply in browsers without support.
+   ========================================================================== */
+
+/* WebGL hero canvas fades in over the CSS slideshow it replaces */
+.hero__gl { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; opacity: 0; transition: opacity 1.2s ease; }
+.hero.is-gl .hero__gl { opacity: 1; }
+.hero.is-gl .hero__slides figure { opacity: 0 !important; transition: opacity 1.2s ease; }
+
+/* Masked word reveal for headlines */
+.words .wd { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .045em .12em 0; margin: 0 -.045em -.12em 0; }
+.words .wd > span { display: inline-block; transform: translateY(108%) rotate(4deg); transform-origin: 0 100%; transition: transform 1.05s cubic-bezier(.16, 1, .3, 1); transition-delay: calc(var(--i, 0) * 55ms + var(--d, 0s)); }
+.js [data-r].words { opacity: 1; transform: none; }
+[data-r].in .words .wd > span, .words.in .wd > span { transform: none; }
+
+/* Hero entrance: stills settle in, floating card bobs */
+.hero__slides { animation: heroSettle 1.6s cubic-bezier(.16, 1, .3, 1) both; }
+@keyframes heroSettle { from { transform: scale(1.12); opacity: 0; } }
+.float-card { animation: bob 6s ease-in-out infinite; }
+@keyframes bob { 50% { translate: 0 -8px; } }
+
+/* Card spotlight that follows the cursor */
+.spot { position: relative; isolation: isolate; }
+.spot::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .35s;
+  background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(200, 65, 42, .09), transparent 70%); }
+.dark .spot::before, .spot.svc__card::before, .pkg--feat.spot::before { background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 107, 71, .2), transparent 70%); }
+.spot:hover::before { opacity: 1; }
+.svc__card, .pkg { transition: transform .25s ease-out, background .35s, box-shadow .35s; will-change: transform; }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Scroll progress along the bottom of the nav pill */
+    .nav::after { content: ""; position: absolute; left: 26px; right: 26px; bottom: 0; height: 2px; border-radius: 2px; background: var(--accent); transform-origin: 0 50%;
+      animation: grow linear both; animation-timeline: scroll(root); }
+    @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+    /* Hero recedes into the page as you scroll past it */
+    .hero__slides { animation: heroSettle 1.6s cubic-bezier(.16, 1, .3, 1) both, heroAway linear both; animation-timeline: auto, view(); animation-range: normal, exit 0% exit 100%; }
+    @keyframes heroAway { to { translate: 0 22%; } }
+    .hero__inner { animation: fadeLift linear both; animation-timeline: view(); animation-range: exit 0% exit 55%; }
+    @keyframes fadeLift { to { opacity: 0; transform: translateY(-12%); } }
+
+    /* Statement lights up word by word */
+    .statement .sw { animation: lit linear both; animation-timeline: view(); animation-range: entry 35% cover 52%; }
+    @keyframes lit { from { opacity: .14; } }
+
+    /* Images drift inside their frames (parallax) */
+    .mcard__img img, .frow__img img, .tile--img img, .svc__img img, .polaroid__img img, .outcome img {
+      animation: drift linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+    @keyframes drift { from { transform: translateY(-6%) scale(1.14); } to { transform: translateY(6%) scale(1.14); } }
+
+    /* Dark panels swell into place */
+    .panel { animation: swell linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; transform-origin: 50% 0; }
+    @keyframes swell { from { transform: scale(.93); } }
+
+    /* Polaroids fan out from a stack */
+    .polaroid { animation: fan linear both; animation-timeline: view(); animation-range: entry 10% cover 45%; }
+    .polaroid:nth-child(1) { --fx: 34%; } .polaroid:nth-child(3) { --fx: -34%; }
+    @keyframes fan { from { translate: var(--fx, 0) 70px; rotate: 0deg; } }
+
+    /* Accent rules and process rows draw themselves */
+    .rule::before { animation: grow linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; transform-origin: 0 50%; }
+    .steps li { position: relative; }
+    .steps li::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: var(--accent); transform-origin: 0 50%;
+      animation: grow linear both; animation-timeline: view(); animation-range: entry 40% cover 55%; }
+
+    /* Ticker drifts with the scroll on top of its own loop */
+    .ticker__group { animation: tickDrift linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+    @keyframes tickDrift { from { translate: 10vw 0; } to { translate: -14vw 0; } }
+
+    /* Film cards and tiles rise with a slight 3D tip */
+    .films .mcard, .bento .tile, .formats .format, .outcomes .outcome { animation: tip linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; }
+    @keyframes tip { from { transform: perspective(1200px) rotateX(9deg) translateY(50px); opacity: .2; } }
+  }
+}
+
+/* Cross-page transitions (supporting browsers): quick fade, nav stays put */
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .32s; animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
+.nav { view-transition-name: site-nav; }
+
+@media (prefers-reduced-motion: reduce) {
+  .words .wd > span { transform: none !important; transition: none; }
+  .hero__slides, .float-card { animation: none; }
+  @view-transition { navigation: none; }
+}
+.hero__kicker { margin-bottom: clamp(4px, 1vw, 12px); }

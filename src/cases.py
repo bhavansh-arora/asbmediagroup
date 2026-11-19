@@ -110,7 +110,7 @@ def render(i):
     <section>
       <div class="wrap">
         <button class="player" type="button" data-player="{c["vimeo"]}" data-title="{c["name"]}" aria-label="Play the {c["name"]} film" data-r>
-          <img src="assets/img/{c["img"]}.webp" alt="Still from the {c["name"]} film" fetchpriority="high" sizes="100vw">
+          <img src="assets/img/{poster}.webp" alt="Still from the {c["name"]} film" fetchpriority="high" sizes="100vw"{' style="object-position:50% 32%"' if poster != c["img"] else ""}>
           <span class="player__ui"><span class="player__play"><span class="circle circle--solid">{{{{icon:play}}}}</span>Play the film</span><span class="mono">{c["runtime"]}</span></span>
         </button>
       </div>

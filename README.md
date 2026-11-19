@@ -28,7 +28,9 @@ python3 build.py
 - `src/pages/`: the body of each page. The first line is a JSON meta comment with title, description and nav.
 - `src/cases.py`: all four case studies come from one data list and one template. To add a film, add an entry here.
 - `assets/css/styles.css`: the design system (tokens are at the top)
-- `assets/js/main.js`: all interactions in ~14 KB of plain JavaScript (no libraries). Scrolling is native; reveals use IntersectionObserver + CSS.
+- `assets/js/main.js`: interactions in plain JavaScript (no libraries): word-mask headline reveals, count-ups, cursor spotlight/tilt, magnetic buttons, quiz, brief builder, lightbox. Scrolling is native.
+- `assets/js/gl-hero.js`: the WebGL hero (film-burn transitions, light leak, grain, mouse parallax). It pauses off-screen, lowers its own resolution on slow GPUs and falls back to the CSS slideshow if needed; reduced-motion visitors get the CSS version.
+- Scroll-linked motion (parallax, statement highlight, panel/polaroid entrances, nav progress line) is pure CSS scroll timelines at the end of `styles.css`, so it runs off the main thread; browsers without support just show the static layout.
 - Images: `build.py` adds width/height and a `-sm`/full `srcset` to every image automatically, so phones download the small versions.
 
 ## Preview locally

@@ -36,6 +36,40 @@
   menuBtn && menuBtn.addEventListener("click", () => setMenu(!root.classList.contains("menu-open")));
   sheet && sheet.addEventListener("click", (e) => { if (e.target.closest("a")) setMenu(false); });
 
+  /* Split headlines into masked words (they rise in, staggered, when revealed) */
+  const splitWords = (el, wrap) => {
+    let i = 0;
+    const walk = (node) => {
+      Array.from(node.childNodes).forEach((ch) => {
+        if (ch.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          ch.textContent.split(/(\s+)/).forEach((part) => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+            frag.appendChild(wrap(part, i++));
+          });
+          ch.replaceWith(frag);
+        } else if (ch.nodeType === 1 && !ch.classList.contains("pill") && ch.tagName !== "BR") walk(ch);
+      });
+    };
+    walk(el);
+  };
+  if (!reduce) {
+    $$(".hero-title, .h1, .h2").forEach((h) => {
+      if (h.closest("[data-r-name], .finder__result")) return;
+      h.setAttribute("aria-label", h.textContent.replace(/\s+/g, " ").trim());
+      splitWords(h, (word, i) => {
+        const o = document.createElement("span"); o.className = "wd"; o.setAttribute("aria-hidden", "true");
+        const n = document.createElement("span"); n.textContent = word; n.style.setProperty("--i", i);
+        o.appendChild(n); return o;
+      });
+      h.classList.add("words");
+      if (!h.closest("[data-r]")) h.setAttribute("data-r", "");
+    });
+    // Statement paragraphs light up word by word as they scroll through (CSS scroll timeline)
+    $$(".statement").forEach((p) => splitWords(p, (word) => { const s = document.createElement("span"); s.className = "sw"; s.textContent = word; return s; }));
+  }
+
   /* Reveal on enter (once) */
   const revealIO = new IntersectionObserver((entries) => {
     entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); revealIO.unobserve(en.target); } });
@@ -61,6 +95,7 @@
       if (label) label.textContent = slides[i].dataset.label || "";
       if (num) num.textContent = String(i + 1).padStart(2, "0");
       if (bar) bar.style.setProperty("--p", (i + 1) / slides.length);
+      hero.dispatchEvent(new CustomEvent("hero:slide", { detail: { index: i } }));   // WebGL hero follows
     };
     const play = () => { if (!timer && !reduce && slides.length > 1) timer = setInterval(() => show(i + 1), 5200); };
     const stop = () => { clearInterval(timer); timer = null; };
@@ -275,5 +310,54 @@
     const copy = $("[data-copy]");
     copy && copy.addEventListener("click", async () => { try { await navigator.clipboard.writeText($(".brief__summary").textContent); copy.querySelector("span").textContent = "Copied"; } catch (x) {} });
     go(0);
+  }
+
+  /* Count-up for big stat numbers (4K, 48h) when they reveal */
+  if (!reduce) {
+    $$(".tile__big").forEach((el) => {
+      const tn = Array.from(el.childNodes).find((n) => n.nodeType === 3 && /\d/.test(n.textContent));
+      if (!tn) return;
+      const m = tn.textContent.match(/^(\D*)(\d+)(.*)$/);
+      if (!m) return;
+      const end = +m[2];
+      tn.textContent = m[1] + "0" + m[3];
+      const io = new IntersectionObserver(([en]) => {
+        if (!en.isIntersecting) return;
+        io.disconnect();
+        const t0 = performance.now();
+        const step = (t) => {
+          const k = Math.min(1, (t - t0) / 1400);
+          tn.textContent = m[1] + Math.round(end * (1 - Math.pow(1 - k, 3))) + m[3];
+          if (k < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }, { threshold: .6 });
+      io.observe(el);
+    });
+  }
+
+  /* Pointer effects (mouse/trackpad only): cursor spotlight + 3D tilt on cards, magnetic buttons */
+  if (!reduce && matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    const track = (el, onMove, onLeave) => {
+      let raf = 0, ev = null;
+      el.addEventListener("pointermove", (e) => { ev = e; if (!raf) raf = requestAnimationFrame(() => { raf = 0; onMove(ev, el.getBoundingClientRect()); }); });
+      el.addEventListener("pointerleave", () => { cancelAnimationFrame(raf); raf = 0; onLeave(); });
+    };
+    $$(".svc__card, .tile, .pkg, .format, .story, .frow__body, .finder__card").forEach((card) => {
+      const tilt = card.matches(".svc__card, .pkg");
+      card.classList.add("spot");
+      track(card, (e, r) => {
+        const x = e.clientX - r.left, y = e.clientY - r.top;
+        card.style.setProperty("--mx", x + "px");
+        card.style.setProperty("--my", y + "px");
+        if (tilt) card.style.transform = `perspective(900px) rotateX(${((r.height / 2 - y) / r.height) * 7}deg) rotateY(${((x - r.width / 2) / r.width) * 7}deg) translateY(-4px)`;
+      }, () => { if (tilt) card.style.transform = ""; });
+    });
+    $$(".btn, .mcard .circle").forEach((b) => {
+      const k = .22;
+      track(b, (e, r) => {
+        b.style.translate = `${(e.clientX - r.left - r.width / 2) * k}px ${(e.clientY - r.top - r.height / 2) * k}px`;
+      }, () => { b.style.translate = ""; });
+    });
   }
 })();
