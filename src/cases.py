@@ -61,9 +61,25 @@ CASES = [
 ]
 
 
-def ratio_box(w, h):
-    scale = 64 / max(w, h)
-    return f'<span class="format__box"><i style="width:{w*scale:.0f}px;height:{h*scale:.0f}px"></i></span>'
+
+# One shoot, every screen: the same still cropped to each delivery format, at equal heights
+# (column widths are proportional to each aspect ratio), with a hint of the platform's UI.
+FSHOT_KIND = {"16:9": "169", "9:16": "916", "4:5": "45", "1:1": "11"}
+CASE_STILL = {"film-mary": ("film-mary-crop", "55% 30%"), "film-funbike": ("film-funbike-hero", "50% 30%"),
+              "film-teco": ("film-teco", "40% 45%"), "film-dance": ("film-dance-hero", "45% 35%")}
+
+
+def fshots(img, pos, items, indent="        "):
+    cols = " ".join(f"minmax(0,{w / h:.4f}fr)" for _, _, w, h in items)
+    figs = []
+    for k, (r, label, w, h) in enumerate(items):
+        figs.append(
+            f'{indent}  <figure class="fshot fshot--{FSHOT_KIND[r]}" data-r style="--d:{k * 0.06:.2f}s">'
+            f'<span class="fshot__frame" style="--ar:{w}/{h}"><img src="assets/img/{img}.webp" alt="" loading="lazy" decoding="async" '
+            f'sizes="(max-width: 640px) 50vw, 40vw" style="object-position:{pos}"><span class="fshot__ui" aria-hidden="true"></span></span>'
+            f'<figcaption><span class="mono accent">{r}</span><span>{label}</span></figcaption></figure>')
+    nl = chr(10)
+    return f'{indent}<div class="fshots" style="grid-template-columns:{cols}">' + nl + nl.join(figs) + nl + f"{indent}</div>"
 
 
 def render(i):
@@ -71,11 +87,8 @@ def render(i):
     nxt = CASES[(i + 1) % len(CASES)]
     title = " ".join(c["title_lines"])
     poster = "film-mary-crop" if c["img"] == "film-mary" else c["img"]
-    where = "\n".join(
-        f"""          <div class="format" data-r style="--d:{k*0.05:.2f}s">
-            {ratio_box(w, h)}
-            <div><p class="mono accent">{r}</p><p>{label}</p></div>
-          </div>""" for k, (r, label, w, h) in enumerate(c["where"]))
+    still, spos = CASE_STILL[c["img"]]
+    where = fshots(still, spos, c["where"])
     tags = "".join(f'<span class="chip">{t}</span>' for t in c["tags"])
     schema = {
         "@context": "https://schema.org", "@type": "VideoObject", "name": c["name"], "description": c["desc"],
@@ -145,9 +158,7 @@ def render(i):
       <div class="wrap">
         <div class="rule"></div>
         <div class="eyebrow-row mono" data-r><span><span class="num">(02)</span> — Where it works</span><span>One shoot · every screen</span></div>
-        <div class="formats">
 {where}
-        </div>
       </div>
     </section>
 

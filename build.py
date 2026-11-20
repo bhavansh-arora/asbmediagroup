@@ -28,6 +28,7 @@ ICONS = {
     "close": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg>',
     "star": '<svg class="marquee__star" viewBox="0 0 40 40" fill="currentColor" aria-hidden="true"><path d="M20 0c1.2 10.6 9.4 18.8 20 20-10.6 1.2-18.8 9.4-20 20C18.8 29.4 10.6 21.2 0 20 10.6 18.8 18.8 10.6 20 0Z"/></svg>',
     "phone": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>',
+    "mail": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" width="16" height="16"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>',
     # industry icons
     "i-heart": '<svg class="ind__icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20 34S5 25.5 5 15a8 8 0 0 1 15-4 8 8 0 0 1 15 4c0 10.5-15 19-15 19Z"/></svg>',
     "i-bolt": '<svg class="ind__icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M22 3 7 23h12l-2 14 16-21H21l1-13Z"/></svg>',
