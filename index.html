@@ -23,9 +23,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://player.vimeo.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300..700;1,300..700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0;1,9..144,300..700,100&family=JetBrains+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="assets/css/studio.css?v=9e6582d9">
-  <script src="assets/js/main.js?v=ddd339d6" defer fetchpriority="high"></script>
-  <script src="assets/js/studio.js?v=9be65201" defer fetchpriority="high"></script>
+  <link rel="stylesheet" href="assets/css/studio.css?v=bdf2629e">
+  <script src="assets/js/main.js?v=cf7e8524" defer fetchpriority="high"></script>
+  <script src="assets/js/studio.js?v=596477eb" defer fetchpriority="high"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -108,34 +108,66 @@
   </div>
 
   <main id="main">
-<!-- HERO: a framed cinematic panel (grows open after the loader / curtain), cross-fading film stills,
-         slide counter, rotating word, and a featured film that plays in the lightbox -->
-    <section class="hero hero--frame" aria-label="Introduction" data-slides>
+<!-- HERO: a film slider in a framed cinematic panel (grows open after the loader / curtain).
+         Each slide is one of the four films: its still, a "Now showing" panel that plays it in the lightbox,
+         and a tab with a progress bar. Auto-advances; pauses on hover or focus and while off-screen. -->
+    <section class="hero hero--frame" aria-label="Introduction and our films" data-slides>
       <div class="hero__frame">
         <div class="hero__slides" aria-hidden="true">
-          <figure class="is-on"><img src="assets/img/film-funbike-hero.webp" alt="" fetchpriority="high" decoding="async" sizes="100vw" width="1800" height="861" srcset="assets/img/film-funbike-hero-sm.webp 900w, assets/img/film-funbike-hero.webp 1800w"></figure>
+          <figure class="is-on"><img src="assets/img/film-mary-hero.webp" alt="" fetchpriority="high" decoding="async" sizes="100vw" style="object-position:58% 30%" width="1800" height="740" srcset="assets/img/film-mary-hero-sm.webp 900w, assets/img/film-mary-hero.webp 1800w"></figure>
+          <figure><img src="assets/img/film-funbike-hero.webp" alt="" loading="lazy" decoding="async" sizes="100vw" width="1800" height="861" srcset="assets/img/film-funbike-hero-sm.webp 900w, assets/img/film-funbike-hero.webp 1800w"></figure>
+          <figure><img src="assets/img/film-teco.webp" alt="" loading="lazy" decoding="async" sizes="100vw" style="object-position:50% 40%" width="1800" height="1013" srcset="assets/img/film-teco-sm.webp 900w, assets/img/film-teco.webp 1800w"></figure>
           <figure><img src="assets/img/film-dance-hero.webp" alt="" loading="lazy" decoding="async" sizes="100vw" style="object-position:40% 40%" width="1800" height="891" srcset="assets/img/film-dance-hero-sm.webp 900w, assets/img/film-dance-hero.webp 1800w"></figure>
-          <figure><img src="assets/img/film-teco.webp" alt="" loading="lazy" decoding="async" sizes="100vw" width="1800" height="1013" srcset="assets/img/film-teco-sm.webp 900w, assets/img/film-teco.webp 1800w"></figure>
-          <figure><img src="assets/img/wed-16-hero.webp" alt="" loading="lazy" decoding="async" sizes="100vw" style="object-position:50% 40%" width="1800" height="1116" srcset="assets/img/wed-16-hero-sm.webp 900w, assets/img/wed-16-hero.webp 1800w"></figure>
         </div>
 
-        <a class="hero__card" href="film-mary-lees-house.html" data-video="1209681619" data-title="Mary Lee’s House" data-cursor="Play" data-hr style="--d:.7s">
-          <span class="hero__card-media"><img src="assets/img/film-mary-crop.webp" alt="" decoding="async" sizes="320px" style="object-position:55% 30%" width="1044" height="1013"><span class="hero__card-play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4.5v15a.5.5 0 0 0 .76.43l12.5-7.5a.5.5 0 0 0 0-.86L6.76 4.07A.5.5 0 0 0 6 4.5Z"/></svg></span></span>
-          <span class="hero__card-body"><span><span class="mono">Featured film · 04:03</span><b>Mary Lee’s House, a brand film for child advocacy</b></span><span class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></span>
-        </a>
+        <div class="hero__now" data-hero-hold data-hr style="--d:.7s">
+          <p class="mono hero__now-k"><span class="dot dot--live"></span>&nbsp; Now showing <span class="hero__now-n"><span data-hero-n>01</span> / 04</span></p>
+          <div class="hero__now-list">
+            <div class="hnow is-on">
+              <span class="mono hnow__s">Nonprofit · Tampa</span>
+              <b class="hnow__t">Mary Lee’s House</b>
+              <span class="hnow__m">Brand film · 04:03 · Compassionate, interview-led</span>
+              <span class="hnow__ctl"><button class="btn btn--cream btn--sm" type="button" data-video="1209681619" data-title="Mary Lee’s House"><span>Play film</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4.5v15a.5.5 0 0 0 .76.43l12.5-7.5a.5.5 0 0 0 0-.86L6.76 4.07A.5.5 0 0 0 6 4.5Z"/></svg></span></button><a class="link" href="film-mary-lees-house.html">The case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></span>
+            </div>
+            <div class="hnow" aria-hidden="true" inert>
+              <span class="mono hnow__s">Powersports · Lakeland</span>
+              <b class="hnow__t">Fun Bike Center</b>
+              <span class="hnow__m">Showcase · 01:07 · High energy, showroom</span>
+              <span class="hnow__ctl"><button class="btn btn--cream btn--sm" type="button" data-video="1210003802" data-title="Fun Bike Center"><span>Play film</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4.5v15a.5.5 0 0 0 .76.43l12.5-7.5a.5.5 0 0 0 0-.86L6.76 4.07A.5.5 0 0 0 6 4.5Z"/></svg></span></button><a class="link" href="film-fun-bike-center.html">The case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></span>
+            </div>
+            <div class="hnow" aria-hidden="true" inert>
+              <span class="mono hnow__s">Utility · Tampa Bay</span>
+              <b class="hnow__t">Tampa Electric</b>
+              <span class="hnow__m">Field feature · 00:29 · On site, explainer</span>
+              <span class="hnow__ctl"><button class="btn btn--cream btn--sm" type="button" data-video="1210011258" data-title="Tampa Electric — Energy Audit"><span>Play film</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4.5v15a.5.5 0 0 0 .76.43l12.5-7.5a.5.5 0 0 0 0-.86L6.76 4.07A.5.5 0 0 0 6 4.5Z"/></svg></span></button><a class="link" href="film-teco-energy-audit.html">The case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></span>
+            </div>
+            <div class="hnow" aria-hidden="true" inert>
+              <span class="mono hnow__s">Dance studio · Sarasota</span>
+              <b class="hnow__t">The Dance Room</b>
+              <span class="hnow__m">Brand film · 01:26 · Movement, welcoming</span>
+              <span class="hnow__ctl"><button class="btn btn--cream btn--sm" type="button" data-video="1209998926" data-title="The Dance Room"><span>Play film</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4.5v15a.5.5 0 0 0 .76.43l12.5-7.5a.5.5 0 0 0 0-.86L6.76 4.07A.5.5 0 0 0 6 4.5Z"/></svg></span></button><a class="link" href="film-the-dance-room.html">The case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></span>
+            </div>
+          </div>
+        </div>
 
         <div class="hero__ui">
           <div class="hero__top" data-hr>
             <p class="hero__kicker mono"><span class="dot"></span> Commercial film · Tampa Bay, Florida</p>
-            <p class="hero__index mono" aria-hidden="true"><span data-hero-n>01</span><span class="hero__index-bar"><i></i></span><span>04</span></p>
           </div>
           <h1 class="hero-title" aria-label="We film what makes you different.">We film what makes <br>you <span class="rot" data-nosplit><em class="rot__w is-on">different.</em><em class="rot__w">remarkable.</em><em class="rot__w">memorable.</em></span></h1>
           <div class="hero__foot" data-hr style="--d:.35s">
             <p class="hero__lede">Brand anthem films, product showcases and social campaigns for businesses that want to be remembered and chosen.</p>
             <div class="btn-row">
               <a class="btn" href="contact.html"><span>Start your film</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
-              <a class="btn btn--ghost" href="work.html"><span>Watch 4 films</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4.5v15a.5.5 0 0 0 .76.43l12.5-7.5a.5.5 0 0 0 0-.86L6.76 4.07A.5.5 0 0 0 6 4.5Z"/></svg></span></a>
+              <a class="btn btn--ghost" href="work.html"><span>All films</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
             </div>
+          </div>
+          <div class="hero__films" role="group" aria-label="Choose a film" data-hero-hold data-hr style="--d:.5s">
+          <button class="hfilm is-on" type="button" data-hero-go="0" aria-current="true" aria-label="Show Mary Lee’s House"><span class="hfilm__bar" aria-hidden="true"><i></i></span><img class="hfilm__th" src="assets/img/film-mary-crop-th.webp" alt="" loading="lazy" decoding="async" width="300" height="200"><span class="hfilm__tx"><span class="mono">01<span class="hfilm__rt"> · 04:03</span></span><b>Mary Lee’s House</b></span></button>
+          <button class="hfilm" type="button" data-hero-go="1" aria-label="Show Fun Bike Center"><span class="hfilm__bar" aria-hidden="true"><i></i></span><img class="hfilm__th" src="assets/img/film-funbike-th.webp" alt="" loading="lazy" decoding="async" width="300" height="200"><span class="hfilm__tx"><span class="mono">02<span class="hfilm__rt"> · 01:07</span></span><b>Fun Bike Center</b></span></button>
+          <button class="hfilm" type="button" data-hero-go="2" aria-label="Show Tampa Electric"><span class="hfilm__bar" aria-hidden="true"><i></i></span><img class="hfilm__th" src="assets/img/film-teco-th.webp" alt="" loading="lazy" decoding="async" width="300" height="200"><span class="hfilm__tx"><span class="mono">03<span class="hfilm__rt"> · 00:29</span></span><b>Tampa Electric</b></span></button>
+          <button class="hfilm" type="button" data-hero-go="3" aria-label="Show The Dance Room"><span class="hfilm__bar" aria-hidden="true"><i></i></span><img class="hfilm__th" src="assets/img/film-dance-th.webp" alt="" loading="lazy" decoding="async" width="300" height="200"><span class="hfilm__tx"><span class="mono">04<span class="hfilm__rt"> · 01:26</span></span><b>The Dance Room</b></span></button>
+            <div class="hero__arrows"><button class="hero__arrow" type="button" data-hero-prev aria-label="Previous film"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button class="hero__arrow" type="button" data-hero-next aria-label="Next film"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
           </div>
         </div>
       </div>

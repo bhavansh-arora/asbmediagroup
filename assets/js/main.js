@@ -87,28 +87,72 @@
   const tickIO = new IntersectionObserver((entries) => entries.forEach((en) => en.target.classList.toggle("is-paused", !en.isIntersecting)));
   $$(".ticker").forEach((t) => tickIO.observe(t));
 
-  /* Hero slideshow (cross-fade), paused when hero is off-screen or tab hidden */
+  /* Hero film slider (cross-fade). Each slide can have a "Now showing" panel (.hnow) and a tab
+     ([data-hero-go]) whose progress bar is a CSS animation lasting --slide. The clock keeps the time left,
+     so pausing (hover or focus on the panel or tabs, film playing in the lightbox, hero off-screen, tab
+     hidden, or before the opening has finished) and resuming never skips or restarts a film. */
   const hero = $(".hero[data-slides]");
   if (hero) {
     const slides = $$(".hero__slides figure", hero);
+    const nows = $$(".hnow", hero);
+    const tabs = $$("[data-hero-go]", hero);
     const label = $(".hero__label", hero);
     const num = $(".hero__num", hero);
     const bar = $(".hero__count i", hero);
-    let i = 0, timer = null, visible = true;
+    const DUR = (parseFloat(getComputedStyle(hero).getPropertyValue("--slide")) || 5.2) * 1000;
+    let i = 0, timer = 0, left = DUR, t0 = 0;
+    const why = new Set(root.classList.contains("is-in") ? [] : ["opening"]);
+    const restartBar = () => { const b = tabs[i] && $(".hfilm__bar i", tabs[i]); if (b) { b.style.animation = "none"; void b.offsetWidth; b.style.animation = ""; } };
     const show = (n) => {
       slides[i].classList.remove("is-on");
       i = (n + slides.length) % slides.length;
       slides[i].classList.add("is-on");
+      nows.forEach((el, j) => { const on = j === i; el.classList.toggle("is-on", on); el.inert = !on; el.setAttribute("aria-hidden", String(!on)); });
+      tabs.forEach((t, j) => { t.classList.toggle("is-on", j === i); t.classList.toggle("is-past", j < i); t.setAttribute("aria-current", String(j === i)); });
       if (label) label.textContent = slides[i].dataset.label || "";
       if (num) num.textContent = String(i + 1).padStart(2, "0");
       if (bar) bar.style.setProperty("--p", (i + 1) / slides.length);
-      hero.dispatchEvent(new CustomEvent("hero:slide", { detail: { index: i } }));   // WebGL hero follows
+      restartBar();
+      left = DUR;
+      if (timer) { clearTimeout(timer); timer = 0; run(); }
+      hero.dispatchEvent(new CustomEvent("hero:slide", { detail: { index: i } }));   // counter and rotating word follow
     };
-    const play = () => { if (!timer && !reduce && slides.length > 1) timer = setInterval(() => show(i + 1), 5200); };
-    const stop = () => { clearInterval(timer); timer = null; };
-    new IntersectionObserver(([en]) => { visible = en.isIntersecting; visible ? play() : stop(); }).observe(hero);
-    document.addEventListener("visibilitychange", () => (document.hidden ? stop() : visible && play()));
+    const run = () => {
+      const go = !why.size && !reduce && slides.length > 1;
+      hero.classList.toggle("is-held", !go);
+      if (go && !timer) { t0 = performance.now(); timer = setTimeout(() => { timer = 0; show(i + 1); run(); }, left); }
+      if (!go && timer) { clearTimeout(timer); timer = 0; left = Math.max(0, left - (performance.now() - t0)); }
+    };
+    const hold = (k, on) => { on ? why.add(k) : why.delete(k); run(); };
+    const pick = (n) => { show(n); run(); };
+    tabs.forEach((t) => t.addEventListener("click", () => pick(+t.dataset.heroGo)));
+    $$("[data-hero-prev]", hero).forEach((b) => b.addEventListener("click", () => pick(i - 1)));
+    $$("[data-hero-next]", hero).forEach((b) => b.addEventListener("click", () => pick(i + 1)));
+    $$("[data-hero-hold]", hero).forEach((el, k) => {
+      el.addEventListener("pointerenter", (e) => e.pointerType === "mouse" && hold("hover" + k, true));
+      el.addEventListener("pointerleave", () => hold("hover" + k, false));
+      el.addEventListener("focusin", (e) => e.target.matches(":focus-visible") && hold("focus" + k, true));   // keyboard focus, not a mouse click
+      el.addEventListener("focusout", (e) => { if (!el.contains(e.relatedTarget)) hold("focus" + k, false); });
+    });
+    // Swipe between films on touch screens
+    let sx = null, sy = 0;
+    hero.addEventListener("touchstart", (e) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+    hero.addEventListener("touchend", (e) => {
+      if (sx === null) return;
+      const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+      sx = null;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) pick(i + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+    document.addEventListener("lb:open", () => hold("lightbox", true));
+    document.addEventListener("lb:close", () => hold("lightbox", false));
+    new IntersectionObserver(([en]) => hold("offscreen", !en.isIntersecting)).observe(hero);
+    document.addEventListener("visibilitychange", () => hold("hidden", document.hidden));
+    if (why.has("opening")) new MutationObserver((_, mo) => {
+      if (!root.classList.contains("is-in")) return;
+      mo.disconnect(); restartBar(); left = DUR; hold("opening", false);
+    }).observe(root, { attributes: true, attributeFilter: ["class"] });
     show(0);
+    run();
   }
 
   /* Local Tampa time */
@@ -131,6 +175,7 @@
     lb.classList.add("is-open"); lb.inert = false; lb.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     $(".lb__close", lb).focus();
+    document.dispatchEvent(new Event("lb:open"));
   };
   const close = () => {
     if (!lb || !lb.classList.contains("is-open")) return;
@@ -138,6 +183,7 @@
     document.body.style.overflow = "";
     setTimeout(() => (frame.innerHTML = ""), 300);
     lastFocus && lastFocus.focus && lastFocus.focus();
+    document.dispatchEvent(new Event("lb:close"));
   };
   const showImg = (n) => {
     gi = (n + group.length) % group.length;
