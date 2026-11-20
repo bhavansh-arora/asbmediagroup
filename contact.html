@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://player.vimeo.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=JetBrains+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="assets/css/studio.css">
-  <script>document.documentElement.classList.add("js")</script>
+  <script>(function(d){d.classList.add("js");try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(sessionStorage.getItem("asb-curtain"))d.classList.add("curtain-in");else if(!sessionStorage.getItem("asb-seen"))d.classList.add("ld-on")}catch(e){}})(document.documentElement)</script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -40,6 +40,28 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
+
+  <!-- First-visit loader (shown only when the head script adds html.ld-on) -->
+  <div class="ld" aria-hidden="true">
+    <div class="ld__p ld__p--t"><div class="lstrip lstrip--t"><div class="lstrip__track"><img src="assets/img/film-funbike-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-06-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/wed-16-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-teco-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-15-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/sport-09-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-dance-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-funbike-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-06-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/wed-16-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-teco-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-15-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/sport-09-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-dance-th.webp" alt="" decoding="async" width="300" height="200"></div></div></div>
+    <div class="ld__p ld__p--b"><div class="lstrip lstrip--b"><div class="lstrip__track"><img src="assets/img/prod-09-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/wedp-12-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-mary-crop-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-04-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/sport-08-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/wed-04-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-05-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-09-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/wedp-12-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-mary-crop-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-04-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/sport-08-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/wed-04-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-05-th.webp" alt="" decoding="async" width="300" height="200"></div></div></div>
+    <div class="ld__vf"><i></i><i></i><i></i><i></i></div>
+    <div class="ld__hud mono"><span><span class="dot dot--live"></span> REC <span data-ld-tc>00:00:00:00</span></span><span>4K · 24 FPS · Tampa Bay</span></div>
+    <div class="ld__in">
+      <span class="mono ld__eyebrow">An ASB Media film · Tampa Bay</span>
+      <span class="ld__name"><span class="ld__w"><span>ASB</span></span> <span class="ld__w"><em>Media</em></span></span>
+      <span class="ld__tag">We film what makes you <em>different.</em></span>
+      <span class="ld__bar"><i></i></span>
+      <span class="mono ld__status"><span class="dot dot--live"></span>&nbsp; Loading the film</span>
+    </div>
+  </div>
+
+  <!-- Page-change curtain -->
+  <div class="curtain" aria-hidden="true">
+    <div class="curtain__p curtain__p--t"></div><div class="curtain__p curtain__p--b"></div>
+    <div class="curtain__in"><span class="mono curtain__eyebrow">ASB Media Group</span><span class="curtain__name" data-curtain-name>ASB Media</span><i class="curtain__line"></i></div>
+  </div>
+  <script>try{var n=sessionStorage.getItem("asb-curtain");if(n)document.querySelector("[data-curtain-name]").textContent=n}catch(e){}</script>
   <div class="cur" aria-hidden="true"><span class="cur__b">Play</span></div>
 
   <header class="nav" aria-label="Site">
@@ -252,7 +274,7 @@
     <div class="wordmark" aria-hidden="true"><span>ASB</span> <span><em>Media</em></span></div>
     <div class="foot__bottom">
       <span>© <span data-year>2026</span> ASB Media Group · Commercial film &amp; photography, Tampa Bay</span>
-      <span>Website by <a class="cb" href="https://codebunny.net" target="_blank" rel="noopener"><span class="dot"></span> Code Bunny ↗</a></span>
+      <span class="foot__credits"><a class="foot__top" href="#main" data-top>Back to top ↑</a><span>Website by <a class="cb" href="https://codebunny.net" target="_blank" rel="noopener"><span class="dot"></span> Code Bunny ↗</a></span></span>
     </div>
   </footer>
 
