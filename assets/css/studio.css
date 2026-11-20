@@ -225,10 +225,12 @@ html.js:not(.is-in) .hero--frame .hero__frame { transform: scale(.9); }
 
 /* Words rise from a mask (split by main.js) */
 .words .wd { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .06em .14em 0; margin: 0 -.06em -.14em 0; }
-.words .wd > span { display: inline-block; transform: translateY(105%); transition: transform 1.1s var(--ease); transition-delay: calc(var(--i, 0) * 60ms + var(--d, 0s)); }
+.words .wd > span { display: inline-block; transform: translateY(105%); transition: transform .8s var(--ease); transition-delay: calc(var(--i, 0) * 35ms + var(--d, 0s)); }
 .words.in .wd > span, [data-r].in .words .wd > span, .is-in .hero .words .wd > span { transform: none; }
 html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !important; }
-.js [data-r] { opacity: 0; transform: translateY(24px); transition: opacity .9s var(--ease), transform 1s var(--ease); transition-delay: var(--d, 0s); }
+/* Kept short and small, and started just before content enters (main.js), so nothing is still hidden or sliding
+   against the scroll once it is on screen */
+.js [data-r] { opacity: 0; transform: translateY(10px); transition: opacity .6s ease, transform .7s var(--ease); transition-delay: var(--d, 0s); }
 .js [data-r].in { opacity: 1; transform: none; }
 .js [data-r].words { opacity: 1; transform: none; }
 

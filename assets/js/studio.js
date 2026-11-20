@@ -106,7 +106,7 @@
   }
 
   /* One-shot reveals for scene labels and the footer wordmark */
-  const once = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); once.unobserve(en.target); } }), { rootMargin: "0px 0px -8% 0px" });
+  const once = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); once.unobserve(en.target); } }), { rootMargin: "0px 0px 12% 0px" });
   $$(".scene, .wordmark").forEach((el) => once.observe(el));
   $$("[data-wordmark]").forEach((el) => onScreen(el, (v) => el.classList.toggle("is-live", v)));
 

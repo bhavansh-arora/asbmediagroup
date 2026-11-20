@@ -78,7 +78,7 @@
   /* Reveal on enter (once) */
   const revealIO = new IntersectionObserver((entries) => {
     entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); revealIO.unobserve(en.target); } });
-  }, { rootMargin: "0px 0px -8% 0px" });
+  }, { rootMargin: "0px 0px 12% 0px" });
   $$("[data-r]").forEach((el) => revealIO.observe(el));
   // One-shot accents (rules, statement highlight, footer wordmark): get .in once, no hiding
   $$(".label, .steps, .foot__mark, .statement").forEach((el) => revealIO.observe(el));
