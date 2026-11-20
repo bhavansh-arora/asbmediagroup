@@ -126,6 +126,29 @@
     if (!reduce) onScreen(tc.closest(".hero") || tc, (v) => { clearInterval(timer); timer = v ? setInterval(upd, 83) : 0; });
   }
 
+  /* Framed hero: the slide counter, its progress bar and the rotating word follow the slideshow
+     (main.js fires hero:slide on every change) */
+  const fh = $(".hero--frame[data-slides]");
+  if (fh) {
+    const num = $("[data-hero-n]", fh), bar = $(".hero__index-bar i", fh), words = $$(".rot__w", fh);
+    let w = 0;
+    const restart = () => { if (!bar) return; bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = ""; };
+    fh.addEventListener("hero:slide", (e) => {
+      const i = e.detail.index;
+      if (num) num.textContent = String(i + 1).padStart(2, "0");
+      restart();
+      if (words.length > 1) {
+        const prev = words[w];
+        w = i % words.length;
+        if (prev === words[w]) return;
+        prev.classList.remove("is-on"); prev.classList.add("is-out");
+        words[w].classList.remove("is-out"); words[w].classList.add("is-on");
+        setTimeout(() => prev.classList.remove("is-out"), 900);
+      }
+    });
+    opened.then(restart);
+  }
+
   /* "Now showing" pill follows the hero slideshow (main.js fires hero:slide) */
   const hero = $(".hero[data-slides]");
   const now = $("[data-now]");

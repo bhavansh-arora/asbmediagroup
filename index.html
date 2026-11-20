@@ -23,9 +23,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://player.vimeo.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300..700;1,300..700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0;1,9..144,300..700,100&family=JetBrains+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="assets/css/studio.css?v=d70451c4">
-  <script src="assets/js/main.js?v=5fe228c3" defer fetchpriority="high"></script>
-  <script src="assets/js/studio.js?v=df46e264" defer fetchpriority="high"></script>
+  <link rel="stylesheet" href="assets/css/studio.css?v=fde9612e">
+  <script src="assets/js/main.js?v=ddd339d6" defer fetchpriority="high"></script>
+  <script src="assets/js/studio.js?v=892ec57d" defer fetchpriority="high"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -108,24 +108,34 @@
   </div>
 
   <main id="main">
-<!-- HERO -->
-    <section class="hero hero--wall" aria-label="Introduction">
-      <div class="hero__wall" aria-hidden="true">
-        <div class="wall__col"><img data-src="assets/img/film-funbike-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/prod-06-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/wed-16-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/film-teco-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/prod-15-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/sport-09-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/film-funbike-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/prod-06-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/wed-16-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/film-teco-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/prod-15-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/sport-09-wall.webp" alt="" width="720" height="540" decoding="async"></div>
-        <div class="wall__col"><img data-src="assets/img/film-mary-crop-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/prod-04-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/wed-04-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/film-dance-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/prod-13-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/sport-08-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/film-mary-crop-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/prod-04-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/wed-04-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/film-dance-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/prod-13-wall.webp" alt="" width="720" height="540" decoding="async"><img data-src="assets/img/sport-08-wall.webp" alt="" width="720" height="540" decoding="async"></div>
-      </div>
-      <!-- Wall tiles: only columns that are shown load (the 4th is hidden on phones). On a first visit they
-           start once the loader's reels are in, so the reels are never starved; each tile fades in on its own
-           when it arrives, so an empty tile never shows. -->
-      <script>(function(d){var w=document.querySelector(".hero__wall");if(!w)return;function go(){var c=w.querySelectorAll(".wall__col");for(var i=0;i<c.length;i++){if(getComputedStyle(c[i]).display==="none")continue;var im=c[i].querySelectorAll("img[data-src]");for(var j=0;j<im.length;j++)(function(x){x.onload=function(){x.classList.add("ok")};x.src=x.getAttribute("data-src");x.removeAttribute("data-src")})(im[j])}}w.wallLoad=go;if(!d.classList.contains("ld-on"))return go();var r=document.querySelectorAll(".ld img"),n=0,done=false,once=function(){if(!done){done=true;go()}};setTimeout(once,1500);for(var k=0;k<r.length;k++){if(r[k].complete&&r[k].naturalWidth)n++;else r[k].addEventListener("load",function(){if(++n>=r.length)once()})}if(n>=r.length)once()})(document.documentElement)</script>
-      <div class="hero__ui">
-        <p class="hero__kicker mono" data-hr><span class="dot"></span> Commercial film · Tampa Bay, Florida</p>
-        <h1 class="hero-title">We film what <br>makes you <em>different.</em></h1>
-        <div class="hero__foot" data-hr style="--d:.35s">
-          <p class="hero__lede">Brand anthem films, product showcases and social campaigns for businesses that want to be remembered and chosen.</p>
-          <div class="btn-row">
-            <a class="btn" href="contact.html"><span>Start your film</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
-            <a class="btn btn--ghost" href="work.html"><span>Watch 4 films</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4.5v15a.5.5 0 0 0 .76.43l12.5-7.5a.5.5 0 0 0 0-.86L6.76 4.07A.5.5 0 0 0 6 4.5Z"/></svg></span></a>
+<!-- HERO: a framed cinematic panel (grows open after the loader / curtain), cross-fading film stills,
+         slide counter, rotating word, and a featured film that plays in the lightbox -->
+    <section class="hero hero--frame" aria-label="Introduction" data-slides>
+      <div class="hero__frame">
+        <div class="hero__slides" aria-hidden="true">
+          <figure class="is-on"><img src="assets/img/film-funbike-hero.webp" alt="" fetchpriority="high" decoding="async" sizes="100vw" width="1800" height="861" srcset="assets/img/film-funbike-hero-sm.webp 900w, assets/img/film-funbike-hero.webp 1800w"></figure>
+          <figure><img src="assets/img/film-dance-hero.webp" alt="" loading="lazy" decoding="async" sizes="100vw" style="object-position:40% 40%" width="1800" height="891" srcset="assets/img/film-dance-hero-sm.webp 900w, assets/img/film-dance-hero.webp 1800w"></figure>
+          <figure><img src="assets/img/film-teco.webp" alt="" loading="lazy" decoding="async" sizes="100vw" width="1800" height="1013" srcset="assets/img/film-teco-sm.webp 900w, assets/img/film-teco.webp 1800w"></figure>
+          <figure><img src="assets/img/wed-16-hero.webp" alt="" loading="lazy" decoding="async" sizes="100vw" style="object-position:50% 40%" width="1800" height="1116" srcset="assets/img/wed-16-hero-sm.webp 900w, assets/img/wed-16-hero.webp 1800w"></figure>
+        </div>
+
+        <a class="hero__card" href="film-mary-lees-house.html" data-video="1209681619" data-title="Mary Lee’s House" data-cursor="Play" data-hr style="--d:.7s">
+          <span class="hero__card-media"><img src="assets/img/film-mary-crop.webp" alt="" decoding="async" sizes="320px" style="object-position:55% 30%" width="1044" height="1013"><span class="hero__card-play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4.5v15a.5.5 0 0 0 .76.43l12.5-7.5a.5.5 0 0 0 0-.86L6.76 4.07A.5.5 0 0 0 6 4.5Z"/></svg></span></span>
+          <span class="hero__card-body"><span><span class="mono">Featured film · 04:03</span><b>Mary Lee’s House, a brand film for child advocacy</b></span><span class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></span>
+        </a>
+
+        <div class="hero__ui">
+          <div class="hero__top" data-hr>
+            <p class="hero__kicker mono"><span class="dot"></span> Commercial film · Tampa Bay, Florida</p>
+            <p class="hero__index mono" aria-hidden="true"><span data-hero-n>01</span><span class="hero__index-bar"><i></i></span><span>04</span></p>
+          </div>
+          <h1 class="hero-title" aria-label="We film what makes you different.">We film what makes <br>you <span class="rot" data-nosplit><em class="rot__w is-on">different.</em><em class="rot__w">remarkable.</em><em class="rot__w">memorable.</em></span></h1>
+          <div class="hero__foot" data-hr style="--d:.35s">
+            <p class="hero__lede">Brand anthem films, product showcases and social campaigns for businesses that want to be remembered and chosen.</p>
+            <div class="btn-row">
+              <a class="btn" href="contact.html"><span>Start your film</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+              <a class="btn btn--ghost" href="work.html"><span>Watch 4 films</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4.5v15a.5.5 0 0 0 .76.43l12.5-7.5a.5.5 0 0 0 0-.86L6.76 4.07A.5.5 0 0 0 6 4.5Z"/></svg></span></a>
+            </div>
           </div>
         </div>
       </div>

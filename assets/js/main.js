@@ -49,6 +49,11 @@
             frag.appendChild(wrap(part, i++));
           });
           ch.replaceWith(frag);
+        } else if (ch.nodeType === 1 && ch.hasAttribute("data-nosplit")) {
+          // kept whole (e.g. the hero's rotating word): masked and rising like any other word
+          const o = document.createElement("span"); o.className = "wd"; o.setAttribute("aria-hidden", "true");
+          const n = document.createElement("span"); n.style.setProperty("--i", i++);
+          ch.replaceWith(o); n.appendChild(ch); o.appendChild(n);
         } else if (ch.nodeType === 1 && !ch.classList.contains("pill") && ch.tagName !== "BR") walk(ch);
       });
     };
@@ -57,7 +62,7 @@
   if (!reduce) {
     $$(".hero-title, .h1, .h2").forEach((h) => {
       if (h.closest("[data-r-name], .finder__result")) return;
-      h.setAttribute("aria-label", h.textContent.replace(/\s+/g, " ").trim());
+      if (!h.hasAttribute("aria-label")) h.setAttribute("aria-label", h.textContent.replace(/\s+/g, " ").trim());
       splitWords(h, (word, i) => {
         const o = document.createElement("span"); o.className = "wd"; o.setAttribute("aria-hidden", "true");
         const n = document.createElement("span"); n.textContent = word; n.style.setProperty("--i", i);
