@@ -15,12 +15,16 @@
   <meta property="og:image" content="https://www.asbmediagroup.com/{{og}}">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <!-- Opening state, decided before anything paints. First visit: loader (its two film reels are
+       preloaded at high priority right here). Page change: curtain. Safety net: whatever happens to the
+       network or scripts, the page is revealed after 9s. -->
+  <script>(function(d){d.classList.add("js");setTimeout(function(){if(d.classList.contains("is-in"))return;var l=document.querySelector(".ld");if(l)l.classList.add("is-out");d.classList.add("is-in");setTimeout(function(){d.classList.remove("ld-on","curtain-in")},1300)},9000);try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(sessionStorage.getItem("asb-curtain"))d.classList.add("curtain-in");else if(!sessionStorage.getItem("asb-seen")){d.classList.add("ld-on","fw");setTimeout(function(){d.classList.remove("fw")},3000);["a","b"].forEach(function(k){var l=document.createElement("link");l.rel="preload";l.as="image";l.href="assets/img/ld-reel-"+k+".webp";l.setAttribute("fetchpriority","high");document.head.appendChild(l)})}}catch(e){}})(document.documentElement)</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://player.vimeo.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300..700;1,300..700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0;1,9..144,300..700,100&family=JetBrains+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="assets/css/{{css}}">
-  <script>(function(d){d.classList.add("js");try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(sessionStorage.getItem("asb-curtain"))d.classList.add("curtain-in");else if(!sessionStorage.getItem("asb-seen"))d.classList.add("ld-on")}catch(e){}})(document.documentElement)</script>
+  {{headscripts}}
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",

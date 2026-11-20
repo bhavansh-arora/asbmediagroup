@@ -1,10 +1,11 @@
 <body>
   <a class="skip" href="#main">Skip to content</a>
 
-  <!-- First-visit loader (shown only when the head script adds html.ld-on) -->
+  <!-- First-visit loader (shown only when the head script adds html.ld-on). The name waits for its typeface
+       (html.fw, max 3s) so it never rises in a fallback font. -->
   <div class="ld" aria-hidden="true">
-    <div class="ld__p ld__p--t"><div class="lstrip lstrip--t"><div class="lstrip__track"><img src="assets/img/film-funbike-th.webp" alt="" decoding="async"><img src="assets/img/prod-06-th.webp" alt="" decoding="async"><img src="assets/img/wed-16-th.webp" alt="" decoding="async"><img src="assets/img/film-teco-th.webp" alt="" decoding="async"><img src="assets/img/prod-15-th.webp" alt="" decoding="async"><img src="assets/img/sport-09-th.webp" alt="" decoding="async"><img src="assets/img/film-dance-th.webp" alt="" decoding="async"><img src="assets/img/film-funbike-th.webp" alt="" decoding="async"><img src="assets/img/prod-06-th.webp" alt="" decoding="async"><img src="assets/img/wed-16-th.webp" alt="" decoding="async"><img src="assets/img/film-teco-th.webp" alt="" decoding="async"><img src="assets/img/prod-15-th.webp" alt="" decoding="async"><img src="assets/img/sport-09-th.webp" alt="" decoding="async"><img src="assets/img/film-dance-th.webp" alt="" decoding="async"></div></div></div>
-    <div class="ld__p ld__p--b"><div class="lstrip lstrip--b"><div class="lstrip__track"><img src="assets/img/prod-09-th.webp" alt="" decoding="async"><img src="assets/img/wedp-12-th.webp" alt="" decoding="async"><img src="assets/img/film-mary-crop-th.webp" alt="" decoding="async"><img src="assets/img/prod-04-th.webp" alt="" decoding="async"><img src="assets/img/sport-08-th.webp" alt="" decoding="async"><img src="assets/img/wed-04-th.webp" alt="" decoding="async"><img src="assets/img/prod-05-th.webp" alt="" decoding="async"><img src="assets/img/prod-09-th.webp" alt="" decoding="async"><img src="assets/img/wedp-12-th.webp" alt="" decoding="async"><img src="assets/img/film-mary-crop-th.webp" alt="" decoding="async"><img src="assets/img/prod-04-th.webp" alt="" decoding="async"><img src="assets/img/sport-08-th.webp" alt="" decoding="async"><img src="assets/img/wed-04-th.webp" alt="" decoding="async"><img src="assets/img/prod-05-th.webp" alt="" decoding="async"></div></div></div>
+    <div class="ld__p ld__p--t"><div class="lstrip lstrip--t"><div class="lstrip__track"><img class="lstrip__reel" data-src="assets/img/ld-reel-a.webp" alt=""><img class="lstrip__reel" data-src="assets/img/ld-reel-a.webp" alt=""><img class="lstrip__reel" data-src="assets/img/ld-reel-a.webp" alt=""><img class="lstrip__reel" data-src="assets/img/ld-reel-a.webp" alt=""></div></div></div>
+    <div class="ld__p ld__p--b"><div class="lstrip lstrip--b"><div class="lstrip__track"><img class="lstrip__reel" data-src="assets/img/ld-reel-b.webp" alt=""><img class="lstrip__reel" data-src="assets/img/ld-reel-b.webp" alt=""><img class="lstrip__reel" data-src="assets/img/ld-reel-b.webp" alt=""><img class="lstrip__reel" data-src="assets/img/ld-reel-b.webp" alt=""></div></div></div>
     <div class="ld__vf"><i></i><i></i><i></i><i></i></div>
     <div class="ld__hud mono"><span><span class="dot dot--live"></span> REC <span data-ld-tc>00:00:00:00</span></span><span>4K · 24 FPS · Tampa Bay</span></div>
     <div class="ld__in">
@@ -15,6 +16,8 @@
       <span class="mono ld__status"><span class="dot dot--live"></span>&nbsp; Loading the film</span>
     </div>
   </div>
+
+  <script>(function(d){if(!d.classList.contains("ld-on"))return;var F=document.fonts;window.__asbFonts=F&&F.load?Promise.race([Promise.all([F.load("400 1em Fraunces"),F.load("italic 400 1em Fraunces")]),new Promise(function(r){setTimeout(r,2600)})]).then(function(){d.classList.remove("fw")},function(){d.classList.remove("fw")}):(d.classList.remove("fw"),Promise.resolve());var s=document.querySelectorAll(".ld img[data-src]");for(var i=0;i<s.length;i++){(function(im){im.onload=function(){var r=im.closest(".lstrip");if(r)r.classList.add("is-ready")};im.setAttribute("fetchpriority","high");im.src=im.getAttribute("data-src")})(s[i])}})(document.documentElement)</script>
 
   <!-- Page-change curtain -->
   <div class="curtain" aria-hidden="true">

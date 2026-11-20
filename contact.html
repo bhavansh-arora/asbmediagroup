@@ -15,12 +15,17 @@
   <meta property="og:image" content="https://www.asbmediagroup.com/assets/img/prod-06.webp">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <!-- Opening state, decided before anything paints. First visit: loader (its two film reels are
+       preloaded at high priority right here). Page change: curtain. Safety net: whatever happens to the
+       network or scripts, the page is revealed after 9s. -->
+  <script>(function(d){d.classList.add("js");setTimeout(function(){if(d.classList.contains("is-in"))return;var l=document.querySelector(".ld");if(l)l.classList.add("is-out");d.classList.add("is-in");setTimeout(function(){d.classList.remove("ld-on","curtain-in")},1300)},9000);try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(sessionStorage.getItem("asb-curtain"))d.classList.add("curtain-in");else if(!sessionStorage.getItem("asb-seen")){d.classList.add("ld-on","fw");setTimeout(function(){d.classList.remove("fw")},3000);["a","b"].forEach(function(k){var l=document.createElement("link");l.rel="preload";l.as="image";l.href="assets/img/ld-reel-"+k+".webp";l.setAttribute("fetchpriority","high");document.head.appendChild(l)})}}catch(e){}})(document.documentElement)</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://player.vimeo.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=JetBrains+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="assets/css/studio.css">
-  <script>(function(d){d.classList.add("js");try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(sessionStorage.getItem("asb-curtain"))d.classList.add("curtain-in");else if(!sessionStorage.getItem("asb-seen"))d.classList.add("ld-on")}catch(e){}})(document.documentElement)</script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300..700;1,300..700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0;1,9..144,300..700,100&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/studio.css?v=c9b67c92">
+  <script src="assets/js/main.js?v=5fe228c3" defer fetchpriority="high"></script>
+  <script src="assets/js/studio.js?v=478affa1" defer fetchpriority="high"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -41,10 +46,11 @@
 <body>
   <a class="skip" href="#main">Skip to content</a>
 
-  <!-- First-visit loader (shown only when the head script adds html.ld-on) -->
+  <!-- First-visit loader (shown only when the head script adds html.ld-on). The name waits for its typeface
+       (html.fw, max 3s) so it never rises in a fallback font. -->
   <div class="ld" aria-hidden="true">
-    <div class="ld__p ld__p--t"><div class="lstrip lstrip--t"><div class="lstrip__track"><img src="assets/img/film-funbike-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-06-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/wed-16-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-teco-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-15-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/sport-09-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-dance-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-funbike-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-06-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/wed-16-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-teco-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-15-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/sport-09-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-dance-th.webp" alt="" decoding="async" width="300" height="200"></div></div></div>
-    <div class="ld__p ld__p--b"><div class="lstrip lstrip--b"><div class="lstrip__track"><img src="assets/img/prod-09-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/wedp-12-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-mary-crop-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-04-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/sport-08-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/wed-04-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-05-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-09-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/wedp-12-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/film-mary-crop-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-04-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/sport-08-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/wed-04-th.webp" alt="" decoding="async" width="300" height="200"><img src="assets/img/prod-05-th.webp" alt="" decoding="async" width="300" height="200"></div></div></div>
+    <div class="ld__p ld__p--t"><div class="lstrip lstrip--t"><div class="lstrip__track"><img class="lstrip__reel" data-src="assets/img/ld-reel-a.webp" alt="" width="2100" height="192"><img class="lstrip__reel" data-src="assets/img/ld-reel-a.webp" alt="" width="2100" height="192"><img class="lstrip__reel" data-src="assets/img/ld-reel-a.webp" alt="" width="2100" height="192"><img class="lstrip__reel" data-src="assets/img/ld-reel-a.webp" alt="" width="2100" height="192"></div></div></div>
+    <div class="ld__p ld__p--b"><div class="lstrip lstrip--b"><div class="lstrip__track"><img class="lstrip__reel" data-src="assets/img/ld-reel-b.webp" alt="" width="2100" height="192"><img class="lstrip__reel" data-src="assets/img/ld-reel-b.webp" alt="" width="2100" height="192"><img class="lstrip__reel" data-src="assets/img/ld-reel-b.webp" alt="" width="2100" height="192"><img class="lstrip__reel" data-src="assets/img/ld-reel-b.webp" alt="" width="2100" height="192"></div></div></div>
     <div class="ld__vf"><i></i><i></i><i></i><i></i></div>
     <div class="ld__hud mono"><span><span class="dot dot--live"></span> REC <span data-ld-tc>00:00:00:00</span></span><span>4K · 24 FPS · Tampa Bay</span></div>
     <div class="ld__in">
@@ -55,6 +61,8 @@
       <span class="mono ld__status"><span class="dot dot--live"></span>&nbsp; Loading the film</span>
     </div>
   </div>
+
+  <script>(function(d){if(!d.classList.contains("ld-on"))return;var F=document.fonts;window.__asbFonts=F&&F.load?Promise.race([Promise.all([F.load("400 1em Fraunces"),F.load("italic 400 1em Fraunces")]),new Promise(function(r){setTimeout(r,2600)})]).then(function(){d.classList.remove("fw")},function(){d.classList.remove("fw")}):(d.classList.remove("fw"),Promise.resolve());var s=document.querySelectorAll(".ld img[data-src]");for(var i=0;i<s.length;i++){(function(im){im.onload=function(){var r=im.closest(".lstrip");if(r)r.classList.add("is-ready")};im.setAttribute("fetchpriority","high");im.src=im.getAttribute("data-src")})(s[i])}})(document.documentElement)</script>
 
   <!-- Page-change curtain -->
   <div class="curtain" aria-hidden="true">
@@ -289,7 +297,5 @@
     <p class="lb__cap mono"></p>
   </div>
 
-  <script src="assets/js/main.js" defer></script>
-  <script src="assets/js/studio.js" defer></script>
 </body>
 </html>

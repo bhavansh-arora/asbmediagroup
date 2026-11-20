@@ -168,18 +168,23 @@ ul, ol { list-style: none; padding: 0; }
 /* Hero: moving wall of the work */
 .hero__wall { position: absolute; z-index: -2; inset: -12% -6%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(8px, .8vw, 12px); transform: rotate(-4deg); opacity: 0; transition: opacity 1.2s ease; }
 .hero__wall.is-ready { opacity: 1; }
+/* Safety net: if scripts are slow or blocked the wall still appears */
+.hero__wall:not(.is-ready) { animation: wallBail 1.2s ease 6s forwards; }
+html:not(.js) .hero__wall { opacity: 1; animation: none; }
+@keyframes wallBail { to { opacity: 1; } }
 .wall__col { display: flex; flex-direction: column; gap: clamp(8px, .8vw, 12px); animation: wallUp 70s linear infinite; will-change: transform; }
 .wall__col:nth-child(even) { animation-direction: reverse; animation-duration: 82s; }
 .wall__col:nth-child(3) { animation-duration: 76s; }
 .hero__wall.is-paused .wall__col { animation-play-state: paused; }
-.wall__col img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: clamp(10px, 1vw, 16px); background: var(--ink-3); }
+.wall__col img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: clamp(10px, 1vw, 16px); opacity: 0; transition: opacity .7s ease; }
+.wall__col img.ok { opacity: 1; }
 @keyframes wallUp { to { transform: translateY(-50%); } }
 .hero--wall::before { background:
   linear-gradient(180deg, rgba(11, 9, 7, .78) 0%, rgba(11, 9, 7, .42) 26%, rgba(11, 9, 7, .55) 58%, rgba(11, 9, 7, .96) 100%),
   radial-gradient(70% 60% at 22% 72%, rgba(11, 9, 7, .62), transparent 70%); }
 
 /* hero entrance (after fonts) */
-.hero [data-hr] { opacity: 0; transform: translateY(16px); transition: opacity .9s var(--ease), transform 1s var(--ease); transition-delay: var(--d, 0s); }
+.js .hero [data-hr] { opacity: 0; transform: translateY(16px); transition: opacity .9s var(--ease), transform 1s var(--ease); transition-delay: var(--d, 0s); }
 .is-in .hero [data-hr] { opacity: 1; transform: none; }
 
 /* Words rise from a mask (split by main.js) */
@@ -198,6 +203,9 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 .strip__track { display: flex; gap: 8px; width: max-content; animation: tick 60s linear infinite; }
 .strip.is-paused .strip__track { animation-play-state: paused; }
 .strip__track img { height: clamp(110px, 12vw, 170px); width: auto; border-radius: 6px; object-fit: cover; aspect-ratio: 3 / 2; background: var(--ink-3); }
+/* Deferred strip: loads after the opening, and shows only once every frame is in */
+.strip[data-defer] .strip__track { opacity: 0; transition: opacity .9s ease; }
+.strip[data-defer].is-ready .strip__track { opacity: 1; }
 @keyframes tick { to { transform: translateX(-50%); } }
 
 /* ---------- Hello ---------- */
@@ -411,13 +419,16 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 .ld__p--t::after { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 90% at 50% 100%, rgba(239, 90, 44, .16), transparent 70%); }
 .ld__p--b::after { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 90% at 50% 0%, rgba(239, 90, 44, .16), transparent 70%); }
 .lstrip { position: absolute; left: 0; right: 0; padding: 12px 0; z-index: 1; opacity: 0; transition: opacity .6s ease; }
-.lstrip.is-ready { opacity: .6; }
+.lstrip.is-ready { opacity: .72; }
 .lstrip::before, .lstrip::after { content: ""; position: absolute; left: 0; right: 0; height: 6px; background: repeating-linear-gradient(90deg, rgba(244, 236, 223, .45) 0 8px, transparent 8px 20px); }
 .lstrip::before { top: 2px; } .lstrip::after { bottom: 2px; }
 .lstrip--t { top: clamp(10px, 2.4vh, 28px); } .lstrip--b { bottom: clamp(10px, 2.4vh, 28px); }
-.lstrip__track { display: flex; gap: 6px; width: max-content; animation: tick 34s linear infinite; }
+/* Each reel is one sprite (seven frames, gaps and corners baked in) repeated four times:
+   it arrives in one request and the loop covers screens up to ~3000px wide with no gap. */
+.lstrip__track { display: flex; width: max-content; animation: ldReel 24s linear infinite; }
 .lstrip--b .lstrip__track { animation-direction: reverse; }
-.lstrip img { height: clamp(64px, 8.4vh, 96px); width: auto; aspect-ratio: 3 / 2; border-radius: 4px; object-fit: cover; }
+.lstrip__reel { display: block; flex: none; height: clamp(64px, 8.4vh, 96px); width: auto; max-width: none; aspect-ratio: 2100 / 192; }
+@keyframes ldReel { to { transform: translate3d(-25%, 0, 0); } }
 .ld__vf { position: absolute; z-index: 2; inset: clamp(110px, 16vh, 150px) clamp(20px, 6vw, 96px); }
 .ld__vf i { position: absolute; width: 18px; height: 18px; border: 0 solid rgba(244, 236, 223, .5); }
 .ld__vf i:nth-child(1) { top: 0; left: 0; border-top-width: 1.5px; border-left-width: 1.5px; }
@@ -432,6 +443,7 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 .ld__w { display: inline-block; overflow: hidden; padding: 0 .06em .14em; margin: 0 -.06em -.14em; vertical-align: top; }
 .ld__w > * { display: inline-block; transform: translateY(105%); animation: ldUp 1s var(--ease) forwards; }
 .ld__w + .ld__w > * { animation-delay: .12s; }
+.fw .ld__w > *, .fw .ld__tag { animation-play-state: paused; }
 .ld__tag { font-family: var(--display); font-size: clamp(1rem, 1.4vw, 1.25rem); opacity: 0; animation: ldFade .8s ease .55s forwards; }
 .ld__tag em { color: var(--sun); }
 .ld__bar { width: clamp(120px, 14vw, 180px); height: 1px; background: rgba(244, 236, 223, .18); position: relative; overflow: hidden; margin-top: 6px; }
@@ -463,8 +475,8 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 .curtain.is-opening .curtain__in { opacity: 0; transition: opacity .25s ease; }
 
 /* Hold the first headline until the loader / curtain has opened */
-html:not(.is-in) .phead .words .wd > span, html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !important; }
-html:not(.is-in) .phead [data-r] { opacity: 0 !important; transform: translateY(24px) !important; }
+html.js:not(.is-in) .phead .words .wd > span, html.js:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !important; }
+html.js:not(.is-in) .phead [data-r] { opacity: 0 !important; transform: translateY(24px) !important; }
 
 /* ---------- Lightbox ---------- */
 .lb { position: fixed; inset: 0; z-index: 420; display: grid; place-items: center; padding: clamp(14px, 4vw, 64px); background: rgba(5, 4, 3, .95); opacity: 0; visibility: hidden; transition: opacity .3s, visibility 0s .3s; }
@@ -848,7 +860,7 @@ html:not(.is-in) .phead [data-r] { opacity: 0 !important; transform: translateY(
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
-  .js [data-r], .hero [data-hr] { opacity: 1; transform: none; }
+  .js [data-r], .js .hero [data-hr] { opacity: 1; transform: none; }
   .words .wd > span, .wordmark span { transform: none !important; }
   .wall__col { animation: none !important; }
   @view-transition { navigation: none; }

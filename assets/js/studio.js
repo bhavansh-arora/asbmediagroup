@@ -10,38 +10,45 @@
   const onScreen = (el, fn, opts) => new IntersectionObserver(([en]) => fn(en.isIntersecting), opts).observe(el);
 
   /* ---------- Opening sequence: loader (first visit) / curtain (page change) / plain ---------- */
-  const reveal = () => root.classList.add("is-in");
+  let markOpened;
+  const opened = new Promise((r) => (markOpened = r));
+  const reveal = () => { root.classList.add("is-in"); markOpened(); };
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const fontsReady = Promise.race([document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve(), wait(1400)]);
   const ld = $(".ld");
   const curtain = $(".curtain");
   const loaded = (im) => (im.complete && im.naturalWidth ? Promise.resolve() : new Promise((r) => { im.addEventListener("load", r, { once: true }); im.addEventListener("error", r, { once: true }); }));
 
-  /* Hero wall: fade in only once the first rows of every column have loaded (no empty tiles),
-     and pause the drift while the hero is off-screen */
+  /* Hero wall: only columns that are shown load (the 4th is hidden on phones); the wall fades in once
+     every tile in those columns has loaded (never an empty tile), and pauses while the hero is off-screen */
   const wall = $(".hero__wall");
   let wallReady = Promise.resolve();
   if (wall) {
-    const first = $$(".wall__col", wall).flatMap((c) => $$("img", c).slice(0, 3));
-    wallReady = Promise.race([Promise.all(first.map(loaded)), wait(3500)]).then(() => wall.classList.add("is-ready"));
+    // Sources are set by the inline script after the wall markup; a column that becomes visible later
+    // (phone rotated, window widened) gets its tiles then
+    addEventListener("resize", () => wall.wallLoad && wall.wallLoad(), { passive: true });
+    const tiles = $$(".wall__col", wall).filter((c) => getComputedStyle(c).display !== "none").flatMap((c) => $$("img", c));
+    const unique = [...new Map(tiles.map((im) => [im.getAttribute("src") || im.dataset.src, im])).values()];
+    wallReady = Promise.race([Promise.all(unique.map(loaded)), wait(4000)]).then(() => wall.classList.add("is-ready"));
     onScreen(wall.closest(".hero") || wall, (v) => wall.classList.toggle("is-paused", !v));
   }
   const store = { get: (k) => { try { return sessionStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { sessionStorage.setItem(k, v); } catch (e) {} }, del: (k) => { try { sessionStorage.removeItem(k); } catch (e) {} } };
 
   if (root.classList.contains("ld-on") && ld) {
     store.set("asb-seen", "1");
-    // Each film strip fades in only once all of its frames have loaded (never empty frames)
-    $$(".lstrip", ld).forEach((s) => {
-      const ims = $$("img", s);
-      Promise.all(ims.map((im) => (im.complete && im.naturalWidth ? 1 : new Promise((r) => { im.addEventListener("load", r, { once: true }); im.addEventListener("error", r, { once: true }); }))))
-        .then(() => s.classList.add("is-ready"));
-    });
+    // The film reels show themselves as soon as their sprite arrives (inline script in the header);
+    // keep the loader up until they have been on screen for a moment
+    const reels = $$(".lstrip__reel", ld);
+    const reelsSeen = Promise.race([Promise.all(reels.map(loaded)), wait(3500)]).then(() => wait(900));
     const bar = $(".ld__bar", ld), tcl = $("[data-ld-tc]", ld);
     const heroImg = $(".hero__slides figure.is-on img, .phead ~ * img");
-    const imgReady = Promise.all([wallReady, heroImg ? Promise.race([loaded(heroImg), wait(3000)]) : Promise.resolve()]);
+    const imgReady = Promise.all([wallReady, reelsSeen, heroImg ? Promise.race([loaded(heroImg), wait(3000)]) : Promise.resolve()]);
     let ready = false;
-    Promise.all([fontsReady, imgReady]).then(() => (ready = true));
-    const t0 = performance.now(), MIN = 1900;
+    // The loader's name rises once its typeface is in (header script, max ~3s); give the rise time to land
+    const nameShown = (window.__asbFonts || fontsReady).then(() => wait(1000));
+    Promise.all([fontsReady, nameShown, imgReady]).then(() => (ready = true));
+    // Count from navigation start (capped), so a slow script download never lengthens the loader
+    const t0 = Math.min(performance.now(), 600), MIN = 2200;
     const pad = (n) => String(n).padStart(2, "0");
     const step = (now) => {
       const el = now - t0;
@@ -140,7 +147,16 @@
     $$("img[loading=lazy]", en.target).forEach((im) => (im.loading = "eager"));
     pre.unobserve(en.target);
   }), { rootMargin: "150% 0px 150% 0px" });
-  $$("[data-preload]").forEach((el) => pre.observe(el));
+  opened.then(() => $$("[data-preload]").forEach((el) => pre.observe(el)));
+
+  /* Deferred image groups ([data-defer], e.g. the film strip under the hero): sources are set only after
+     the opening, so they never compete with the loader and hero for bandwidth; the group fades in once
+     every frame is in, so it never moves with empty frames */
+  opened.then(() => $$("[data-defer]").forEach((g) => {
+    const ims = $$("img[data-src]", g);
+    ims.forEach((im) => { im.src = im.dataset.src; im.removeAttribute("data-src"); });
+    Promise.race([Promise.all(ims.map(loaded)), wait(8000)]).then(() => g.classList.add("is-ready"));
+  }));
 
   /* Pause CSS loops (film strip, ticker) when off-screen */
   $$(".strip, .ticker").forEach((el) => onScreen(el, (v) => el.classList.toggle("is-paused", !v)));

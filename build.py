@@ -10,6 +10,7 @@ Each page starts with a meta comment:
 
   <!--meta {"title": "...", "desc": "...", "nav": "work", "loader": false} -->
 """
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -86,7 +87,7 @@ def add_img_dimensions(html):
         extra = f' width="{w}" height="{h}"'
         # Pair full-size and -sm variants into a srcset so phones never download 1800px images.
         rel = src.group(1)
-        if "srcset=" not in tag and rel.endswith(".webp"):
+        if "srcset=" not in tag and "data-src=" not in tag and rel.endswith(".webp"):
             base = rel[:-8] if rel.endswith("-sm.webp") else rel[:-5]
             sm, full = ROOT / f"{base}-sm.webp", ROOT / f"{base}.webp"
             if sm.exists() and full.exists():
@@ -98,6 +99,17 @@ def add_img_dimensions(html):
         return tag[:-1].rstrip("/").rstrip() + extra + ">"
 
     return re.sub(r"<img\b[^>]*>", fix, html)
+
+
+def asset_versions(html):
+    """Stamp local CSS/JS URLs with a content hash, so a browser never pairs new HTML with a cached old script."""
+    def stamp(m):
+        path = ROOT / m.group(2)
+        if not path.exists():
+            return m.group(0)
+        v = hashlib.sha1(path.read_bytes()).hexdigest()[:8]
+        return f'{m.group(1)}{m.group(2)}?v={v}"'
+    return re.sub(r'((?:href|src)=")(assets/(?:css|js)/[\w.-]+\.(?:css|js))"', stamp, html)
 
 
 def expand_icons(html):
@@ -134,10 +146,16 @@ def build():
         header = partials.get(f"header_{layout}", partials["header"]) if layout else partials["header"]
         footer = partials.get(f"footer_{layout}", partials["footer"]) if layout else partials["footer"]
         ctx["css"] = f"{layout}.css" if layout else "styles.css"
+        # Studio pages fetch their scripts from the <head> at high priority (defer keeps them non-blocking),
+        # so the opening sequence never waits behind the page's images on a slow connection.
+        ctx["headscripts"] = (
+            '<script src="assets/js/main.js" defer fetchpriority="high"></script>\n'
+            '  <script src="assets/js/studio.js" defer fetchpriority="high"></script>'
+        ) if layout == "studio" else ""
         html = partials["head"] + header + body + footer
         for k, v in ctx.items():
             html = html.replace("{{" + k + "}}", v)
-        html = add_img_dimensions(expand_icons(html))
+        html = asset_versions(add_img_dimensions(expand_icons(html)))
         (ROOT / slug).write_text(html)
         if not meta.get("noindex"):
             sitemap.append(canonical)
