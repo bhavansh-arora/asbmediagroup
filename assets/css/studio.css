@@ -167,7 +167,7 @@ ul, ol { list-style: none; padding: 0; }
 .hero__count { display: none; }
 
 /* Hero: wall of clips (home). Rows of 16:9 film frames run sideways at once in alternate directions and
-   at different speeds; each frame carries a camera-roll name and a play bar so it reads as footage.
+   at different speeds; each frame carries a camera-roll name so it reads as footage.
    One transform animation per row (compositor only); rows pause while the hero is off-screen. The wall
    fades in once the frames in view have loaded (studio.js), with a 6s safety net. */
 .clips { position: absolute; z-index: -2; inset: -16% -12%; display: grid; grid-template-rows: repeat(4, minmax(0, 1fr)); gap: clamp(8px, .9vw, 14px); transform: rotate(-5deg); opacity: 0; transition: opacity 1.2s ease; }
@@ -187,10 +187,7 @@ ul, ol { list-style: none; padding: 0; }
 .clip { position: relative; flex: none; height: 100%; aspect-ratio: 16 / 9; margin: 0; border-radius: clamp(8px, .8vw, 12px); overflow: hidden; background: var(--ink-3); }
 .clip img { width: 100%; height: 100%; object-fit: cover; }
 .clip__id { position: absolute; top: 8px; left: 10px; font-family: var(--mono); font-size: .55rem; letter-spacing: .12em; color: rgba(244, 236, 223, .78); text-shadow: 0 1px 3px rgba(0, 0, 0, .7); }
-.clip__bar { position: absolute; left: 10px; right: 10px; bottom: 8px; height: 2px; border-radius: 2px; background: rgba(244, 236, 223, .22); overflow: hidden; }
-.clip__bar::after { content: ""; position: absolute; inset: 0; background: rgba(244, 236, 223, .85); transform-origin: 0 50%; animation: clipPlay var(--t, 8s) linear var(--o, 0s) infinite; }
-@keyframes clipPlay { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.clips.is-paused .clips__track, .clips.is-paused .clip__bar::after { animation-play-state: paused; }
+.clips.is-paused .clips__track { animation-play-state: paused; }
 /* the wall sits under a darker grade than a single still, so the headline always reads */
 .hero--clips .hero__frame::before { z-index: -1; background:
   linear-gradient(180deg, rgba(11, 9, 7, .62) 0%, rgba(11, 9, 7, .38) 26%, rgba(11, 9, 7, .5) 55%, rgba(11, 9, 7, .93) 100%),
