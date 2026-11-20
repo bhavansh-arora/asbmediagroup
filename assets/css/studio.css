@@ -731,8 +731,14 @@ html.js:not(.is-in) .phead [data-r] { opacity: 0 !important; transform: translat
 .tab:hover { color: var(--text); }
 .tab.is-active { background: var(--ink); color: var(--on-dark); box-shadow: none; }
 .tab.is-active sup { color: var(--accent-light); }
-.masonry { columns: 3; column-gap: var(--gap); }
-.masonry figure { break-inside: avoid; margin-bottom: var(--gap); border-radius: var(--r-md); overflow: hidden; background: var(--bg-2); }
+.masonry { --mgap: var(--gap); columns: 3; column-gap: var(--mgap); }
+.masonry figure { break-inside: avoid; margin-bottom: var(--mgap); border-radius: var(--r-md); overflow: hidden; background: var(--bg-2); }
+/* main.js deals the figures into flex columns and trims each column's images a few percent so every column ends level */
+.masonry.is-laid { display: flex; align-items: flex-start; gap: var(--mgap); columns: auto; }
+.masonry__col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: var(--mgap); }
+.masonry.is-laid figure { margin: 0; }
+.masonry.is-laid button, .masonry.is-laid img { height: 100%; }
+.masonry.is-laid img { object-fit: cover; }
 .masonry button { display: block; width: 100%; }
 .masonry img { width: 100%; transition: transform 1s var(--ease); }
 .masonry figure:hover img { transform: scale(1.03); }
@@ -874,8 +880,7 @@ html.js:not(.is-in) .phead [data-r] { opacity: 0 !important; transform: translat
   .faq summary { grid-template-columns: 32px 1fr 32px; }
   .faq details p { padding: 0 0 22px 44px; }
   .formats { grid-template-columns: 1fr 1fr; }
-  .masonry { column-gap: 8px; }
-  .masonry figure { margin-bottom: 8px; }
+  .masonry { --mgap: 8px; }
 }
 @media (max-width: 640px) {
   .mcard__img { aspect-ratio: 4 / 5; }

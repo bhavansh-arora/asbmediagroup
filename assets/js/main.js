@@ -171,6 +171,45 @@
     p.addEventListener("click", start);
   });
 
+  /* Masonry with level bottoms. Each figure goes into the currently shortest column (using the
+     image's width/height attributes), then each column's images are scaled a few percent so all
+     columns end at the same height (object-fit crops the difference). Without JS, CSS columns stay. */
+  $$(".masonry").forEach((m) => {
+    const figs = [...m.children].filter((f) => f.tagName === "FIGURE");
+    const ratio = (f) => { const i = $("img", f); return i && +i.getAttribute("width") ? +i.getAttribute("height") / +i.getAttribute("width") : 0; };
+    if (!figs.length || figs.some((f) => !ratio(f))) return;
+    const narrow = matchMedia("(max-width: 900px)");
+    let lastW = 0;
+    const lay = () => {
+      const n = narrow.matches ? 2 : 3;
+      m.classList.add("is-laid");
+      const gap = parseFloat(getComputedStyle(m).columnGap) || 0;
+      const w = (m.clientWidth - gap * (n - 1)) / n;
+      if (w <= 0) return;
+      const cols = Array.from({ length: n }, () => ({ el: Object.assign(document.createElement("div"), { className: "masonry__col" }), figs: [], img: 0 }));
+      const height = (c) => c.img + gap * Math.max(0, c.figs.length - 1);
+      figs.forEach((f) => {
+        if (f.classList.contains("is-hidden")) { cols[0].el.append(f); return; }
+        const c = cols.reduce((a, b) => (height(b) < height(a) ? b : a));
+        c.figs.push(f); c.img += ratio(f) * w; c.el.append(f);
+      });
+      const used = cols.filter((c) => c.figs.length);
+      const target = used.reduce((sum, c) => sum + height(c), 0) / (used.length || 1);
+      cols.forEach((c) => {
+        const gaps = gap * Math.max(0, c.figs.length - 1);
+        const k = c.img ? Math.min(1.25, Math.max(0.8, (target - gaps) / c.img)) : 1;
+        c.figs.forEach((f) => { f.style.aspectRatio = "1 / " + (ratio(f) * k).toFixed(4); });
+      });
+      m.replaceChildren(...cols.map((c) => c.el));
+      lastW = m.clientWidth;
+    };
+    lay();
+    narrow.addEventListener("change", lay);
+    m.addEventListener("relayout", lay);
+    let timer = 0;
+    new ResizeObserver(() => { if (Math.abs(m.clientWidth - lastW) > 1) { clearTimeout(timer); timer = setTimeout(lay, 150); } }).observe(m);
+  });
+
   /* Filters (work + stills), with deep links like photography.html#sports */
   $$("[data-filter-group]").forEach((groupEl) => {
     const scope = $(groupEl.dataset.filterGroup);
@@ -180,6 +219,7 @@
       const f = tab.dataset.filter;
       $$("[data-cat]", scope).forEach((it) => it.classList.toggle("is-hidden", !(f === "all" || it.dataset.cat.split(" ").includes(f))));
       scope.classList.toggle("is-filtered", f !== "all");
+      scope.dispatchEvent(new Event("relayout"));
     };
     tabs.forEach((t) => t.addEventListener("click", () => apply(t)));
     const deep = location.hash && tabs.find((t) => t.dataset.filter === location.hash.slice(1));
