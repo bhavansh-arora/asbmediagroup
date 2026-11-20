@@ -153,7 +153,7 @@
       if (e.key === "ArrowLeft") showImg(gi - 1);
     }
   });
-  const vimeo = (id) => `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0&color=ff6b47&dnt=1`;
+  const vimeo = (id) => `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0&color=ef5a2c&dnt=1`;
   document.addEventListener("click", (e) => {
     const v = e.target.closest("[data-video]");
     if (v && lb) {

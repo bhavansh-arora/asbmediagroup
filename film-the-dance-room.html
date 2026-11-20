@@ -18,8 +18,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://player.vimeo.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="assets/css/noir.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/studio.css">
   <script>document.documentElement.classList.add("js")</script>
   <script type="application/ld+json">
   {
@@ -39,22 +39,16 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "The Dance Room", "description": "Brand film for The Dance Room, Sarasota\u2019s ballroom and Latin studio: energy, technique and a welcoming atmosphere for new dancers.", "thumbnailUrl": "https://www.asbmediagroup.com/assets/img/film-dance.webp", "uploadDate": "2026-08-01", "duration": "PT1M26S", "embedUrl": "https://player.vimeo.com/video/1209998926", "productionCompany": {"@type": "Organization", "name": "ASB Media Group"}}</script>
 </head>
 <body>
-  <script>try{if(sessionStorage.getItem("asb-noir"))document.documentElement.classList.add("ld-quick")}catch(e){}</script>
   <a class="skip" href="#main">Skip to content</a>
-
-  <div class="ld" aria-hidden="true">
-    <div class="ld__word"><span style="--i:0">A</span><span style="--i:1">S</span><span style="--i:2">B</span><span style="--i:3">&nbsp;</span><span style="--i:4"><em>Media</em></span></div>
-    <span class="ld__tag mono">Commercial film · Tampa Bay</span>
-    <span class="ld__n">0</span>
-    <i class="ld__bar"></i>
-  </div>
-
-  <div class="cur" aria-hidden="true"><div class="cur__ring"><span class="cur__label"></span></div><div class="cur__dot"></div></div>
+  <div class="cur" aria-hidden="true"><span class="cur__b">Play</span></div>
 
   <header class="nav" aria-label="Site">
-    <a class="brand" href="index.html" aria-label="ASB Media Group home">ASB <i>Media</i></a>
+    <a class="brand" href="index.html" aria-label="ASB Media Group home">
+      <span class="brand__mark" aria-hidden="true">AB</span>
+      <span class="brand__txt"><span class="brand__name">ASB Media</span><span class="brand__sub">Group · Tampa Bay</span></span>
+    </a>
     <nav class="nav__links" aria-label="Primary">
-        <a href="work.html" aria-current="page">Work</a>
+        <a href="work.html" aria-current="page">Films</a>
         <a href="services.html">Services</a>
         <a href="weddings.html">Weddings</a>
         <a href="photography.html">Stills</a>
@@ -62,7 +56,8 @@
         <a href="contact.html">Contact</a>
     </nav>
     <div class="nav__r">
-      <a class="nav__cta" href="contact.html">Start a project <span aria-hidden="true">↗</span></a>
+      <span class="nav__pill"><span class="dot dot--live"></span><b>Booking</b> · reply in 48h</span>
+      <a class="btn btn--sm" href="contact.html"><span>Start your film</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
       <button class="nav__menu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="sheet"><span></span></button>
     </div>
   </header>
@@ -70,14 +65,15 @@
   <div class="sheet" id="sheet" aria-hidden="true">
     <nav class="sheet__links" aria-label="Mobile">
       <a href="index.html">Home<span>01</span></a>
-      <a href="work.html">Work<span>02</span></a>
+      <a href="work.html">Films<span>02</span></a>
       <a href="services.html">Services<span>03</span></a>
       <a href="weddings.html">Weddings<span>04</span></a>
       <a href="photography.html">Stills<span>05</span></a>
       <a href="about.html">Studio<span>06</span></a>
       <a href="contact.html">Contact<span>07</span></a>
     </nav>
-    <div class="sheet__foot">
+    <a class="btn btn--block" href="contact.html"><span>Start your film</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+    <div class="sheet__foot small">
       <a href="mailto:aramisbooker@asbmediagroup.com">aramisbooker@asbmediagroup.com</a>
       <a href="tel:+18136070444">(813) 607-0444</a>
     </div>
@@ -121,9 +117,8 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section light">
       <div class="wrap">
-        <div class="rule"></div>
         <div class="head" style="align-items:start">
           <p class="quote" data-r>“Make the first lesson feel like an invitation, not a risk.”</p>
           <div class="head__aside" data-r>
@@ -177,53 +172,48 @@
     </section>
   </main>
 
-  <section class="cta" aria-label="Start a project">
-    <div class="label mono"><span><span class="n">●</span>&nbsp; Booking new projects</span><span>Reply within one business day</span></div>
-    <h2 class="cta__t h1">Your story, <em>next.</em></h2>
-    <div class="cta__row">
-      <a class="orb" href="contact.html" data-cursor="Let’s go">Start<br>your film</a>
-      <div class="contact">
-        <div><span class="mono faint">Email</span><a href="mailto:aramisbooker@asbmediagroup.com">aramisbooker@asbmediagroup.com</a></div>
-        <div><span class="mono faint">Phone</span><a href="tel:+18136070444">(813) 607-0444</a></div>
-        <div><span class="mono faint">Studio</span><a href="about.html">Tampa Bay, Florida</a></div>
-      </div>
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      <div class="ticker__g"><span class="ticker__i">Let’s make <em>&nbsp;your film</em></span><span class="ticker__i ticker__i--o">Now booking 2027</span><span class="ticker__i">Tampa <em>&nbsp;Bay</em></span><span class="ticker__i ticker__i--o">Brand films</span></div>
+      <div class="ticker__g"><span class="ticker__i">Let’s make <em>&nbsp;your film</em></span><span class="ticker__i ticker__i--o">Now booking 2027</span><span class="ticker__i">Tampa <em>&nbsp;Bay</em></span><span class="ticker__i ticker__i--o">Brand films</span></div>
     </div>
-  </section>
+  </div>
 
   <footer class="foot">
+    <a class="reelcard" href="work.html">
+      <span class="reelcard__t"><span class="mono faint"><span class="dot"></span>&nbsp; Watch the work</span><b>4 brand films · Tampa Bay ↗</b></span>
+      <span class="reelcard__thumbs" aria-hidden="true">
+        <img src="assets/img/film-mary-crop.webp" alt="" loading="lazy" sizes="100px" width="1044" height="1013"><img src="assets/img/film-funbike-sm.webp" alt="" loading="lazy" sizes="100px" width="900" height="506" srcset="assets/img/film-funbike-sm.webp 900w, assets/img/film-funbike.webp 1800w"><img src="assets/img/film-teco-sm.webp" alt="" loading="lazy" sizes="100px" width="900" height="506" srcset="assets/img/film-teco-sm.webp 900w, assets/img/film-teco.webp 1800w"><img src="assets/img/film-dance-sm.webp" alt="" loading="lazy" sizes="100px" width="900" height="506" srcset="assets/img/film-dance-sm.webp 900w, assets/img/film-dance.webp 1800w"><img src="assets/img/prod-06-sm.webp" alt="" loading="lazy" sizes="100px" width="900" height="600" srcset="assets/img/prod-06-sm.webp 900w, assets/img/prod-06.webp 1800w"><img src="assets/img/sport-09-sm.webp" alt="" loading="lazy" sizes="100px" width="720" height="900" srcset="assets/img/sport-09-sm.webp 720w, assets/img/sport-09.webp 1440w"><img src="assets/img/wed-04-sm.webp" alt="" loading="lazy" sizes="100px" width="720" height="900" srcset="assets/img/wed-04-sm.webp 720w, assets/img/wed-04.webp 1440w"><img src="assets/img/prod-15-sm.webp" alt="" loading="lazy" sizes="100px" width="900" height="600" srcset="assets/img/prod-15-sm.webp 900w, assets/img/prod-15.webp 1800w">
+      </span>
+    </a>
     <div class="foot__grid">
-      <div><a class="brand" href="index.html">ASB <i>Media</i> Group</a><p>Brand films, product showcases and photography for businesses, nonprofits and couples across Florida.</p></div>
+      <div>
+        <span class="mono faint"><span class="dot"></span>&nbsp; Booking projects across Tampa Bay &amp; Florida</span>
+        <p class="foot__lede">Your story, <em>next.</em></p>
+        <div class="btn-row">
+          <a class="btn" href="contact.html"><span>Start your film</span><span class="btn__i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+          <a class="btn btn--ghost btn--plain" href="mailto:aramisbooker@asbmediagroup.com">aramisbooker@asbmediagroup.com</a>
+        </div>
+      </div>
+      <div><h4 class="mono">Explore</h4><ul>
+        <li><a href="index.html">Home</a></li><li><a href="work.html">Films</a></li><li><a href="services.html">Services</a></li><li><a href="weddings.html">Weddings</a></li><li><a href="photography.html">Stills</a></li><li><a href="about.html">Studio</a></li>
+      </ul></div>
       <div><h4 class="mono">Films</h4><ul>
-        <li><a href="film-mary-lees-house.html">Mary Lee’s House</a></li>
-        <li><a href="film-fun-bike-center.html">Fun Bike Center</a></li>
-        <li><a href="film-teco-energy-audit.html">TECO Energy Audit</a></li>
-        <li><a href="film-the-dance-room.html">The Dance Room</a></li>
+        <li><a href="film-mary-lees-house.html">Mary Lee’s House</a></li><li><a href="film-fun-bike-center.html">Fun Bike Center</a></li><li><a href="film-teco-energy-audit.html">Tampa Electric</a></li><li><a href="film-the-dance-room.html">The Dance Room</a></li>
       </ul></div>
-      <div><h4 class="mono">Studio</h4><ul>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="weddings.html">Weddings</a></li>
-        <li><a href="photography.html">Stills</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html#faq">FAQ</a></li>
-      </ul></div>
-      <div><h4 class="mono">Tampa time</h4><ul>
-        <li><span data-clock>—</span> ET</li>
-        <li>Tampa · St. Pete · Clearwater</li>
+      <div><h4 class="mono">In Tampa it’s</h4><ul>
+        <li><span class="dot dot--live"></span>&nbsp; <b data-clock>—</b></li><li><a href="tel:+18136070444">(813) 607-0444</a></li><li><a href="contact.html#faq">FAQ</a></li>
       </ul></div>
     </div>
-    <div class="foot__mark" aria-hidden="true"><span>ASB</span> <span><em>Media</em></span></div>
-    <div class="foot__bottom mono">
-      <span>© <span data-year>2026</span> ASB Media Group</span>
-      <span>Site by <a href="https://codebunny.net" target="_blank" rel="noopener">Code Bunny</a> · <a href="#main">Back to top ↑</a></span>
+    <div class="wordmark" aria-hidden="true"><span>ASB</span> <span><em>Media</em></span></div>
+    <div class="foot__bottom">
+      <span>© <span data-year>2026</span> ASB Media Group · Commercial film &amp; photography, Tampa Bay</span>
+      <span>Website by <a class="cb" href="https://codebunny.net" target="_blank" rel="noopener"><span class="dot"></span> Code Bunny ↗</a></span>
     </div>
   </footer>
 
-  <div class="mbar">
-    <a href="tel:+18136070444"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" width="16" height="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg> Call</a>
-    <a href="contact.html">Start a project</a>
-  </div>
-
-  <div class="preview" aria-hidden="true"></div>
+  <div class="mbar"><a href="contact.html">Start your film</a><a href="work.html">Films</a></div>
+  <button class="totop" type="button" aria-label="Back to top"><svg class="ring" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22"/></svg><svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
 
   <div class="lb" role="dialog" aria-modal="true" aria-label="Media viewer" aria-hidden="true">
     <button class="lb__btn lb__close" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg></button>
@@ -234,7 +224,6 @@
   </div>
 
   <script src="assets/js/main.js" defer></script>
-  <script src="assets/js/gl-hero.js" defer></script>
-  <script src="assets/js/noir.js" defer></script>
+  <script src="assets/js/studio.js" defer></script>
 </body>
 </html>

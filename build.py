@@ -37,7 +37,7 @@ ICONS = {
 }
 
 NAV = [
-    ("work", "work.html", "Work"),
+    ("work", "work.html", "Films"),
     ("services", "services.html", "Services"),
     ("weddings", "weddings.html", "Weddings"),
     ("stills", "photography.html", "Stills"),

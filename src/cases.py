@@ -88,7 +88,7 @@ def render(i):
         "desc": c["desc"], "nav": "work", "og": f"assets/img/{c['img']}.webp",
         "schema": '<script type="application/ld+json">' + json.dumps(schema) + "</script>",
         "cta": "Your story, <em>next.</em>",
-        "layout": "noir",
+        "layout": "studio",
     }
     return f"""<!--meta {json.dumps(meta)} -->
 
@@ -129,9 +129,8 @@ def render(i):
       </div>
     </section>
 
-    <section class="section">
+    <section class="section light">
       <div class="wrap">
-        <div class="rule"></div>
         <div class="head" style="align-items:start">
           <p class="quote" data-r>“{c["pull"]}”</p>
           <div class="head__aside" data-r>

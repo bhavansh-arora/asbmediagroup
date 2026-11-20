@@ -27,9 +27,9 @@ python3 build.py
 - `src/partials/`: shared head, nav, mobile menu and the closing panel/footer (each page sets its closing headline with `"cta"` in its meta line)
 - `src/pages/`: the body of each page. The first line is a JSON meta comment with title, description and nav.
 - `src/cases.py`: all four case studies come from one data list and one template. To add a film, add an entry here.
-- `assets/css/noir.css`: the current dark "Noir" design system used by every page (pages opt in with `"layout": "noir"` in their meta line). `assets/css/styles.css` is the previous cream design, kept for reference.
-- `src/partials/header_noir.html` / `footer_noir.html`: the Noir shell (loader, cursor, blended nav, closing statement, footer)
-- `assets/js/noir.js`: loader, custom cursor, the WebGL hover preview on the film list, background reel, magnetic buttons
+- `assets/css/studio.css`: the current "Studio" design system (Arista-style: Fraunces + DM Sans, ink and cream sections, ember actions) used by every page via `"layout": "studio"` in each page's meta line. `noir.css` and `styles.css` are earlier directions, kept for reference.
+- `src/partials/header_studio.html` / `footer_studio.html`: the Studio shell (nav, mobile menu, ticker, footer with wordmark, back-to-top ring)
+- `assets/js/studio.js`: REC timecode, the "Now showing" pill, client-list previews, the brief slider, back-to-top ring, play bubble, story picker. No libraries; the pinned film reel is a CSS scroll timeline.
 - `assets/js/main.js`: interactions in plain JavaScript (no libraries): word-mask headline reveals, count-ups, cursor spotlight/tilt, magnetic buttons, quiz, brief builder, lightbox. Scrolling is native.
 - `assets/js/gl-hero.js`: the WebGL hero (film-burn transitions). It only draws while a transition runs; the slow zoom and mouse parallax are CSS transforms on the canvas. It lowers its own resolution on slow GPUs, and browsers rendering WebGL in software (hardware acceleration off) get the CSS cross-fade instead. Add `?gl=force` to a URL to force the shader on for testing.
 - Performance rule for Noir: scroll-timeline animations keep a GPU layer alive permanently, so only the hero exit and the pinned photo strip use them. Everything else is a one-shot reveal (main.js adds `.in` once).
