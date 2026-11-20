@@ -844,6 +844,30 @@ html.js:not(.is-in) .phead [data-r] { opacity: 0 !important; transform: translat
 .faq details[open] summary i { background: var(--accent); color: #fff; box-shadow: none; }
 .faq details[open] summary i::after { rotate: 0deg; }
 .faq details p { padding: 0 44px 24px 56px; color: var(--muted); max-width: 74ch; }
+/* Contact FAQ: intro and contact actions stay beside the list; rows respond to the pointer and open smoothly */
+.faq-split .split__aside { gap: 18px; }
+.faq-split .split__aside .h2 { margin: 0; }
+.faq-split .split__aside p { max-width: 38ch; margin: 0; }
+.faq-split .btn-row { margin-top: 8px; }
+.faq-split .btn__i svg { width: 15px; height: 15px; }
+.faq-split .faq summary { padding: 24px 4px; transition: color .25s; }
+.faq-split .faq summary .mono { color: var(--ember-deep); font-size: .7rem; }
+.faq-split .faq summary:hover { color: var(--ember-deep); }
+.faq-split .faq summary:hover i { background: var(--ink); color: var(--cream); box-shadow: none; }
+.faq-split .faq summary:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; border-radius: 8px; }
+.faq-split .faq details[open] summary { color: var(--ember-deep); }
+.faq-split .faq details[open] summary i { background: var(--ember); color: #fff; }
+.faq-split .faq details p { padding: 0 52px 26px 60px; max-width: none; font-size: 1rem; line-height: 1.7; }
+/* smooth height animation where supported (Chrome/Edge 131+); elsewhere answers open instantly */
+@supports (interpolate-size: allow-keywords) {
+  .faq-split .faq { interpolate-size: allow-keywords; }
+  .faq-split .faq details::details-content { block-size: 0; overflow: hidden; transition: block-size .45s var(--ease), content-visibility .45s allow-discrete; }
+  .faq-split .faq details[open]::details-content { block-size: auto; }
+}
+@media (max-width: 640px) {
+  .faq-split .faq summary { padding: 20px 0; }
+  .faq-split .faq details p { padding: 0 0 22px 44px; }
+}
 .nf { min-height: 100svh; display: grid; place-items: center; text-align: center; padding: 120px var(--gutter) 60px; }
 .head:last-child, .eyebrow-row:last-child { margin-bottom: 0; }
 .pkg { transition: transform .25s ease-out, background .35s, box-shadow .35s; will-change: transform; }
