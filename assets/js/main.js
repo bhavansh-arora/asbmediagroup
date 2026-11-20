@@ -339,6 +339,7 @@
       }, () => { card.style.transform = ""; });
     });
     $$(".btn, .mcard .circle").forEach((b) => {
+      if (b.closest(".pkg")) return; // full-width card buttons would slide out of the card
       const k = .22;
       track(b, (e, r) => {
         b.style.translate = `${(e.clientX - r.left - r.width / 2) * k}px ${(e.clientY - r.top - r.height / 2) * k}px`;
