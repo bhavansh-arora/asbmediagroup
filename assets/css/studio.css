@@ -280,10 +280,9 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 .stats--plain .stat + .stat { padding-left: clamp(12px, 1.4vw, 20px); box-shadow: inset 1px 0 0 var(--line); }
 
 /* ---------- Film reel ----------
-   Laptops and desktops: the section pins and scrolling moves the reel sideways (--reel-speed px across
-   for each 1px down), then the page carries on after the last card (see "Pinned" below).
-   Phones, tablets and reduced motion: a native sideways scroller (swipe, trackpad, shift+wheel, arrows). */
-.reel { position: relative; --reel-speed: 1.5; }
+   A native sideways scroller on every screen (swipe, trackpad, shift+wheel, arrows, mouse drag); the page's
+   vertical scroll is never taken over. */
+.reel { position: relative; }
 .reel__in { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(18px, 2vw, 28px); }
 .reel__ctl { display: flex; align-items: center; gap: 8px; }
 .reel__btn { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; flex: none; box-shadow: inset 0 0 0 1px var(--line2); transition: background .3s, color .3s, opacity .3s; }
@@ -291,7 +290,7 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 .reel__btn:hover:not(:disabled) { background: var(--cream); color: var(--ink); }
 .reel__btn:disabled { opacity: .3; cursor: default; }
 /* the first card lines up with the headline on wide screens too (.wrap caps at 1600px) */
-.reel__track { --edge: max(var(--g), calc((100% - 1600px) / 2 + var(--g))); display: flex; gap: var(--gap); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--edge); scrollbar-width: none; padding: 0 var(--edge) 4px; }
+.reel__track { --edge: max(var(--g), calc((100% - 1600px) / 2 + var(--g))); display: flex; gap: var(--gap); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scroll-padding-inline: var(--edge); scrollbar-width: none; padding: 0 var(--edge) 4px; }
 .reel__track::-webkit-scrollbar { display: none; }
 .film { flex: none; width: clamp(280px, 34vw, 560px); scroll-snap-align: start; display: grid; align-content: start; gap: 14px; }
 .film__img { position: relative; aspect-ratio: 16 / 10; border-radius: var(--r); overflow: hidden; background: var(--ink-3); }
@@ -307,32 +306,11 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 /* progress thumb: its width is the visible share of the reel, it moves with the reel (studio.js) */
 .reel__bar { height: 1px; background: var(--line); position: relative; overflow: hidden; }
 .reel__bar i { position: absolute; top: 0; bottom: 0; left: 0; width: 30%; background: var(--sun); }
-/* Pinned. The section is one screen tall plus the reel's sideways travel (--travel, measured by studio.js)
-   divided by the speed, so the sticky screen holds still for exactly as long as the cards need to cross it. The cards are sized
-   from the screen height so the whole block fits, and the block sits centred under the nav. */
-@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
-  .js .reel { height: calc(100svh + var(--travel, 0px) / var(--reel-speed)); padding-block: 0; }
-  .js .reel__in { position: sticky; top: 0; height: 100svh; overflow: hidden; align-content: center; padding: 78px 0 clamp(12px, 2svh, 24px); }
-  .js .reel__track { overflow: visible; width: max-content; scroll-snap-type: none; will-change: transform; }
-  /* no hover while the reel slides under the pointer (studio.js sets this while scrolling): hover states
-     changing card by card would repaint the whole reel every frame */
-  .js .reel.is-moving .reel__track { pointer-events: none; }
-  .js .reel__bar i { will-change: transform; }
-  .js .film { width: min(44vw, calc((100svh - 360px) * 1.6)); }
-  .js .film--end { width: min(24vw, 340px); }
-}
-/* where the browser can, the scroll position drives the reel directly on the compositor; elsewhere
-   studio.js moves it */
-@supports (animation-timeline: view()) {
-  @media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
-    /* inset 0: otherwise the page's scroll-padding (90px) starts the cards moving before the pin engages */
-    .js .reel { view-timeline-name: --reel; view-timeline-inset: 0px; }
-    .js .reel__track { animation: reelMove linear both; animation-timeline: --reel; animation-range: contain 0% contain 100%; }
-    @keyframes reelMove { from { transform: none; } to { transform: translateX(calc(-1 * var(--travel, 0px))); } }
-    /* the progress thumb rides the same timeline (--thumb-x is its end position, set by studio.js) */
-    .js .reel__bar i { animation: reelThumb linear both; animation-timeline: --reel; animation-range: contain 0% contain 100%; }
-    @keyframes reelThumb { from { transform: none; } to { transform: translateX(var(--thumb-x, 0%)); } }
-  }
+/* desktop: a mouse can drag the row (studio.js); snapping pauses while dragging */
+@media (hover: hover) and (pointer: fine) {
+  .reel__track { cursor: grab; }
+  .reel.is-dragging .reel__track { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+  .reel.is-dragging .film { pointer-events: none; }
 }
 
 /* ---------- Services bento (cream) ---------- */
