@@ -209,8 +209,9 @@
     top.addEventListener("click", () => scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }));
     $$("[data-top]").forEach((l) => l.addEventListener("click", (e) => { e.preventDefault(); scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }); }));
     upd();
-    // Lift above the footer's bottom row when it comes into view (never covers the credits)
-    const fb = $(".foot__bottom");
+    // Step aside once the footer is in view: it has its own "Back to top" link, and the button
+    // would otherwise sit on the footer's links and arrows
+    const fb = $(".foot");
     if (fb) onScreen(fb, (v) => top.classList.toggle("is-docked", v));
   }
 
