@@ -15,13 +15,30 @@
   const fontsReady = Promise.race([document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve(), wait(1400)]);
   const ld = $(".ld");
   const curtain = $(".curtain");
+  const loaded = (im) => (im.complete && im.naturalWidth ? Promise.resolve() : new Promise((r) => { im.addEventListener("load", r, { once: true }); im.addEventListener("error", r, { once: true }); }));
+
+  /* Hero wall: fade in only once the first rows of every column have loaded (no empty tiles),
+     and pause the drift while the hero is off-screen */
+  const wall = $(".hero__wall");
+  let wallReady = Promise.resolve();
+  if (wall) {
+    const first = $$(".wall__col", wall).flatMap((c) => $$("img", c).slice(0, 3));
+    wallReady = Promise.race([Promise.all(first.map(loaded)), wait(3500)]).then(() => wall.classList.add("is-ready"));
+    onScreen(wall.closest(".hero") || wall, (v) => wall.classList.toggle("is-paused", !v));
+  }
   const store = { get: (k) => { try { return sessionStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { sessionStorage.setItem(k, v); } catch (e) {} }, del: (k) => { try { sessionStorage.removeItem(k); } catch (e) {} } };
 
   if (root.classList.contains("ld-on") && ld) {
     store.set("asb-seen", "1");
+    // Each film strip fades in only once all of its frames have loaded (never empty frames)
+    $$(".lstrip", ld).forEach((s) => {
+      const ims = $$("img", s);
+      Promise.all(ims.map((im) => (im.complete && im.naturalWidth ? 1 : new Promise((r) => { im.addEventListener("load", r, { once: true }); im.addEventListener("error", r, { once: true }); }))))
+        .then(() => s.classList.add("is-ready"));
+    });
     const bar = $(".ld__bar", ld), tcl = $("[data-ld-tc]", ld);
     const heroImg = $(".hero__slides figure.is-on img, .phead ~ * img");
-    const imgReady = heroImg && !heroImg.complete ? Promise.race([new Promise((r) => heroImg.addEventListener("load", r, { once: true })), wait(3000)]) : Promise.resolve();
+    const imgReady = Promise.all([wallReady, heroImg ? Promise.race([loaded(heroImg), wait(3000)]) : Promise.resolve()]);
     let ready = false;
     Promise.all([fontsReady, imgReady]).then(() => (ready = true));
     const t0 = performance.now(), MIN = 1900;
@@ -114,6 +131,16 @@
       if (b && fig.dataset.video) { b.dataset.video = fig.dataset.video; b.dataset.title = fig.dataset.title || fig.dataset.label || "Film"; }
     });
   }
+
+  /* Sections that slide images in sideways (the films reel) can't rely on native lazy loading:
+     the browser judges distance by layout position, not by the transform that moves them in.
+     Start loading every image in such a section once it is within ~1.5 screens. */
+  const pre = new IntersectionObserver((es) => es.forEach((en) => {
+    if (!en.isIntersecting) return;
+    $$("img[loading=lazy]", en.target).forEach((im) => (im.loading = "eager"));
+    pre.unobserve(en.target);
+  }), { rootMargin: "150% 0px 150% 0px" });
+  $$("[data-preload]").forEach((el) => pre.observe(el));
 
   /* Pause CSS loops (film strip, ticker) when off-screen */
   $$(".strip, .ticker").forEach((el) => onScreen(el, (v) => el.classList.toggle("is-paused", !v)));
