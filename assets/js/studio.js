@@ -164,10 +164,12 @@
   opened.then(() => $$("[data-preload]").forEach((el) => pre.observe(el)));
 
   /* Films reel. Laptops and desktops: the section pins and the page's own scroll moves the reel sideways
-     (--reel-speed px across per 1px down; CSS scroll timeline where supported, else the transform is set here),
-     then the page carries on after the last card. Phones, tablets and reduced motion: a native sideways
-     scroller. Either way the arrows page through it (as many whole cards as fit, at least one) and switch
-     off at either end, and the bar's thumb shows which part of the reel is in view. */
+     (--reel-speed px across per 1px down), then the page carries on after the last card. The reel and the
+     bar's thumb run on a CSS scroll timeline where supported (compositor, no script per frame); elsewhere
+     they are set here. Phones, tablets and reduced motion: a native sideways scroller. Either way the
+     arrows page through it (as many whole cards as fit, at least one) and switch off at either end.
+     Kept light on purpose, so scrolling never waits on script: no wheel listener, no layout reads while
+     scrolling (the section's position is measured once and on resize), and DOM writes only on change. */
   const reel = $(".reel");
   const track = reel && $(".reel__track", reel);
   if (track) {
@@ -176,37 +178,67 @@
     const prev = $("[data-reel-prev]", reel), next = $("[data-reel-next]", reel);
     const pinMQ = matchMedia("(min-width: 901px) and (prefers-reduced-motion: no-preference)");
     const cssDriven = !!(window.CSS && CSS.supports && CSS.supports("animation-timeline: view()"));
-    let travel = 0, raf = 0, speed = 1;
+    let travel = 0, raf = 0, speed = 1, top = 0, frac = 1, lastX = -1, still = 0;
     const pinned = () => pinMQ.matches;
-    const reelTop = () => reel.getBoundingClientRect().top + scrollY;
     // how far the reel has moved sideways, and how far it can move
-    const pos = () => pinned() ? Math.min(travel, Math.max(0, (scrollY - reelTop()) * speed)) : track.scrollLeft;
+    const pos = () => pinned() ? Math.min(travel, Math.max(0, (scrollY - top) * speed)) : track.scrollLeft;
     const max = () => pinned() ? travel : track.scrollWidth - track.clientWidth;
+    const setOff = (btn, off) => { if (btn && btn.disabled !== off) btn.disabled = off; };
     const measure = () => {
+      let view;
       if (pinned()) {
         speed = parseFloat(getComputedStyle(reel).getPropertyValue("--reel-speed")) || 1;
-        travel = Math.max(0, Math.round(track.scrollWidth - inner.clientWidth));
+        view = inner.clientWidth;
+        travel = Math.max(0, Math.round(track.scrollWidth - view));
         reel.style.setProperty("--travel", `${travel}px`);
+        top = reel.getBoundingClientRect().top + scrollY;
       } else {
         travel = 0;
+        view = track.clientWidth;
         reel.style.removeProperty("--travel");
         track.style.transform = "";
       }
+      const m = max();
+      frac = view + m ? view / (view + m) : 1;
+      if (thumb) {
+        thumb.style.width = `${frac * 100}%`;
+        reel.style.setProperty("--thumb-x", `${((1 - frac) / frac) * 100}%`);   // end position for the CSS timeline
+      }
+      lastX = -1;
       queue();
     };
     const upd = () => {
       raf = 0;
-      const x = pos(), m = max(), view = pinned() ? inner.clientWidth : track.clientWidth, full = view + m;
-      if (pinned() && !cssDriven) track.style.transform = `translate3d(${-x}px, 0, 0)`;
-      if (thumb) { const f = full ? view / full : 1; thumb.style.width = `${f * 100}%`; thumb.style.transform = `translateX(${m ? (x / m) * ((1 - f) / f) * 100 : 0}%)`; }
-      if (prev) prev.disabled = x <= 2;
-      if (next) next.disabled = x >= m - 2;
+      const x = Math.round(pos()), m = max();
+      if (x === lastX) return;
+      lastX = x;
+      if (!(pinned() && cssDriven)) {
+        if (pinned()) track.style.transform = `translate3d(${-x}px, 0, 0)`;
+        if (thumb) thumb.style.transform = `translateX(${m ? (x / m) * ((1 - frac) / frac) * 100 : 0}%)`;
+      }
+      setOff(prev, x <= 2);
+      setOff(next, x >= m - 2);
     };
     const queue = () => { if (!raf) raf = requestAnimationFrame(upd); };
     track.addEventListener("scroll", queue, { passive: true });
-    addEventListener("scroll", () => { if (pinned()) queue(); }, { passive: true });
+    addEventListener("scroll", () => {
+      if (!pinned()) return;
+      queue();
+      // While the cards slide under a resting pointer, each would take its hover state in turn (zoom,
+      // button colour, "View" bubble) and repaint the whole reel every frame. So the reel ignores the
+      // pointer while it moves and takes it back 160ms after scrolling stops.
+      const d = scrollY - top;
+      if (d > -innerHeight && d < travel / speed + innerHeight) {
+        if (!still) reel.classList.add("is-moving");
+        clearTimeout(still);
+        still = setTimeout(() => { reel.classList.remove("is-moving"); still = 0; }, 160);
+      }
+    }, { passive: true });
     addEventListener("resize", measure, { passive: true });
-    if (window.ResizeObserver) new ResizeObserver(measure).observe(track);
+    addEventListener("load", measure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    // anything above the reel changing height moves where the pin starts
+    if (window.ResizeObserver) { const ro = new ResizeObserver(measure); ro.observe(track); ro.observe(document.body); }
     if (pinMQ.addEventListener) pinMQ.addEventListener("change", measure);
     const page = (dir) => {
       const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
@@ -215,20 +247,11 @@
       const room = (pinned() ? inner.clientWidth : track.clientWidth) - 2 * (parseFloat(getComputedStyle(track).paddingLeft) || 0) + gap;
       const by = dir * Math.max(1, Math.floor(room / step)) * step;
       const behavior = reduce ? "auto" : "smooth";
-      if (pinned()) scrollTo({ top: reelTop() + Math.min(travel, Math.max(0, pos() + by)) / speed, behavior });
+      if (pinned()) scrollTo({ top: top + Math.min(travel, Math.max(0, pos() + by)) / speed, behavior });
       else track.scrollBy({ left: by, behavior });
     };
     if (prev) prev.addEventListener("click", () => page(-1));
     if (next) next.addEventListener("click", () => page(1));
-    // While pinned, a sideways trackpad swipe over the reel moves it too (instead of doing nothing,
-    // or the browser going back a page)
-    reel.addEventListener("wheel", (e) => {
-      if (!pinned() || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
-      const x = pos(), unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? innerHeight : 1, dx = e.deltaX * unit;
-      if ((dx < 0 && x <= 0) || (dx > 0 && x >= travel)) return;
-      e.preventDefault();
-      scrollBy(0, dx / speed);
-    }, { passive: false });
     measure();
   }
 

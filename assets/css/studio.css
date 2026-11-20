@@ -312,6 +312,10 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
   .js .reel { height: calc(100svh + var(--travel, 0px) / var(--reel-speed)); padding-block: 0; }
   .js .reel__in { position: sticky; top: 0; height: 100svh; overflow: hidden; align-content: center; padding: 78px 0 clamp(12px, 2svh, 24px); }
   .js .reel__track { overflow: visible; width: max-content; scroll-snap-type: none; will-change: transform; }
+  /* no hover while the reel slides under the pointer (studio.js sets this while scrolling): hover states
+     changing card by card would repaint the whole reel every frame */
+  .js .reel.is-moving .reel__track { pointer-events: none; }
+  .js .reel__bar i { will-change: transform; }
   .js .film { width: min(44vw, calc((100svh - 360px) * 1.6)); }
   .js .film--end { width: min(24vw, 340px); }
 }
@@ -323,6 +327,9 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
     .js .reel { view-timeline-name: --reel; view-timeline-inset: 0px; }
     .js .reel__track { animation: reelMove linear both; animation-timeline: --reel; animation-range: contain 0% contain 100%; }
     @keyframes reelMove { from { transform: none; } to { transform: translateX(calc(-1 * var(--travel, 0px))); } }
+    /* the progress thumb rides the same timeline (--thumb-x is its end position, set by studio.js) */
+    .js .reel__bar i { animation: reelThumb linear both; animation-timeline: --reel; animation-range: contain 0% contain 100%; }
+    @keyframes reelThumb { from { transform: none; } to { transform: translateX(var(--thumb-x, 0%)); } }
   }
 }
 
