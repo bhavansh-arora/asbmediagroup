@@ -19,16 +19,13 @@
   const curtain = $(".curtain");
   const loaded = (im) => (im.complete && im.naturalWidth ? Promise.resolve() : new Promise((r) => { im.addEventListener("load", r, { once: true }); im.addEventListener("error", r, { once: true }); }));
 
-  /* Hero wall: only columns that are shown load (the 4th is hidden on phones); the wall fades in once
-     every tile in those columns has loaded (never an empty tile), and pauses while the hero is off-screen */
-  const wall = $(".hero__wall");
+  /* Hero wall of clips: the wall fades in once every frame in the rows on screen has loaded (never an
+     empty frame; at most 4s), and its rows and play bars pause while the hero is off-screen */
+  const wall = $("[data-clips]");
   let wallReady = Promise.resolve();
   if (wall) {
-    // Sources are set by the inline script after the wall markup; a column that becomes visible later
-    // (phone rotated, window widened) gets its tiles then
-    addEventListener("resize", () => wall.wallLoad && wall.wallLoad(), { passive: true });
-    const tiles = $$(".wall__col", wall).filter((c) => getComputedStyle(c).display !== "none").flatMap((c) => $$("img", c));
-    const unique = [...new Map(tiles.map((im) => [im.getAttribute("src") || im.dataset.src, im])).values()];
+    const frames = $$(".clips__row", wall).filter((r) => getComputedStyle(r).display !== "none").flatMap((r) => $$("img", r));
+    const unique = [...new Map(frames.map((im) => [im.getAttribute("src"), im])).values()];
     wallReady = Promise.race([Promise.all(unique.map(loaded)), wait(4000)]).then(() => wall.classList.add("is-ready"));
     onScreen(wall.closest(".hero") || wall, (v) => wall.classList.toggle("is-paused", !v));
   }
@@ -111,6 +108,7 @@
   /* One-shot reveals for scene labels and the footer wordmark */
   const once = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); once.unobserve(en.target); } }), { rootMargin: "0px 0px -8% 0px" });
   $$(".scene, .wordmark").forEach((el) => once.observe(el));
+  $$("[data-wordmark]").forEach((el) => onScreen(el, (v) => el.classList.toggle("is-live", v)));
 
   /* REC timecode (12 updates/s, only while the hero is visible) */
   const tc = $("[data-timecode]");
@@ -126,24 +124,19 @@
     if (!reduce) onScreen(tc.closest(".hero") || tc, (v) => { clearInterval(timer); timer = v ? setInterval(upd, 83) : 0; });
   }
 
-  /* Framed hero: the film counter and the rotating word follow the film slider
-     (main.js fires hero:slide on every change; it also runs the tabs' progress bars) */
-  const fh = $(".hero--frame[data-slides]");
-  if (fh) {
-    const num = $("[data-hero-n]", fh), words = $$(".rot__w", fh);
-    let w = 0;
-    fh.addEventListener("hero:slide", (e) => {
-      const i = e.detail.index;
-      if (num) num.textContent = String(i + 1).padStart(2, "0");
-      if (words.length > 1) {
-        const prev = words[w];
-        w = i % words.length;
-        if (prev === words[w]) return;
-        prev.classList.remove("is-on"); prev.classList.add("is-out");
-        words[w].classList.remove("is-out"); words[w].classList.add("is-on");
-        setTimeout(() => prev.classList.remove("is-out"), 900);
-      }
-    });
+  /* Hero headline: the italic word rotates every 3.4s while the hero is on screen */
+  const rot = $("[data-rot]");
+  if (rot && !reduce) {
+    const words = $$(".rot__w", rot);
+    let w = 0, timer = 0;
+    const step = () => {
+      const prev = words[w];
+      w = (w + 1) % words.length;
+      prev.classList.remove("is-on"); prev.classList.add("is-out");
+      words[w].classList.remove("is-out"); words[w].classList.add("is-on");
+      setTimeout(() => prev.classList.remove("is-out"), 900);
+    };
+    if (words.length > 1) opened.then(() => onScreen(rot.closest(".hero") || rot, (v) => { clearInterval(timer); timer = v ? setInterval(step, 3400) : 0; }));
   }
 
   /* "Now showing" pill follows the hero slideshow (main.js fires hero:slide) */
