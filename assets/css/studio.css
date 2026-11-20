@@ -2,8 +2,8 @@
    ASB Media Group — "Studio" design system
    Warm ink + cream sections, ember actions, Fraunces display with gold italics.
    Performance rules: no WebGL, no smooth-scroll library, no blend modes or
-   backdrop blur; motion is transform/opacity; only the film reel uses a
-   scroll timeline (runs off the main thread). Everything else reveals once.
+   backdrop blur; motion is transform/opacity. Nothing pins the page: the
+   film reel is a native sideways scroller. Everything else reveals once.
    ========================================================================== */
 :root {
   --ink: #0b0907; --ink-2: #13100d; --ink-3: #1c1814; --ink-4: #26201b;
@@ -44,7 +44,8 @@ ul, ol { list-style: none; padding: 0; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .wrap { width: 100%; max-width: 1600px; margin-inline: auto; padding-inline: var(--g); }
 .sec { padding-block: var(--sec); }
-.sec + .sec:not(.light):not(.flip) { padding-top: 0; }
+/* two dark sections in a row share one gap; a dark section after a cream one keeps its own top padding */
+.sec:not(.light) + .sec:not(.light) { padding-top: 0; }
 
 /* ---------- Type ---------- */
 .display, .hero-title, .h1, .h2, .h3 { font-family: var(--display); font-weight: 400; font-optical-sizing: auto; text-wrap: balance; }
@@ -241,9 +242,10 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 @keyframes tick { to { transform: translateX(-50%); } }
 
 /* ---------- Hello ---------- */
-.hello { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(28px, 4vw, 72px); align-items: start; }
-.hello__img { margin: 0; border-radius: var(--r); overflow: hidden; aspect-ratio: 4 / 5; }
-.hello__img img { width: 100%; height: 100%; object-fit: cover; object-position: 42% 50%; filter: grayscale(1) contrast(1.05); }
+/* the portrait is exactly as tall as the text beside it (no dead space under the stats) */
+.hello { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(28px, 4vw, 72px); align-items: stretch; }
+.hello__img { position: relative; margin: 0; border-radius: var(--r); overflow: hidden; min-height: 320px; }
+.hello__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 42% 30%; filter: grayscale(1) contrast(1.05); }
 .collage { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: var(--gap); position: relative; }
 .collage figure { border-radius: var(--r); overflow: hidden; position: relative; }
 .collage img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.05); }
@@ -271,12 +273,20 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 .stats--plain .stat { background: none; box-shadow: none; border-radius: 0; min-height: 0; overflow: visible; padding: clamp(16px, 1.6vw, 22px) clamp(12px, 1.4vw, 20px) 0 0; gap: 10px; justify-content: flex-start; }
 .stats--plain .stat + .stat { padding-left: clamp(12px, 1.4vw, 20px); box-shadow: inset 1px 0 0 var(--line); }
 
-/* ---------- Pinned film reel ---------- */
+/* ---------- Film reel: native sideways scroller (swipe, trackpad, shift+wheel, arrows) ----------
+   It used to pin the page while the cards slid past; that read as the page getting stuck.
+   Now the page always scrolls freely and the visitor moves the reel. */
 .reel { position: relative; }
-.reel__sticky { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(20px, 2.4vw, 32px); }
-.reel__track { display: flex; gap: var(--gap); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 0 var(--g) 4px; }
+.reel__in { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(18px, 2vw, 28px); }
+.reel__ctl { display: flex; align-items: center; gap: 8px; }
+.reel__btn { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; flex: none; box-shadow: inset 0 0 0 1px var(--line2); transition: background .3s, color .3s, opacity .3s; }
+.reel__btn svg { width: 15px; height: 15px; }
+.reel__btn:hover:not(:disabled) { background: var(--cream); color: var(--ink); }
+.reel__btn:disabled { opacity: .3; cursor: default; }
+/* the first card lines up with the headline on wide screens too (.wrap caps at 1600px) */
+.reel__track { --edge: max(var(--g), calc((100% - 1600px) / 2 + var(--g))); display: flex; gap: var(--gap); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--edge); scrollbar-width: none; padding: 0 var(--edge) 4px; }
 .reel__track::-webkit-scrollbar { display: none; }
-.film { flex: none; width: clamp(280px, 34vw, 560px); scroll-snap-align: start; display: grid; gap: 14px; }
+.film { flex: none; width: clamp(280px, 34vw, 560px); scroll-snap-align: start; display: grid; align-content: start; gap: 14px; }
 .film__img { position: relative; aspect-ratio: 16 / 10; border-radius: var(--r); overflow: hidden; background: var(--ink-3); }
 .film__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
 .film:hover .film__img img { transform: scale(1.04); }
@@ -290,20 +300,9 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 .film:hover .circle { background: var(--cream); color: var(--ink); }
 .film--end { width: clamp(240px, 22vw, 340px); border-radius: var(--r); background: var(--ember); color: #fff; padding: clamp(20px, 2vw, 28px); display: flex; flex-direction: column; justify-content: space-between; aspect-ratio: auto; min-height: 100%; }
 .film--end b { font-family: var(--display); font-weight: 400; font-size: clamp(4rem, 7vw, 7rem); line-height: .85; letter-spacing: -.04em; }
-.reel__bar { height: 1px; background: var(--line); margin: 0 var(--g); position: relative; }
-.reel__bar i { position: absolute; inset: 0; background: var(--sun); transform-origin: 0 50%; transform: scaleX(.2); }
-@supports (animation-timeline: view()) {
-  @media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
-    .reel { height: 240svh; view-timeline-name: --reel; }
-    .reel__sticky { position: sticky; top: 0; height: 100svh; align-content: start; overflow: hidden; padding-top: calc(78px + clamp(20px, 4svh, 44px)); }
-    .film { width: min(42vw, calc((100svh - 340px) * 1.6)); }
-    .sec--into-reel { padding-bottom: 0; }
-    .reel__track { overflow: visible; width: max-content; animation: reelMove linear both; animation-timeline: --reel; animation-range: contain 0% contain 100%; }
-    .reel__bar i { animation: grow linear both; animation-timeline: --reel; animation-range: contain 0% contain 100%; }
-    @keyframes reelMove { to { transform: translateX(calc(-100% + 100vw)); } }
-  }
-}
-@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+/* progress thumb: its width is the visible share of the reel, it moves with the reel (studio.js) */
+.reel__bar { height: 1px; background: var(--line); position: relative; overflow: hidden; }
+.reel__bar i { position: absolute; top: 0; bottom: 0; left: 0; width: 30%; background: var(--sun); }
 
 /* ---------- Services bento (cream) ---------- */
 .sbento { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; grid-template-rows: repeat(2, clamp(200px, 17vw, 270px)); gap: var(--gap); }
@@ -322,18 +321,22 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 .emberbox .chip { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .5); color: #fff; }
 
 /* ---------- Clients list ---------- */
-.clients { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr); gap: clamp(28px, 4vw, 72px); align-items: start; }
-.clients__aside { position: sticky; top: 100px; display: grid; gap: 18px; }
-.count { display: flex; align-items: baseline; gap: 10px; font-family: var(--display); font-size: clamp(2rem, 3vw, 3rem); letter-spacing: -.03em; }
+/* both columns end on the same line: the list's rows share the column height, the preview fills what the text leaves */
+.clients { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr); gap: clamp(28px, 4vw, 72px); align-items: stretch; }
+.clients__aside { display: flex; flex-direction: column; gap: 14px; }
+.clients__aside .scene { margin-bottom: 0; }
+.clients__aside .h2 { font-size: clamp(2rem, 3.4vw, 3.6rem); }
+.clients__list { display: flex; flex-direction: column; }
+.count { display: flex; align-items: baseline; gap: 10px; font-family: var(--display); font-size: clamp(1.7rem, 2.3vw, 2.4rem); line-height: 1; letter-spacing: -.03em; }
 .count small { font-family: var(--body); font-size: .8rem; color: var(--fg2); letter-spacing: 0; }
-.peek { position: relative; aspect-ratio: 4 / 3; border-radius: var(--r); overflow: hidden; background: var(--ink-3); }
+.peek { position: relative; flex: 1 1 auto; min-height: clamp(170px, 15vw, 250px); border-radius: var(--r); overflow: hidden; background: var(--ink-3); }
 .peek img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .5s ease; }
 .peek img.is-on { opacity: 1; }
 .peek::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(11, 9, 7, .85)); }
 .peek__cap { position: absolute; z-index: 1; left: 16px; bottom: 14px; }
 .peek__cap .mono { color: var(--sun); display: block; margin-bottom: 4px; }
 .peek__cap b { font-family: var(--display); font-weight: 400; font-size: 1.4rem; letter-spacing: -.02em; }
-.crow { display: grid; grid-template-columns: 40px minmax(0, 1fr) minmax(0, .9fr) auto 24px; align-items: center; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--line); transition: background .3s; }
+.crow { flex: 1 0 auto; display: grid; grid-template-columns: 40px minmax(0, 1fr) minmax(0, .9fr) auto 24px; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); transition: background .3s; }
 .crow:first-child { border-top: 1px solid var(--line); }
 .crow__th { width: 56px; height: 40px; border-radius: 6px; overflow: hidden; }
 .crow__th img { width: 100%; height: 100%; object-fit: cover; }
@@ -388,7 +391,7 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 .mosaic img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
 .story-cta::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(55% 75% at 50% 110%, rgba(239, 90, 44, .2), transparent 70%); }
 .storycard { max-width: 640px; margin: 0 auto; border-radius: calc(var(--r) + 6px); background: rgba(19, 16, 13, .92); box-shadow: inset 0 0 0 1px var(--line), 0 40px 80px -40px rgba(0, 0, 0, .8); padding: clamp(26px, 3.4vw, 48px); display: grid; gap: 18px; justify-items: center; }
-.story-cta .storycard { background: none; box-shadow: none; }
+.story-cta .storycard { background: none; box-shadow: none; padding-block: 0; }
 .storycard .h2 { font-size: clamp(2.2rem, 4.4vw, 4.2rem); }
 .picker { display: flex; gap: 6px; padding: 5px; border-radius: 999px; background: var(--ink); box-shadow: inset 0 0 0 1px var(--line2); width: min(100%, 470px); }
 .picker select { flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; padding: 0 14px; color: var(--cream); font-size: .92rem; appearance: none; -webkit-appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--fg2) 50%), linear-gradient(135deg, var(--fg2) 50%, transparent 50%); background-position: calc(100% - 16px) 50%, calc(100% - 11px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
@@ -424,7 +427,7 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 .foot li + li { margin-top: 7px; }
 .foot li, .foot li a { color: var(--fg2); font-size: .92rem; transition: color .2s; }
 .foot li a:hover { color: var(--cream); }
-.wordmark { font-family: var(--display); font-size: 24.4vw; text-align: center; margin-inline: calc(-1 * var(--g) + 1vw); letter-spacing: -.05em; line-height: .82; white-space: nowrap; overflow: hidden; padding-bottom: .06em; }
+.wordmark { font-family: var(--display); font-size: clamp(3.2rem, 11vw, 12rem); text-align: center; letter-spacing: -.045em; line-height: .86; white-space: nowrap; overflow: hidden; padding-bottom: .1em; }
 .wordmark em { color: var(--sun); }
 .wordmark span { display: inline-block; transform: translateY(40%); transition: transform 1.3s var(--ease); }
 .wordmark.in span { transform: none; }
@@ -934,7 +937,6 @@ main > .section:last-child:not(.light) { padding-bottom: var(--sec); }
   .head__aside, .shead__aside { justify-self: start; justify-items: start; text-align: left; }
   .hello, .clients { grid-template-columns: 1fr; }
   .badge-spin { right: 8px; }
-  .clients__aside { position: static; }
   .peek { display: none; }
   .crow { grid-template-columns: minmax(0, 1fr) auto 18px; }
   .crow__n, .crow__l { display: none; }

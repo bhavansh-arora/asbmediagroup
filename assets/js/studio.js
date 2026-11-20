@@ -172,6 +172,38 @@
   }), { rootMargin: "150% 0px 150% 0px" });
   opened.then(() => $$("[data-preload]").forEach((el) => pre.observe(el)));
 
+  /* Films reel: a native sideways scroller. The arrows page through it (as many whole cards as fit, at
+     least one) and switch off at either end; the bar's thumb shows which part of the reel is in view.
+     The page itself never pins, so scrolling down never stalls here. */
+  const reel = $(".reel");
+  const track = reel && $(".reel__track", reel);
+  if (track) {
+    const thumb = $(".reel__bar i", reel);
+    const prev = $("[data-reel-prev]", reel), next = $("[data-reel-next]", reel);
+    let raf = 0;
+    const upd = () => {
+      raf = 0;
+      const sw = track.scrollWidth, cw = track.clientWidth, sl = track.scrollLeft, max = sw - cw;
+      if (thumb) { thumb.style.width = `${sw ? (cw / sw) * 100 : 100}%`; thumb.style.transform = `translateX(${cw ? (sl / cw) * 100 : 0}%)`; }
+      if (prev) prev.disabled = sl <= 2;
+      if (next) next.disabled = sl >= max - 2;
+    };
+    const queue = () => { if (!raf) raf = requestAnimationFrame(upd); };
+    track.addEventListener("scroll", queue, { passive: true });
+    addEventListener("resize", queue, { passive: true });
+    const page = (dir) => {
+      const cs = getComputedStyle(track);
+      const gap = parseFloat(cs.columnGap) || 0;
+      const card = $(".film", track);
+      const step = card ? card.getBoundingClientRect().width + gap : track.clientWidth * .8;
+      const room = track.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) + gap;
+      track.scrollBy({ left: dir * Math.max(1, Math.floor(room / step)) * step, behavior: reduce ? "auto" : "smooth" });
+    };
+    if (prev) prev.addEventListener("click", () => page(-1));
+    if (next) next.addEventListener("click", () => page(1));
+    upd();
+  }
+
   /* Deferred image groups ([data-defer], e.g. the film strip under the hero): sources are set only after
      the opening, so they never compete with the loader and hero for bandwidth; the group fades in once
      every frame is in, so it never moves with empty frames */

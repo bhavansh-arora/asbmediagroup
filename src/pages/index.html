@@ -34,7 +34,7 @@
     </section>
 
     <!-- SC. 01 HELLO -->
-    <section class="sec sec--into-reel wrap">
+    <section class="sec wrap">
       <div class="hello">
         <figure class="hello__img" data-r><img src="assets/img/film-dance.webp" alt="On set at The Dance Room, Sarasota" loading="lazy" sizes="(max-width: 900px) 100vw, 42vw"></figure>
         <div class="hello__text">
@@ -51,18 +51,18 @@
       </div>
     </section>
 
-    <!-- SC. 02 RECENT FILMS (pinned reel) -->
-    <section class="reel" id="films" aria-label="Recent films" data-preload>
-      <div class="reel__sticky">
+    <!-- SC. 02 RECENT FILMS: a sideways reel the visitor drives (swipe, trackpad, arrows); the page never pins -->
+    <section class="sec reel" id="films" aria-label="Recent films" data-preload>
+      <div class="reel__in">
         <div class="wrap">
           <p class="scene mono">SC. 02 <b>Recent films</b></p>
           <div class="shead" style="margin-bottom:0">
             <h2 class="h2">Real clients. <em>Real stories.</em></h2>
-            <div class="shead__aside"><p class="muted small">Hover a film to preview. Tap to watch with sound.</p><a class="btn btn--ghost btn--sm" href="work.html"><span>All films</span><span class="btn__i">{{icon:arrow}}</span></a></div>
+            <div class="shead__aside"><p class="muted small">Hover a film to preview. Tap to watch with sound.</p><div class="reel__ctl"><button class="reel__btn" type="button" data-reel-prev aria-label="Previous films" disabled>{{icon:arrow-l}}</button><button class="reel__btn" type="button" data-reel-next aria-label="Next films">{{icon:arrow}}</button><a class="btn btn--ghost btn--sm" href="work.html"><span>All films</span><span class="btn__i">{{icon:arrow}}</span></a></div></div>
           </div>
         </div>
         <div class="reel__track">
-          <article class="film"><a class="film__img" href="film-mary-lees-house.html" data-cursor="View"><img src="assets/img/film-mary-crop.webp" alt="Interview at Mary Lee’s House" loading="lazy" sizes="(max-width: 640px) 82vw, 34vw" style="object-position:50% 30%"><span class="tag">Nonprofit · Tampa</span><span class="film__n">01</span><span class="film__bar"><i></i></span></a>
+          <article class="film"><a class="film__img" href="film-mary-lees-house.html" data-cursor="View"><img src="assets/img/film-mary-crop.webp" alt="Interview at Mary Lee’s House" loading="lazy" sizes="(max-width: 640px) 82vw, 34vw" style="object-position:50% 8%"><span class="tag">Nonprofit · Tampa</span><span class="film__n">01</span><span class="film__bar"><i></i></span></a>
             <div class="film__body"><div><h3 class="film__t">Mary Lee’s House</h3><p class="film__m">Brand film · 04:03 · Compassionate, interview-led</p></div><button class="circle" type="button" data-video="1209681619" data-title="Mary Lee’s House" aria-label="Play Mary Lee’s House">{{icon:play}}</button></div></article>
           <article class="film"><a class="film__img" href="film-fun-bike-center.html" data-cursor="View"><img src="assets/img/film-funbike.webp" alt="Fun Bike Center showroom" loading="lazy" sizes="(max-width: 640px) 82vw, 34vw"><span class="tag">Powersports · Lakeland</span><span class="film__n">02</span><span class="film__bar"><i></i></span></a>
             <div class="film__body"><div><h3 class="film__t">Fun Bike Center</h3><p class="film__m">Showcase · 01:07 · High energy, showroom</p></div><button class="circle" type="button" data-video="1210003802" data-title="Fun Bike Center" aria-label="Play Fun Bike Center">{{icon:play}}</button></div></article>
@@ -76,7 +76,7 @@
             <div class="film__body"><div><h3 class="film__t">Weddings</h3><p class="film__m">Photo + film · Timeless, cinematic</p></div><a class="circle" href="weddings.html" aria-label="Weddings">{{icon:arrow-ur}}</a></div></article>
           <a class="film film--end" href="work.html"><span class="mono">The reel</span><b>04</b><span>brand films, plus photography for products, sport and weddings →</span></a>
         </div>
-        <div class="reel__bar"><i></i></div>
+        <div class="wrap"><div class="reel__bar"><i></i></div></div>
       </div>
     </section>
 
@@ -107,7 +107,7 @@
           <p class="count">4 <small>films</small> · 7 <small>sectors</small></p>
           <p class="muted small measure">Child advocacy, energy, powersports, dance, product, sport and weddings. The subject changes; the craft and the care don’t.</p>
           <div class="peek" data-peek>
-            <img class="is-on" data-k="1" src="assets/img/film-mary-crop.webp" alt="" loading="lazy" sizes="30vw" style="object-position:50% 30%">
+            <img class="is-on" data-k="1" src="assets/img/film-mary-crop.webp" alt="" loading="lazy" sizes="30vw" style="object-position:50% 8%">
             <img data-k="2" src="assets/img/film-funbike-sm.webp" alt="" loading="lazy" sizes="30vw">
             <img data-k="3" src="assets/img/film-teco-sm.webp" alt="" loading="lazy" sizes="30vw">
             <img data-k="4" src="assets/img/film-dance-sm.webp" alt="" loading="lazy" sizes="30vw">
@@ -117,7 +117,7 @@
             <span class="peek__cap"><span class="mono" data-peek-sub>Nonprofit · Tampa</span><b data-peek-cap>Mary Lee’s House</b></span>
           </div>
         </div>
-        <div>
+        <div class="clients__list">
           <a class="crow is-on" href="film-mary-lees-house.html" data-row="1" data-cap="Mary Lee’s House" data-sub="Nonprofit · Tampa"><span class="crow__n">01</span><span class="crow__t">Mary Lee’s House</span><span class="crow__l">Child advocacy · Tampa</span><span class="crow__c">04:03</span>{{icon:arrow-ur}}</a>
           <a class="crow" href="film-fun-bike-center.html" data-row="2" data-cap="Fun Bike Center" data-sub="Powersports · Lakeland"><span class="crow__n">02</span><span class="crow__t">Fun Bike Center</span><span class="crow__l">Powersports · Lakeland</span><span class="crow__c">01:07</span>{{icon:arrow-ur}}</a>
           <a class="crow" href="film-teco-energy-audit.html" data-row="3" data-cap="Tampa Electric" data-sub="Utility · Tampa Bay"><span class="crow__n">03</span><span class="crow__t">Tampa Electric (TECO)</span><span class="crow__l">Energy utility · Tampa Bay</span><span class="crow__c">00:29</span>{{icon:arrow-ur}}</a>
@@ -132,7 +132,7 @@
     <!-- THE IDEA IN ONE LINE (slider) -->
     <section class="qs" data-slider aria-label="The idea behind each film">
       <div class="qs__bg" aria-hidden="true">
-        <img class="is-on" src="assets/img/film-mary-crop.webp" alt="" loading="lazy" sizes="100vw" style="object-position:70% 30%">
+        <img class="is-on" src="assets/img/film-mary-crop.webp" alt="" loading="lazy" sizes="100vw" style="object-position:70% 6%">
         <img src="assets/img/film-funbike.webp" alt="" loading="lazy" sizes="100vw">
         <img src="assets/img/film-teco.webp" alt="" loading="lazy" sizes="100vw">
         <img src="assets/img/film-dance.webp" alt="" loading="lazy" sizes="100vw">
