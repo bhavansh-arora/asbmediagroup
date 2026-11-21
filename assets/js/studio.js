@@ -225,14 +225,16 @@
       if (!pinned()) return;
       queue();
       // While the cards slide under a resting pointer, each would take its hover state in turn (zoom,
-      // button colour, "View" bubble) and repaint the whole reel every frame. So the reel ignores the
-      // pointer while it moves and takes it back 160ms after scrolling stops.
+      // button colour, "View" bubble) and repaint the whole reel. So the reel ignores the pointer while it
+      // moves, and takes it back only when the pointer itself moves: a timer would hand hover back in every
+      // pause between wheel notches, flashing the zoom and bubble on and off as the reel steps along.
       const d = scrollY - top;
-      if (d > -innerHeight && d < travel / speed + innerHeight) {
-        if (!still) reel.classList.add("is-moving");
-        clearTimeout(still);
-        still = setTimeout(() => { reel.classList.remove("is-moving"); still = 0; }, 160);
-      }
+      if (!still && d > -innerHeight && d < travel / speed + innerHeight) { still = 1; reel.classList.add("is-moving"); }
+    }, { passive: true });
+    addEventListener("pointermove", (e) => {
+      if (!still || (!e.movementX && !e.movementY)) return;   // ignore the browser's synthetic moves after a scroll
+      still = 0;
+      reel.classList.remove("is-moving");
     }, { passive: true });
     addEventListener("resize", measure, { passive: true });
     addEventListener("load", measure);
