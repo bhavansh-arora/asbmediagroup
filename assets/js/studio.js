@@ -105,6 +105,21 @@
     });
   }
 
+  /* Inner pages: film-shutter reveals on the big images (see .wipe in studio.css). Images that arrive
+     together are staggered left to right. The home page keeps its own opening. */
+  if (!reduce && !$(".hero--frame") && window.IntersectionObserver) {
+    const media = $$(".mcard__img, .frow__img, .player, .founder__card, .masonry figure, .polaroid__img").filter((el) => !el.closest(".devs"));
+    media.forEach((el) => el.classList.add("wipe"));
+    const wipeIO = new IntersectionObserver((es) => {
+      const shown = es.filter((en) => en.isIntersecting).map((en) => en.target)
+        .sort((a, b) => { const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect(); return (ra.top - rb.top) || (ra.left - rb.left); });
+      shown.forEach((el, k) => { el.style.setProperty("--wd", `${Math.min(k, 5) * 0.09}s`); el.classList.add("is-shown"); wipeIO.unobserve(el); });
+    }, { rootMargin: "0px 0px -6% 0px" });
+    const start = () => media.forEach((el) => wipeIO.observe(el));
+    // header images wait for the page to open (curtain or loader), like the rest of the header
+    if (typeof opened !== "undefined" && opened && opened.then) opened.then(start); else start();
+  }
+
   /* One-shot reveals for scene labels and the footer wordmark */
   const once = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); once.unobserve(en.target); } }), { rootMargin: "0px 0px 12% 0px" });
   $$(".scene, .wordmark").forEach((el) => once.observe(el));
