@@ -1177,11 +1177,12 @@ main > .section:last-child:not(.light) { padding-bottom: var(--sec); }
 
 /* ---------- Inner-page motion (studio.js adds .wipe on pages without the home hero) ----------
    One-shot and compositor-only (transform, scale, opacity), skipped for reduced motion.
-   Film-shutter reveal: a panel in the section's colour lifts off the image while it settles from a
+   Film-shutter reveal: a panel in the section's colour slides down off the image (revealing it top to
+   bottom) while it settles from a
    slight zoom. Uses `scale` (not transform) on the image so hover zooms keep working. */
 .light { --wipe: var(--cream); }
 .js .wipe { position: relative; overflow: hidden; isolation: isolate; }
-.js .wipe::after { content: ""; position: absolute; inset: -1px; z-index: 4; background: var(--wipe, var(--ink)); transform-origin: 50% 0; transition: transform 1s var(--io) var(--wd, 0s); pointer-events: none; }
+.js .wipe::after { content: ""; position: absolute; inset: -1px; z-index: 4; background: var(--wipe, var(--ink)); transform-origin: 50% 100%; transition: transform 1s var(--io) var(--wd, 0s); pointer-events: none; }
 .js .wipe img { scale: 1.14; transition: scale 1.6s var(--ease) var(--wd, 0s), transform 1.2s var(--ease); }
 .js .wipe.is-shown::after { transform: scaleY(0); }
 .js .wipe.is-shown img { scale: 1; }
