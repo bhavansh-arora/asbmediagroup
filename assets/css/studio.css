@@ -1090,11 +1090,10 @@ main > .section:last-child:not(.light) { padding-bottom: var(--sec); }
 .sreveal em::after { content: ""; position: absolute; left: .06em; right: .02em; bottom: .02em; height: .055em; border-radius: 1em; background: currentColor; color: var(--sun); transform: scaleX(0); transform-origin: 0 50%; transition: transform .8s var(--ease) 1.1s; }
 .light .sreveal em::after { color: var(--ember-deep); }
 .sreveal.in em::after { transform: none; }
-/* Body-copy reveal (.lreveal, main.js): words fade up in quick succession as their block reveals; the
-   block itself no longer fades (the words carry it). */
-.lreveal[data-r], .js .hero .lreveal[data-hr] { opacity: 1; transform: none; }
-.lreveal .lw { display: inline-block; opacity: 0; transform: translateY(.45em); transition: opacity .6s ease, transform .8s var(--ease); transition-delay: calc(var(--d, 0s) + var(--i, 0) * 14ms); }
-.lreveal.in .lw, .in .lreveal .lw, .is-in .hero .lreveal .lw { opacity: 1; transform: none; }
+/* Body-copy reveal (.lreveal, main.js): the block rises as usual while its words fade in, in quick
+   succession. Words stay inline (opacity only), so the text wraps exactly as it would unsplit. */
+.lreveal .lw { opacity: 0; transition: opacity .7s ease; transition-delay: calc(var(--d, 0s) + .1s + var(--i, 0) * 16ms); }
+.lreveal.in .lw, .in .lreveal .lw, .is-in .hero .lreveal .lw { opacity: 1; }
 html:not(.is-in) .hero .lreveal .lw, html.js:not(.is-in) .phead .lreveal .lw { opacity: 0 !important; }
 
 /* Home intro: the photo bleeds back into colour on hover; the signature writes itself on; the stats'

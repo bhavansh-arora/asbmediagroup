@@ -83,10 +83,20 @@
         s.appendChild(n); return s;
       });
     });
-    // Body copy (intros, side notes, quotes): words fade up in quick succession when their block
-    // reveals (.lreveal in studio.css). Plain spans, so screen readers read the text as normal.
+    // Body copy (intros, side notes, quotes): words fade in quick succession while the block rises
+    // (.lreveal in studio.css). Words stay plain inline text, so line wrapping is exactly as before and
+    // screen readers read the text as normal. A grid or flex container (some side notes use grid just
+    // for spacing) would make every word its own row, so its inline content is wrapped in one span first.
     $$(".hero__lede, .lead, .head__aside, .hello__text .measure, .phead__aside > p, .split__aside > p, .quote").forEach((p) => {
       if (p.closest(".sreveal, .finder__result")) return;
+      const d = getComputedStyle(p).display;
+      if (/grid|flex/.test(d)) {
+        const kids = Array.from(p.childNodes);
+        if (!kids.every((n) => n.nodeType === 3 || (n.nodeType === 1 && getComputedStyle(n).display === "inline"))) return;
+        const wrap = document.createElement("span");
+        kids.forEach((n) => wrap.appendChild(n));
+        p.appendChild(wrap);
+      }
       p.classList.add("lreveal");
       splitWords(p, (word, i) => {
         const s = document.createElement("span"); s.className = "lw"; s.textContent = word;
