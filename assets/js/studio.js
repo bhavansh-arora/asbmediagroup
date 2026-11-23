@@ -123,7 +123,19 @@
 
   /* One-shot reveals for scene labels and the footer wordmark */
   const once = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); once.unobserve(en.target); } }), { rootMargin: "0px 0px 12% 0px" });
-  $$(".scene, .wordmark").forEach((el) => once.observe(el));
+  $$(".scene").forEach((el) => once.observe(el));
+  // Footer wordmark: "ASB" rises letter by letter, then "Media" wipes in (studio.css). It waits until it
+  // is properly on screen, so the sign-off is actually seen.
+  $$(".wordmark").forEach((wm) => {
+    const a = $(".wm__a", wm);
+    if (a && !reduce) {
+      const letters = a.textContent.split("");
+      a.textContent = "";
+      letters.forEach((ch, k) => { const s = document.createElement("span"); s.className = "wl"; s.textContent = ch; s.style.setProperty("--k", k); a.appendChild(s); });
+    }
+    const io = new IntersectionObserver(([en]) => { if (en.isIntersecting) { wm.classList.add("in"); io.disconnect(); } }, { threshold: .45 });
+    io.observe(wm);
+  });
   $$("[data-wordmark]").forEach((el) => onScreen(el, (v) => el.classList.toggle("is-live", v)));
 
   /* REC timecode (12 updates/s, only while the hero is visible) */
