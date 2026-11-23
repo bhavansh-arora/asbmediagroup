@@ -1280,3 +1280,6 @@ html.js:not(.is-in) .phead .phead__meta > div { opacity: 0 !important; }
 /* copy that depends on the input: hover hints on mouse/trackpad, swipe hints on touch */
 .on-touch { display: none; }
 @media (hover: none) { .on-hover { display: none; } .on-touch { display: inline; } }
+/* arrow characters in text, drawn as line icons by build.py (phones would show some as emoji) */
+.ia { display: inline-flex; vertical-align: -.12em; }
+.ia svg { width: .95em; height: .95em; }

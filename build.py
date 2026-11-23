@@ -30,6 +30,7 @@ def og_image(path):
 ICONS = {
     "arrow": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
     "arrow-ur": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>',
+    "arrow-up": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>',
     "arrow-l": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>',
     "play": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4.5v15a.5.5 0 0 0 .76.43l12.5-7.5a.5.5 0 0 0 0-.86L6.76 4.07A.5.5 0 0 0 6 4.5Z"/></svg>',
     "check": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 12.5 5 5L20 6.5"/></svg>',
@@ -130,6 +131,29 @@ def expand_icons(html):
     return re.sub(r"\{\{icon:([\w-]+)\}\}", lambda m: ICONS[m.group(1)], html)
 
 
+# Arrow characters in page text become inline line icons. Phones (iOS especially) draw some of them,
+# like the up-right arrow, as colour emoji, which clash with the design. Only text between tags is
+# touched: never tag attributes, scripts or styles.
+TEXT_ARROWS = {"↗": "arrow-ur", "→": "arrow", "←": "arrow-l", "↑": "arrow-up"}
+
+
+def iconize_arrows(html):
+    out, skip = [], False
+    for part in re.split(r"(<[^>]+>)", html):
+        if part.startswith("<"):
+            tag = part[1:].split(None, 1)[0].lower().rstrip(">") if len(part) > 1 else ""
+            if tag in ("script", "style"):
+                skip = True
+            elif tag in ("/script", "/style"):
+                skip = False
+            out.append(part)
+        elif skip or not any(ch in part for ch in TEXT_ARROWS):
+            out.append(part)
+        else:
+            out.append("".join(f'<span class="ia">{ICONS[TEXT_ARROWS[ch]]}</span>' if ch in TEXT_ARROWS else ch for ch in part))
+    return "".join(out)
+
+
 def build():
     import sys
     sys.path.insert(0, str(SRC))
@@ -171,7 +195,7 @@ def build():
         html = partials["head"] + header + body + footer
         for k, v in ctx.items():
             html = html.replace("{{" + k + "}}", v)
-        html = asset_versions(add_img_dimensions(expand_icons(html)))
+        html = asset_versions(add_img_dimensions(iconize_arrows(expand_icons(html))))
         (ROOT / slug).write_text(html)
         if not meta.get("noindex"):
             sitemap.append(canonical)
