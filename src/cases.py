@@ -182,7 +182,7 @@ _SVG = {
     "save": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>',
     "like": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 10v10H4V10h3Zm0 0 4-7a2 2 0 0 1 3 2l-1 5h6a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 17.8 20H7"/></svg>',
 }
-DEV_COLS = {"laptop": 2.1, "tv": 1.75, "reel": 0.62, "feed": 0.62, "post": 0.9}
+DEV_COLS = {"laptop": 2.1, "tv": 1.75, "reel": 0.62, "feed": 0.62, "post": 0.62}
 
 
 def _handle(name):
@@ -229,12 +229,14 @@ def devices(img, pos, items, name, wide_img=None, indent="        "):
                     f'<span class="feed__acts">{_SVG["heart"]}{_SVG["chat"]}{_SVG["send"]}<span class="sp"></span>{_SVG["save"]}</span>'
                     f'<span class="feed__cap"><i></i><i></i></span>'
                     f'</span></span>')
-        else:  # post
-            body = (f'<span class="post"><span class="post__head">{av}<span><b>{name}</b><small>Promoted</small></span></span>'
-                    f'<span class="post__txt"><i></i><i></i></span>'
-                    f'<span class="post__img">{pic(img, "", "22vw")}<span class="dev__play">{_SVG["play"]}</span></span>'
-                    f'<span class="post__acts"><span>{_SVG["like"]}Like</span><span>{_SVG["chat"]}Comment</span><span>{_SVG["send"]}Share</span></span>'
-                    f'</span>')
+        else:  # post: a phone showing a promoted square post in a professional feed
+            body = (f'<span class="ph"><span class="ph__screen ph__screen--post"><span class="ph__island"></span>'
+                    f'<span class="li__bar"><i class="li__logo"></i><span class="li__search"></span><i class="li__dot"></i></span>'
+                    f'<span class="feed__head">{av}<span><b>{name}</b><small>Promoted · 1d</small></span></span>'
+                    f'<span class="feed__cap li__cap"><i></i><i></i></span>'
+                    f'<span class="post__img">{pic(img, "", "16vw")}<span class="dev__play">{_SVG["play"]}</span></span>'
+                    f'<span class="li__acts"><span>{_SVG["like"]}Like</span><span>{_SVG["chat"]}Comment</span><span>{_SVG["send"]}Send</span></span>'
+                    f'</span></span>')
         figs.append(f'{indent}  <figure class="dev dev--{k}" data-r style="--d:{n * 0.08:.2f}s"><span class="dev__body" aria-hidden="true">{body}</span>'
                     f'<figcaption><span class="mono accent">{r}</span><span>{label}</span></figcaption></figure>')
     nl = chr(10)

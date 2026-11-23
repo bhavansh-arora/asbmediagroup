@@ -125,6 +125,10 @@ ul, ol { list-style: none; padding: 0; }
 .menu-open { overflow: hidden; }
 .sheet__links a { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); font-family: var(--display); font-size: clamp(2rem, 8.6vw, 3rem); letter-spacing: -.03em; }
 .sheet__links span { font-family: var(--mono); font-size: .66rem; color: var(--fg3); }
+/* the page you're on: ember, italic, with a live dot */
+.sheet__links a[aria-current="page"] { color: var(--sun); font-style: italic; border-bottom-color: rgba(246, 179, 106, .45); }
+.sheet__links a[aria-current="page"] span { color: var(--sun); display: inline-flex; align-items: center; gap: 8px; }
+.sheet__links a[aria-current="page"] span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ember); animation: live 1.6s ease-in-out infinite; }
 .sheet__foot { margin-top: auto; display: grid; gap: 6px; color: var(--fg2); }
 
 /* ---------- Hero ---------- */
@@ -185,11 +189,13 @@ ul, ol { list-style: none; padding: 0; }
 @keyframes clipsRun { to { transform: translateX(-50%); } }
 .clip { position: relative; flex: none; height: 100%; aspect-ratio: 16 / 9; margin: 0; border-radius: clamp(8px, .8vw, 12px); overflow: hidden; background: var(--ink-3); }
 .clip img { width: 100%; height: 100%; object-fit: cover; }
-/* Touch devices (iOS Safari especially): a moving row thousands of pixels wide becomes one huge tiled
-   layer, and Safari skips painting parts of it while it moves, leaving black holes in the wall. Giving
-   each frame its own small layer keeps every frame painted. */
-@media (hover: none) {
-  .clip { transform: translateZ(0); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+/* Phones and portrait tablets: each moving row is one GPU layer as wide as its track. With five frames
+   (twice over) a row is ~3,700px wide, ~11,000 device pixels on an iPhone; five of them can exceed what
+   iOS Safari will keep in memory for a page, and it then stops drawing whole rows (black bands). Three
+   frames per row (frames 4, 5, 9 and 10 hidden; the second half still repeats the first, so the loop
+   stays seamless) still covers the screen with room to spare and cuts the layers by 40%. */
+@media (max-aspect-ratio: 4 / 5) {
+  .clips__track .clip:nth-child(5n + 4), .clips__track .clip:nth-child(5n + 5) { display: none; }
 }
 .clip__id { position: absolute; top: 8px; left: 10px; font-family: var(--mono); font-size: .55rem; letter-spacing: .12em; color: rgba(244, 236, 223, .78); text-shadow: 0 1px 3px rgba(0, 0, 0, .7); }
 .clips.is-paused .clips__track { animation-play-state: paused; }
@@ -783,21 +789,19 @@ html.js:not(.is-in) .phead [data-r] { opacity: 0 !important; transform: translat
 .feed__cap i { display: block; height: 2.8cqw; border-radius: 99px; background: #d8d0c4; }
 .feed__cap i + i { width: 58%; }
 
-/* square post card */
-.post { display: block; border-radius: 3.4cqw; background: #f7f3ec; color: #1a1714; overflow: hidden; box-shadow: 0 30px 50px -26px rgba(0, 0, 0, .9); }
-.post__head { display: flex; align-items: center; gap: 3cqw; padding: 4.4cqw 4.4cqw 3cqw; }
-.post__head .dev__av { width: 10cqw; height: 10cqw; font-size: 5cqw; border-radius: 2cqw; }
-.post__head > span { display: grid; min-width: 0; }
-.post__head b { font-size: 4.4cqw; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.post__head small { font-size: 3.6cqw; color: #8a8176; }
-.post__txt { display: grid; gap: 2cqw; padding: 0 4.4cqw 4cqw; }
-.post__txt i { display: block; height: 2.4cqw; border-radius: 99px; background: #d8d0c4; }
-.post__txt i + i { width: 70%; }
-.post__img { position: relative; display: block; aspect-ratio: 1; }
-.post .dev__play { width: 14cqw; height: 14cqw; }
-.post__acts { display: flex; justify-content: space-around; padding: 3.4cqw 2cqw; border-top: 1px solid #e3dcd0; font-size: 3.8cqw; color: #5d554c; }
-.post__acts span { display: flex; align-items: center; gap: 1.4cqw; }
-.post__acts svg { width: 5.4cqw; height: 5.4cqw; }
+/* 1:1: a phone showing a promoted square post in a professional feed (app bar, post, reactions) */
+.ph__screen--post { padding-top: 14cqw; background: #f7f3ec; color: #1a1714; }
+.li__bar { display: flex; align-items: center; gap: 3cqw; padding: 0 5cqw 3.4cqw; border-bottom: 1px solid #e3dcd0; margin-bottom: 3.4cqw; }
+.li__logo { flex: none; width: 9cqw; height: 9cqw; border-radius: 2cqw; background: #1a1714; }
+.li__search { flex: 1; height: 7.6cqw; border-radius: 99px; background: #e8e1d6; }
+.li__dot { flex: none; width: 8cqw; height: 8cqw; border-radius: 50%; background: #d8d0c4; }
+.ph__screen--post .feed__head .dev__av { border-radius: 2.4cqw; }
+.li__cap { padding: 0 5cqw 3.4cqw; }
+.post__img { position: relative; display: block; aspect-ratio: 1; flex: none; }
+.post__img .dev__play { width: 16cqw; height: 16cqw; }
+.li__acts { display: flex; justify-content: space-around; padding: 4cqw 2cqw; font-size: 4.4cqw; color: #5d554c; }
+.li__acts span { display: flex; align-items: center; gap: 1.6cqw; }
+.li__acts svg { width: 6.4cqw; height: 6.4cqw; }
 
 /* phones: the big screen across the top, the others in a row of three beneath */
 @media (max-width: 640px) {
@@ -1238,3 +1242,33 @@ html.js:not(.is-in) .phead .phead__meta > div { opacity: 0 !important; }
   .js .eyebrow-row[data-r]::after, .js .phead__meta[data-r]::before { transform: none; }
   .js .phead__meta[data-r] > div { opacity: 1; transform: none; }
 }
+
+/* ---------- Phones and small tablets: more motion (desktop unchanged) ----------
+   All compositor-only (translate, scale, opacity) and off for reduced motion. */
+@media (max-width: 900px) and (prefers-reduced-motion: no-preference) {
+  /* cards and media arrive with more travel and a slight scale-up */
+  .js [data-r]:is(.mcard, .tilep, .frow, .film, .pkg, .dev, .story, .st, .stat, .hello__img, .player, details) { transform: translateY(34px) scale(.96); transition: opacity .7s ease, transform 1s var(--ease); transition-delay: var(--d, 0s); }
+  .js [data-r].in:is(.mcard, .tilep, .frow, .film, .pkg, .dev, .story, .st, .stat, .hello__img, .player, details) { transform: none; }
+  /* press feedback on touch: a small dip while a finger is down (never on hover) */
+  .btn, .tilep, .mcard, .film__img, .circle, .reel__btn, .pkg, .q, .faq summary { transition-property: background, color, box-shadow, transform, opacity; }
+  .btn:active, .circle:active, .reel__btn:active { transform: scale(.96); transition-duration: .12s; }
+  .tilep:active, .mcard:active, .film__img:active { transform: scale(.985); transition-duration: .15s; }
+}
+@supports (animation-timeline: view()) {
+  @media (max-width: 900px) and (prefers-reduced-motion: no-preference) {
+    /* photos drift against the scroll inside their frames (scroll-driven, on the compositor) */
+    /* frames clip instead of hide: overflow: hidden makes each frame its own (non-scrolling) scroll
+       container, which would tie the drift to the frame instead of the page */
+    .mcard, .mcard__img, .player, .frow__img, .tilep, .hello__img, .story, .js .wipe { overflow: clip; }
+    .mcard__img img, .player img, .frow__img img, .tilep img, .hello__img img, .story img { scale: 1.12; animation: pxImg linear both; animation-timeline: view(); animation-range: cover; }
+    .js .wipe img { scale: 1.26; }
+    .js .wipe.is-shown img { scale: 1.12; }
+    /* films reel (a sideways scroller here): the card in view is full size, those at the edges shrink and dim */
+    .reel__track .film { animation: reelCard linear both; animation-timeline: view(inline); animation-range: entry 0% exit 100%; }
+  }
+}
+@keyframes pxImg { from { translate: 0 -5%; } to { translate: 0 5%; } }
+@keyframes reelCard { entry 0% { scale: .86; opacity: .45; } entry 100% { scale: 1; opacity: 1; } exit 0% { scale: 1; opacity: 1; } exit 100% { scale: .86; opacity: .45; } }
+/* copy that depends on the input: hover hints on mouse/trackpad, swipe hints on touch */
+.on-touch { display: none; }
+@media (hover: none) { .on-hover { display: none; } .on-touch { display: inline; } }

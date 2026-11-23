@@ -64,9 +64,14 @@ def nav_html(active):
     return "\n        ".join(out)
 
 
-def sheet_html():
+def sheet_html(active=None):
+    """Mobile menu; `active` is the page's nav key (case studies use "work"), marked as the current page."""
+    keys = {"home": "index.html", **{k: h for k, h, _ in NAV}}
+    current = keys.get(active)
     rows = [("index.html", "Home")] + [(h, l) for _, h, l in NAV]
-    return "\n      ".join(f'<a href="{h}">{l}<span>{i:02d}</span></a>' for i, (h, l) in enumerate(rows, 1))
+    return "\n      ".join(
+        f'<a href="{h}"{" aria-current=\"page\"" if h == current else ""}>{l}<span>{i:02d}</span></a>'
+        for i, (h, l) in enumerate(rows, 1))
 
 
 DEFAULT_CTA = "Let’s make something <em>worth watching.</em>"
@@ -147,7 +152,7 @@ def build():
             "canonical": canonical,
             "nav": nav_html(meta.get("nav")),
             "schema": meta.get("schema", ""),
-            "sheet": sheet_html(),
+            "sheet": sheet_html(meta.get("nav")),
             "cta": meta.get("cta", DEFAULT_CTA),
             "bodyclass": meta.get("bodyclass", ""),
         }
