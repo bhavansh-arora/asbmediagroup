@@ -153,6 +153,7 @@ def build():
             '<script src="assets/js/main.js" defer fetchpriority="high"></script>\n'
             '  <script src="assets/js/studio.js" defer fetchpriority="high"></script>'
         ) if layout == "studio" else ""
+        body = body.replace("{{devices:services}}", cases.services_devices().lstrip())
         html = partials["head"] + header + body + footer
         for k, v in ctx.items():
             html = html.replace("{{" + k + "}}", v)

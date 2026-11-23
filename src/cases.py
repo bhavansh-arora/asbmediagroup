@@ -1,5 +1,6 @@
 """Case-study data + template. build.py renders these into film-*.html."""
 import json
+import re
 
 CASES = [
     {
@@ -62,24 +63,8 @@ CASES = [
 
 
 
-# One shoot, every screen: the same still cropped to each delivery format, at equal heights
-# (column widths are proportional to each aspect ratio), with a hint of the platform's UI.
-FSHOT_KIND = {"16:9": "169", "9:16": "916", "4:5": "45", "1:1": "11"}
-CASE_STILL = {"film-mary": ("film-mary-crop", "55% 30%"), "film-funbike": ("film-funbike-hero", "50% 30%"),
-              "film-teco": ("film-teco", "40% 45%"), "film-dance": ("film-dance-hero", "45% 35%")}
-
-
-def fshots(img, pos, items, indent="        "):
-    cols = " ".join(f"minmax(0,{w / h:.4f}fr)" for _, _, w, h in items)
-    figs = []
-    for k, (r, label, w, h) in enumerate(items):
-        figs.append(
-            f'{indent}  <figure class="fshot fshot--{FSHOT_KIND[r]}" data-r style="--d:{k * 0.06:.2f}s">'
-            f'<span class="fshot__frame" style="--ar:{w}/{h}"><img src="assets/img/{img}.webp" alt="" loading="lazy" decoding="async" '
-            f'sizes="(max-width: 640px) 50vw, 40vw" style="object-position:{pos}"><span class="fshot__ui" aria-hidden="true"></span></span>'
-            f'<figcaption><span class="mono accent">{r}</span><span>{label}</span></figcaption></figure>')
-    nl = chr(10)
-    return f'{indent}<div class="fshots" style="grid-template-columns:{cols}">' + nl + nl.join(figs) + nl + f"{indent}</div>"
+CASE_STILL = {"film-mary": ("film-mary-crop", "30% 30%"), "film-funbike": ("film-funbike-hero", "50% 30%"),
+              "film-teco": ("film-teco", "52% 22%"), "film-dance": ("film-dance-hero", "50% 10%")}
 
 
 def render(i):
@@ -88,7 +73,7 @@ def render(i):
     title = " ".join(c["title_lines"])
     poster = "film-mary-crop" if c["img"] == "film-mary" else c["img"]
     still, spos = CASE_STILL[c["img"]]
-    where = fshots(still, spos, c["where"])
+    where = devices(still, spos, c["where"], {"film-teco": "Tampa Electric"}.get(c["img"], c["name"]), wide_img=c["img"])
     tags = "".join(f'<span class="chip">{t}</span>' for t in c["tags"])
     schema = {
         "@context": "https://schema.org", "@type": "VideoObject", "name": c["name"], "description": c["desc"],
@@ -184,3 +169,82 @@ def render(i):
 def generate(pages_dir):
     for i, c in enumerate(CASES):
         (pages_dir / f"{c['slug']}.html").write_text(render(i))
+
+
+# One shoot, every screen: each delivery format shown on the device it plays on (laptop, phone Reel,
+# phone feed post, square post card, wall screen), each with its own crop and interface, all sitting on
+# one baseline. Column widths are tuned so the devices come out at about the same height.
+_SVG = {
+    "play": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>',
+    "heart": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>',
+    "chat": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12Z"/></svg>',
+    "send": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4 18-7Z"/></svg>',
+    "save": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>',
+    "like": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 10v10H4V10h3Zm0 0 4-7a2 2 0 0 1 3 2l-1 5h6a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 17.8 20H7"/></svg>',
+}
+DEV_COLS = {"laptop": 2.1, "tv": 1.75, "reel": 0.62, "feed": 0.62, "post": 0.9}
+
+
+def _handle(name):
+    return re.sub(r"[^a-z0-9]", "", name.lower().replace("’", ""))
+
+
+def devices(img, pos, items, name, wide_img=None, indent="        "):
+    """img/pos: the still and its focal point; wide_img: an uncropped 16:9 version for the big screens."""
+    wide = wide_img or img
+    handle = _handle(name)
+    domain = handle + ".com"
+    kinds, seen = [], set()
+    for r, *_ in items:
+        k = {"9:16": "reel", "4:5": "feed", "1:1": "post"}.get(r) or ("tv" if "laptop" in seen else "laptop")
+        seen.add(k)
+        kinds.append(k)
+    cols = " ".join(f"minmax(0,{DEV_COLS[k]}fr)" for k in kinds)
+    pic = lambda src, cls="", sizes="40vw": (f'<img class="{cls}" src="assets/img/{src}.webp" alt="" loading="lazy" decoding="async" '
+                                            f'sizes="(max-width: 640px) 60vw, {sizes}" style="object-position:{pos};--fo:{pos}">')
+    av = f'<i class="dev__av">{name[0]}</i>'
+    figs = []
+    for n, ((r, label, *_), k) in enumerate(zip(items, kinds)):
+        if k == "laptop":
+            body = (f'<span class="lap"><span class="lap__lid"><span class="lap__screen">'
+                    f'<span class="lap__bar"><i></i><i></i><i></i><span>{domain}</span></span>'
+                    f'<span class="lap__page">{pic(wide, sizes="44vw")}<span class="lap__nav"><b>{name}</b><i></i><i></i><i></i></span>'
+                    f'<span class="dev__play">{_SVG["play"]}</span><span class="dev__prog"><i></i></span></span>'
+                    f'</span></span><span class="lap__base"></span></span>')
+        elif k == "tv":
+            body = (f'<span class="tv"><span class="tv__screen">{pic(wide, sizes="36vw")}'
+                    f'<span class="tv__tag"><i></i>On screen · {name}</span><span class="dev__prog"><i></i></span></span>'
+                    f'<span class="tv__stand"></span></span>')
+        elif k == "reel":
+            body = (f'<span class="ph"><span class="ph__screen ph__screen--reel">{pic(img, "is-tight", "16vw")}'
+                    f'<span class="ph__island"></span><span class="reelui__top">Reels</span>'
+                    f'<span class="reelui__side"><span>{_SVG["heart"]}<small>2.4k</small></span><span>{_SVG["chat"]}<small>86</small></span><span>{_SVG["send"]}</span></span>'
+                    f'<span class="reelui__foot"><span class="reelui__who">{av}<b>@{handle}</b><em>Follow</em></span><i></i><i></i></span>'
+                    f'</span></span>')
+        elif k == "feed":
+            body = (f'<span class="ph"><span class="ph__screen ph__screen--feed"><span class="ph__island"></span>'
+                    f'<span class="feed__head">{av}<span><b>{handle}</b><small>Sponsored</small></span></span>'
+                    f'<span class="feed__img">{pic(img, "", "16vw")}</span>'
+                    f'<span class="feed__cta">Learn more<span>›</span></span>'
+                    f'<span class="feed__acts">{_SVG["heart"]}{_SVG["chat"]}{_SVG["send"]}<span class="sp"></span>{_SVG["save"]}</span>'
+                    f'<span class="feed__cap"><i></i><i></i></span>'
+                    f'</span></span>')
+        else:  # post
+            body = (f'<span class="post"><span class="post__head">{av}<span><b>{name}</b><small>Promoted</small></span></span>'
+                    f'<span class="post__txt"><i></i><i></i></span>'
+                    f'<span class="post__img">{pic(img, "", "22vw")}<span class="dev__play">{_SVG["play"]}</span></span>'
+                    f'<span class="post__acts"><span>{_SVG["like"]}Like</span><span>{_SVG["chat"]}Comment</span><span>{_SVG["send"]}Share</span></span>'
+                    f'</span>')
+        figs.append(f'{indent}  <figure class="dev dev--{k}" data-r style="--d:{n * 0.08:.2f}s"><span class="dev__body" aria-hidden="true">{body}</span>'
+                    f'<figcaption><span class="mono accent">{r}</span><span>{label}</span></figcaption></figure>')
+    nl = chr(10)
+    return f'{indent}<div class="devs" style="grid-template-columns:{cols}">' + nl + nl.join(figs) + nl + f"{indent}</div>"
+
+
+# The Services page shows the Fun Bike Center shoot across the four standard formats
+SERVICES_WHERE = [("16:9", "Website, YouTube, presentations, TV", 16, 9), ("9:16", "Reels, TikTok, Shorts, Stories", 9, 16),
+                  ("4:5", "Instagram and Facebook feed ads", 4, 5), ("1:1", "LinkedIn, email, marketplaces", 1, 1)]
+
+
+def services_devices(indent="        "):
+    return devices("film-funbike-hero", "50% 30%", SERVICES_WHERE, "Fun Bike Center", wide_img="film-funbike", indent=indent)
