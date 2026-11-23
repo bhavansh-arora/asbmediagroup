@@ -17,7 +17,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent
 SRC = ROOT / "src"
-SITE_URL = "https://www.asbmediagroup.com"
+# The live address comes from CNAME (the domain the site is served on), so canonical links, link
+# previews, the sitemap and robots.txt always point at the real site. Moving domains = edit CNAME.
+SITE_URL = "https://" + (ROOT / "CNAME").read_text().strip().rstrip("/")
+
+
+def og_image(path):
+    """Absolute URL of a page's link-preview image: its 1200x630 JPG (made by make_og.py) if there is one."""
+    jpg = Path(path).parent / "og" / (Path(path).stem + ".jpg")
+    return f"{SITE_URL}/{jpg.as_posix() if (ROOT / jpg).exists() else path}"
 
 ICONS = {
     "arrow": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
@@ -135,7 +143,7 @@ def build():
         ctx = {
             "title": meta.get("title", "ASB Media Group"),
             "desc": meta.get("desc", ""),
-            "og": meta.get("og", "assets/img/film-funbike.webp"),
+            "og": og_image(meta.get("og", "assets/img/film-funbike.webp")),
             "canonical": canonical,
             "nav": nav_html(meta.get("nav")),
             "schema": meta.get("schema", ""),
@@ -153,6 +161,7 @@ def build():
             '<script src="assets/js/main.js" defer fetchpriority="high"></script>\n'
             '  <script src="assets/js/studio.js" defer fetchpriority="high"></script>'
         ) if layout == "studio" else ""
+        ctx["site"] = SITE_URL   # last, so {{site}} inside inserted values (e.g. a page's schema) is filled too
         body = body.replace("{{devices:services}}", cases.services_devices().lstrip())
         html = partials["head"] + header + body + footer
         for k, v in ctx.items():
@@ -162,6 +171,7 @@ def build():
         if not meta.get("noindex"):
             sitemap.append(canonical)
         print("built", slug)
+    (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
     urls = "\n".join(f"  <url><loc>{u}</loc></url>" for u in sitemap)
     (ROOT / "sitemap.xml").write_text(
         f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}\n</urlset>\n'

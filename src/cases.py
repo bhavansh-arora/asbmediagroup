@@ -77,7 +77,7 @@ def render(i):
     tags = "".join(f'<span class="chip">{t}</span>' for t in c["tags"])
     schema = {
         "@context": "https://schema.org", "@type": "VideoObject", "name": c["name"], "description": c["desc"],
-        "thumbnailUrl": f"https://www.asbmediagroup.com/assets/img/{c['img']}.webp", "uploadDate": "2026-08-01",
+        "thumbnailUrl": f"{{{{site}}}}/assets/img/og/{c['img']}.jpg", "uploadDate": "2026-08-01",
         "duration": c["iso"], "embedUrl": f"https://player.vimeo.com/video/{c['vimeo']}",
         "productionCompany": {"@type": "Organization", "name": "ASB Media Group"},
     }

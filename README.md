@@ -45,6 +45,12 @@ python3 -m http.server 8080
 
 Then open http://localhost:8080.
 
+## Domain and link previews
+
+- The site's address comes from `CNAME`. `build.py` uses it for canonical links, link-preview tags, the sitemap and `robots.txt`, so when the site moves to asbmediagroup.com, change `CNAME` and rebuild.
+- Link previews use 1200×630 JPGs in `assets/img/og/`. After adding a page or changing its `"og"` image, add it to `FOCUS` in `make_og.py`, run `python3 make_og.py` (needs Pillow), then `python3 build.py`.
+- Apps cache previews. To refresh one after a change, use Facebook's Sharing Debugger or LinkedIn's Post Inspector; WhatsApp and iMessage refresh on their own after a while.
+
 ## Before launch
 
 - **Form delivery.** By default the Brief Builder opens the visitor's email app with the brief pre-filled. To receive submissions directly, add `data-endpoint="https://formspree.io/f/XXXX"` to the `<form data-brief>` in `src/pages/contact.html`.
