@@ -105,10 +105,11 @@
     });
   }
 
-  /* Inner pages: film-shutter reveals on the big images (see .wipe in studio.css). Images that arrive
-     together are staggered left to right. The home page keeps its own opening. */
-  if (!reduce && !$(".hero--frame") && window.IntersectionObserver) {
-    const media = $$(".mcard__img, .frow__img, .player, .founder__card, .masonry figure, .polaroid__img").filter((el) => !el.closest(".devs"));
+  /* Film-shutter reveals on the big images (see .wipe in studio.css). Images that arrive together are
+     staggered left to right. On the home page, which keeps its own opening, only the intro photo. */
+  if (!reduce && window.IntersectionObserver) {
+    const sel = $(".hero--frame") ? ".hello__img" : ".mcard__img, .frow__img, .player, .founder__card, .masonry figure, .polaroid__img";
+    const media = $$(sel).filter((el) => !el.closest(".devs"));
     media.forEach((el) => el.classList.add("wipe"));
     const wipeIO = new IntersectionObserver((es) => {
       const shown = es.filter((en) => en.isIntersecting).map((en) => en.target)

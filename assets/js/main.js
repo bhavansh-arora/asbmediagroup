@@ -73,8 +73,9 @@
       h.classList.add("words");
       if (!h.closest("[data-r]")) h.setAttribute("data-r", "");
     });
-    // Statement paragraphs light up word by word as they scroll through (CSS scroll timeline)
-    $$(".statement").forEach((p) => {
+    // Statement paragraphs (and the home intro) reveal word by word once in view: .sreveal in studio.css
+    $$(".statement, .hello__intro").forEach((p) => {
+      p.classList.add("sreveal");
       if (!p.hasAttribute("aria-label")) p.setAttribute("aria-label", p.textContent.replace(/\s+/g, " ").replace(/ ([.,;:!?])/g, "$1").trim());
       splitWords(p, (word, i) => {
         const s = document.createElement("span"); s.className = "sw"; s.setAttribute("aria-hidden", "true");
@@ -88,13 +89,15 @@
   const revealIO = new IntersectionObserver((entries) => {
     entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); revealIO.unobserve(en.target); } });
   }, { rootMargin: "0px 0px 12% 0px" });
-  $$("[data-r]").forEach((el) => { if (!el.classList.contains("statement")) revealIO.observe(el); });
+  $$("[data-r]").forEach((el) => { if (!el.classList.contains("sreveal")) revealIO.observe(el); });
   const statementIO = new IntersectionObserver((entries) => {
     entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); statementIO.unobserve(en.target); } });
   }, { rootMargin: "0px 0px -18% 0px" });
   // One-shot accents (rules, statement highlight, footer wordmark): get .in once, no hiding
-  $$(".label, .steps, .foot__mark").forEach((el) => revealIO.observe(el));
-  $$(".statement").forEach((el) => statementIO.observe(el));
+  $$(".label, .steps, .foot__mark, .stats--plain").forEach((el) => revealIO.observe(el));
+  $$(".sreveal").forEach((el) => statementIO.observe(el));
+  // with reduced motion nothing is split: statements simply show
+  $$(".statement:not(.sreveal)").forEach((el) => revealIO.observe(el));
 
   /* Pause CSS tickers while off-screen */
   const tickIO = new IntersectionObserver((entries) => entries.forEach((en) => en.target.classList.toggle("is-paused", !en.isIntersecting)));
