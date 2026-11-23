@@ -119,8 +119,10 @@ ul, ol { list-style: none; padding: 0; }
 .nav__pill b { color: var(--cream); font-weight: 600; }
 .nav__menu { display: none; width: 44px; height: 44px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--line2); place-items: center; }
 .nav__menu span, .nav__menu span::before { display: block; width: 16px; height: 1.5px; background: currentColor; transition: transform .4s var(--ease); }
+/* the two lines sit 2.5px either side of the centre; open, they cross exactly at the centre */
+.nav__menu span { transform: translateY(-2.5px); }
 .nav__menu span::before { content: ""; transform: translateY(5px); }
-.menu-open .nav__menu span { transform: translateY(-2.5px) rotate(45deg); }
+.menu-open .nav__menu span { transform: rotate(45deg); }
 .menu-open .nav__menu span::before { transform: rotate(-90deg); }
 .sheet { position: fixed; inset: 0; z-index: 150; background: var(--ink-2); padding: 100px var(--g) 28px; display: flex; flex-direction: column; gap: 22px; clip-path: inset(0 0 100% 0); visibility: hidden; transition: clip-path .7s var(--io), visibility 0s .7s; overflow-y: auto; }
 .menu-open .sheet { clip-path: inset(0); visibility: visible; transition: clip-path .7s var(--io); }
