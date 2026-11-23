@@ -377,7 +377,8 @@
     });
   }
 
-  /* Pointer effects (mouse/trackpad only): cursor spotlight + 3D tilt on cards, magnetic buttons */
+  /* Pointer effects (mouse/trackpad only): 3D tilt on package cards. Buttons stay where they are on
+     hover (colour change only). */
   if (!reduce && matchMedia("(hover: hover) and (pointer: fine)").matches) {
     const track = (el, onMove, onLeave) => {
       let raf = 0, ev = null;
@@ -390,13 +391,6 @@
         const x = e.clientX - r.left, y = e.clientY - r.top;
         card.style.transform = `perspective(900px) rotateX(${((r.height / 2 - y) / r.height) * 6}deg) rotateY(${((x - r.width / 2) / r.width) * 6}deg) translateY(-4px)`;
       }, () => { card.style.transform = ""; });
-    });
-    $$(".btn, .mcard .circle").forEach((b) => {
-      if (b.closest(".pkg")) return; // full-width card buttons would slide out of the card
-      const k = .22;
-      track(b, (e, r) => {
-        b.style.translate = `${(e.clientX - r.left - r.width / 2) * k}px ${(e.clientY - r.top - r.height / 2) * k}px`;
-      }, () => { b.style.translate = ""; });
     });
   }
 })();
