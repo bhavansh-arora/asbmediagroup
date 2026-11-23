@@ -54,7 +54,9 @@
           const o = document.createElement("span"); o.className = "wd"; o.setAttribute("aria-hidden", "true");
           const n = document.createElement("span"); n.style.setProperty("--i", i++);
           ch.replaceWith(o); n.appendChild(ch); o.appendChild(n);
-        } else if (ch.nodeType === 1 && !ch.classList.contains("pill") && ch.tagName !== "BR") walk(ch);
+        } else if (ch.nodeType === 1 && ch.classList.contains("pill")) {
+          ch.style.setProperty("--i", i);
+        } else if (ch.nodeType === 1 && ch.tagName !== "BR") walk(ch);
       });
     };
     walk(el);
@@ -72,16 +74,27 @@
       if (!h.closest("[data-r]")) h.setAttribute("data-r", "");
     });
     // Statement paragraphs light up word by word as they scroll through (CSS scroll timeline)
-    $$(".statement").forEach((p) => splitWords(p, (word, i) => { const s = document.createElement("span"); s.className = "sw"; s.textContent = word; s.style.setProperty("--i", i); return s; }));
+    $$(".statement").forEach((p) => {
+      if (!p.hasAttribute("aria-label")) p.setAttribute("aria-label", p.textContent.replace(/\s+/g, " ").replace(/ ([.,;:!?])/g, "$1").trim());
+      splitWords(p, (word, i) => {
+        const s = document.createElement("span"); s.className = "sw"; s.setAttribute("aria-hidden", "true");
+        const n = document.createElement("span"); n.textContent = word; s.style.setProperty("--i", i);
+        s.appendChild(n); return s;
+      });
+    });
   }
 
   /* Reveal on enter (once) */
   const revealIO = new IntersectionObserver((entries) => {
     entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); revealIO.unobserve(en.target); } });
   }, { rootMargin: "0px 0px 12% 0px" });
-  $$("[data-r]").forEach((el) => revealIO.observe(el));
+  $$("[data-r]").forEach((el) => { if (!el.classList.contains("statement")) revealIO.observe(el); });
+  const statementIO = new IntersectionObserver((entries) => {
+    entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); statementIO.unobserve(en.target); } });
+  }, { rootMargin: "0px 0px -18% 0px" });
   // One-shot accents (rules, statement highlight, footer wordmark): get .in once, no hiding
-  $$(".label, .steps, .foot__mark, .statement").forEach((el) => revealIO.observe(el));
+  $$(".label, .steps, .foot__mark").forEach((el) => revealIO.observe(el));
+  $$(".statement").forEach((el) => statementIO.observe(el));
 
   /* Pause CSS tickers while off-screen */
   const tickIO = new IntersectionObserver((entries) => entries.forEach((en) => en.target.classList.toggle("is-paused", !en.isIntersecting)));
