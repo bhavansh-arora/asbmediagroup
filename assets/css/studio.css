@@ -73,7 +73,9 @@ ul, ol { list-style: none; padding: 0; }
 .shead__aside { justify-self: end; display: grid; gap: 16px; justify-items: end; text-align: right; max-width: 40ch; }
 
 /* ---------- Buttons ---------- */
-.btn { --bb: var(--ember); --bf: #fff; --bi: #fff; --bif: var(--ember); display: inline-flex; align-items: center; gap: 12px; height: 50px; padding: 0 5px 0 22px; border-radius: 999px; background: var(--bb); color: var(--bf); font-size: .92rem; font-weight: 600; letter-spacing: .005em; white-space: nowrap; transition: background .3s, color .3s; }
+/* min-height = height: a button never gets squeezed in a column layout (the phone menu squashed it to
+   the arrow circle's height, so the circle touched the edges and looked off-centre) */
+.btn { --bb: var(--ember); --bf: #fff; --bi: #fff; --bif: var(--ember); display: inline-flex; align-items: center; gap: 12px; height: 50px; min-height: 50px; padding: 0 5px 0 22px; border-radius: 999px; background: var(--bb); color: var(--bf); font-size: .92rem; font-weight: 600; letter-spacing: .005em; white-space: nowrap; transition: background .3s, color .3s; }
 .btn__i { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--bi); color: var(--bif); transition: transform .5s var(--ease); flex: none; }
 .btn__i svg { width: 15px; height: 15px; }
 .btn:hover { --bb: var(--ember-deep); }
@@ -81,7 +83,7 @@ ul, ol { list-style: none; padding: 0; }
 .btn--ghost:hover { --bb: rgba(244, 236, 223, .08); }
 .light .btn--ghost { --bi: var(--ink); --bif: var(--cream); }
 .btn--cream { --bb: var(--cream); --bf: var(--ink); --bi: var(--ink); --bif: var(--cream); }
-.btn--sm { height: 44px; font-size: .86rem; }
+.btn--sm { height: 44px; min-height: 44px; font-size: .86rem; }
 .btn--sm .btn__i { width: 34px; height: 34px; }
 .btn--plain { padding: 0 22px; }
 .btn--block { width: 100%; justify-content: space-between; }
@@ -445,7 +447,7 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 .picker select { flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; padding: 0 14px; color: var(--cream); font-size: .92rem; appearance: none; -webkit-appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--fg2) 50%), linear-gradient(135deg, var(--fg2) 50%, transparent 50%); background-position: calc(100% - 16px) 50%, calc(100% - 11px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
 .picker select:focus { outline: none; }
 .picker option { color: #000; }
-.picker .btn { height: 44px; }
+.picker .btn { height: 44px; min-height: 44px; }
 .picker .btn .btn__i { width: 34px; height: 34px; }
 
 /* ---------- Ticker ---------- */
