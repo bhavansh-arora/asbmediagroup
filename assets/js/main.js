@@ -83,6 +83,17 @@
         s.appendChild(n); return s;
       });
     });
+    // Body copy (intros, side notes, quotes): words fade up in quick succession when their block
+    // reveals (.lreveal in studio.css). Plain spans, so screen readers read the text as normal.
+    $$(".hero__lede, .lead, .head__aside, .hello__text .measure, .phead__aside > p, .split__aside > p, .quote").forEach((p) => {
+      if (p.closest(".sreveal, .finder__result")) return;
+      p.classList.add("lreveal");
+      splitWords(p, (word, i) => {
+        const s = document.createElement("span"); s.className = "lw"; s.textContent = word;
+        s.style.setProperty("--i", Math.min(i, 60)); return s;
+      });
+      if (!p.closest("[data-r], [data-hr]")) p.setAttribute("data-r", "");
+    });
   }
 
   /* Reveal on enter (once) */
