@@ -24,6 +24,14 @@
   const wall = $("[data-clips]");
   let wallReady = Promise.resolve();
   if (wall) {
+    // frame width in px from the real row height (16:9), so no engine has to derive it from aspect-ratio
+    const sizeFrames = () => {
+      const row = $$(".clips__row", wall).find((r) => r.offsetHeight > 0);
+      if (row) wall.style.setProperty("--tw", `${(row.offsetHeight * 16 / 9).toFixed(1)}px`);
+    };
+    sizeFrames();
+    if (window.ResizeObserver) new ResizeObserver(sizeFrames).observe(wall);
+    else addEventListener("resize", sizeFrames, { passive: true });
     const frames = $$(".clips__row", wall).filter((r) => getComputedStyle(r).display !== "none").flatMap((r) => $$("img", r));
     const unique = [...new Map(frames.map((im) => [im.getAttribute("src"), im])).values()];
     wallReady = Promise.race([Promise.all(unique.map(loaded)), wait(4000)]).then(() => wall.classList.add("is-ready"));

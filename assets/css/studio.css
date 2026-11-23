@@ -173,21 +173,27 @@ ul, ol { list-style: none; padding: 0; }
    at different speeds; each frame carries a camera-roll name so it reads as footage.
    One transform animation per row (compositor only); rows pause while the hero is off-screen. The wall
    fades in once the frames in view have loaded (studio.js), with a 6s safety net. */
-.clips { position: absolute; z-index: -2; inset: -16% -12%; display: grid; grid-template-rows: repeat(4, minmax(0, 1fr)); gap: clamp(8px, .9vw, 14px); transform: rotate(-5deg); opacity: 0; transition: opacity 1.2s ease; }
+/* Built to lay out the same in every engine (iOS Safari dropped the reverse rows and mis-sized the rest
+   with the earlier grid + aspect-ratio + reversed-shorthand setup): a plain column of rows with explicit
+   heights, one written-out animation per row (the right-to-left rows use their own keyframes rather than
+   animation-direction: reverse with a var() in the shorthand), and frame widths set in px by studio.js
+   from the measured row height (aspect-ratio only as a fallback). */
+.clips { --cg: clamp(8px, .9vw, 14px); --rows: 4; position: absolute; z-index: -2; inset: -16% -12%; display: flex; flex-direction: column; gap: var(--cg); transform: rotate(-5deg); opacity: 0; transition: opacity 1.2s ease; }
 .clips.is-ready, html:not(.js) .clips { opacity: 1; }
 .clips:not(.is-ready) { animation: clipsBail 1.2s ease 6s forwards; }
 @keyframes clipsBail { to { opacity: 1; } }
-.clips__row { display: flex; min-height: 0; }
+.clips__row { display: flex; flex: none; height: calc((100% - (var(--rows) - 1) * var(--cg)) / var(--rows)); min-height: 0; }
 .clips__row:nth-child(5) { display: none; }
 /* padding-right = gap, so the second copy of the set starts exactly at -50% and the loop has no seam */
-.clips__track { display: flex; gap: clamp(8px, .9vw, 14px); padding-right: clamp(8px, .9vw, 14px); height: 100%; width: max-content; animation: clipsRun var(--run, 60s) linear infinite; }
-.clips__row:nth-child(1) .clips__track { --run: 58s; }
-.clips__row:nth-child(2) .clips__track { --run: 50s; animation-direction: reverse; }
-.clips__row:nth-child(3) .clips__track { --run: 66s; }
-.clips__row:nth-child(4) .clips__track { --run: 54s; animation-direction: reverse; }
-.clips__row:nth-child(5) .clips__track { --run: 62s; }
-@keyframes clipsRun { to { transform: translateX(-50%); } }
-.clip { position: relative; flex: none; height: 100%; aspect-ratio: 16 / 9; margin: 0; border-radius: clamp(8px, .8vw, 12px); overflow: hidden; background: var(--ink-3); }
+.clips__track { display: flex; gap: var(--cg); padding-right: var(--cg); height: 100%; width: max-content; will-change: transform; }
+.clips__row:nth-child(1) .clips__track { animation: clipsLeft 58s linear infinite; }
+.clips__row:nth-child(2) .clips__track { animation: clipsRight 50s linear infinite; }
+.clips__row:nth-child(3) .clips__track { animation: clipsLeft 66s linear infinite; }
+.clips__row:nth-child(4) .clips__track { animation: clipsRight 54s linear infinite; }
+.clips__row:nth-child(5) .clips__track { animation: clipsLeft 62s linear infinite; }
+@keyframes clipsLeft { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+@keyframes clipsRight { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(0, 0, 0); } }
+.clip { position: relative; flex: none; height: 100%; width: var(--tw, auto); aspect-ratio: 16 / 9; margin: 0; border-radius: clamp(8px, .8vw, 12px); overflow: hidden; background: var(--ink-3); }
 .clip img { width: 100%; height: 100%; object-fit: cover; }
 /* Phones and portrait tablets: each moving row is one GPU layer as wide as its track. With five frames
    (twice over) a row is ~3,700px wide, ~11,000 device pixels on an iPhone; five of them can exceed what
@@ -205,7 +211,7 @@ ul, ol { list-style: none; padding: 0; }
   radial-gradient(75% 65% at 22% 82%, rgba(11, 9, 7, .72), transparent 70%); }
 /* tall screens (phones, portrait tablets): five slimmer rows, steeper tilt */
 @media (max-aspect-ratio: 4 / 5) {
-  .clips { grid-template-rows: repeat(5, minmax(0, 1fr)); transform: rotate(-8deg); inset: -14% -30%; }
+  .clips { --rows: 5; transform: rotate(-8deg); inset: -14% -30%; }
   .clips__row:nth-child(5) { display: flex; }
 }
 
