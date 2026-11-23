@@ -175,7 +175,7 @@ def generate(pages_dir):
 # phone feed post, square post card, wall screen), each with its own crop and interface, all sitting on
 # one baseline. Column widths are tuned so the devices come out at about the same height.
 _SVG = {
-    "play": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>',
+    "play": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.83 4.5v15l12.5-7.5z"/></svg>',
     "heart": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>',
     "chat": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12Z"/></svg>',
     "send": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4 18-7Z"/></svg>',

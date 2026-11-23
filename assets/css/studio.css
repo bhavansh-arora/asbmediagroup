@@ -669,7 +669,7 @@ html.js:not(.is-in) .phead [data-r] { opacity: 0 !important; transform: translat
 .mcard .play:hover, .mcard:hover .play { transform: none; }
 .mcard__actions { display: flex; gap: 8px; }
 .play { background: var(--accent-light); color: #fff; box-shadow: none; }
-.play svg { margin-left: 2px; }
+/* no nudge: the play icon is drawn centred by its centroid (build.py) */
 .bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); }
 .tile { border-radius: var(--r-lg); background: var(--card); box-shadow: inset 0 0 0 1px var(--line); padding: clamp(20px, 2vw, 28px); display: flex; flex-direction: column; gap: 14px; min-height: clamp(220px, 19vw, 280px); position: relative; overflow: hidden; }
 .tile__top { display: flex; justify-content: space-between; align-items: center; gap: 12px; color: var(--faint); }
@@ -730,7 +730,8 @@ html.js:not(.is-in) .phead [data-r] { opacity: 0 !important; transform: translat
 .dev figcaption span:last-child { font-size: .92rem; line-height: 1.35; color: var(--fg2); }
 .dev__av { flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--ember); color: #fff; font-style: normal; font-family: var(--display); }
 .dev__play { position: absolute; z-index: 2; left: 50%; top: 50%; translate: -50% -50%; display: grid; place-items: center; border-radius: 50%; background: rgba(244, 236, 223, .92); color: var(--ink); }
-.dev__play svg { width: 38%; height: 38%; margin-left: 8%; }
+/* the path is drawn with its centroid on the centre of its box, so no nudge is needed */
+.dev__play svg { width: 38%; height: 38%; }
 .dev__prog { position: absolute; z-index: 2; height: 3px; border-radius: 3px; background: rgba(244, 236, 223, .3); overflow: hidden; }
 .dev__prog i { position: absolute; inset: 0; background: var(--ember); transform-origin: 0 50%; transform: scaleX(.38); }
 .dev.in .dev__prog i { animation: devProg 9s linear .6s infinite; }
