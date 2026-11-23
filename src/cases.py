@@ -240,7 +240,8 @@ def devices(img, pos, items, name, wide_img=None, indent="        "):
         figs.append(f'{indent}  <figure class="dev dev--{k}" data-r style="--d:{n * 0.08:.2f}s"><span class="dev__body" aria-hidden="true">{body}</span>'
                     f'<figcaption><span class="mono accent">{r}</span><span>{label}</span></figcaption></figure>')
     nl = chr(10)
-    return f'{indent}<div class="devs" style="grid-template-columns:{cols}">' + nl + nl.join(figs) + nl + f"{indent}</div>"
+    small = sum(k not in ("laptop", "tv") for k in kinds)   # phone-sized devices: sized per count on phones
+    return f'{indent}<div class="devs devs--s{small}" style="grid-template-columns:{cols}">' + nl + nl.join(figs) + nl + f"{indent}</div>"
 
 
 # The Services page shows the Fun Bike Center shoot across the four standard formats

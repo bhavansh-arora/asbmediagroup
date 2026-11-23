@@ -34,7 +34,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://player.vimeo.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300..700;1,300..700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0;1,9..144,300..700,100&family=JetBrains+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="assets/css/studio.css?v=07ac02b7">
+  <link rel="stylesheet" href="assets/css/studio.css?v=31a52bcc">
   <script src="assets/js/main.js?v=6862808c" defer fetchpriority="high"></script>
   <script src="assets/js/studio.js?v=667c8506" defer fetchpriority="high"></script>
   <script type="application/ld+json">
@@ -81,7 +81,9 @@
     <div class="curtain__p curtain__p--t"></div><div class="curtain__p curtain__p--b"></div>
     <div class="curtain__in"><span class="mono curtain__eyebrow">ASB Media Group</span><span class="curtain__name" data-curtain-name>ASB Media</span><i class="curtain__line"></i></div>
   </div>
-  <script>try{var n=sessionStorage.getItem("asb-curtain");if(n)document.querySelector("[data-curtain-name]").textContent=n}catch(e){}</script>
+  <!-- The destination name waits for its typeface (html.cfw, max 1.5s) so it never shows in a fallback
+       font and then jumps when the real one arrives -->
+  <script>try{var n=sessionStorage.getItem("asb-curtain");if(n)document.querySelector("[data-curtain-name]").textContent=n;var d=document.documentElement,F=document.fonts;if(F&&F.check&&d.classList.contains("curtain-in")&&!F.check("400 1em Fraunces")){d.classList.add("cfw");var done=function(){d.classList.remove("cfw")};F.load("400 1em Fraunces").then(done,done);setTimeout(done,1500)}}catch(e){}</script>
   <div class="cur" aria-hidden="true"><span class="cur__b">Play</span></div>
 
   <header class="nav" aria-label="Site">

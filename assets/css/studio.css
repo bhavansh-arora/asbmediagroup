@@ -582,7 +582,9 @@ html:not(.is-in) .hero .words .wd > span { transform: translateY(105%) !importan
 .curtain.is-closed .curtain__p, .curtain-in .curtain .curtain__p { transform: none; }
 .curtain.is-closed .curtain__in, .curtain-in .curtain .curtain__in { opacity: 1; transition-delay: .35s; }
 .curtain.is-closed .curtain__line, .curtain-in .curtain .curtain__line { transform: none; }
-.curtain-in .curtain .curtain__in, .curtain-in .curtain .curtain__line { transition: none; }
+.curtain-in .curtain .curtain__line { transition: none; }
+.curtain-in .curtain .curtain__in { transition: opacity .25s ease; }
+.cfw .curtain .curtain__in { opacity: 0 !important; }
 .curtain.is-opening .curtain__p { transform: scaleY(0); transition-duration: .8s; }
 .curtain.is-opening .curtain__in { opacity: 0; transition: opacity .25s ease; }
 
@@ -814,13 +816,15 @@ html.js:not(.is-in) .phead [data-r] { opacity: 0 !important; transform: translat
 .li__acts span { display: flex; align-items: center; gap: 1.6cqw; }
 .li__acts svg { width: 6.4cqw; height: 6.4cqw; }
 
-/* phones: the big screen across the top, the others in a row of three beneath */
+/* phones: the big screens first, each across the full width, then the phone-sized devices sharing the
+   rows beneath evenly (three in a row get a third each, two get half each), so no device is ever left
+   alone beside an empty gap, whatever order a case study lists its formats in */
 @media (max-width: 640px) {
-  .devs { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; grid-template-rows: none; row-gap: 12px; column-gap: 12px; }
-  .dev { margin-bottom: 16px; }
-  .dev { grid-column: span 2; }
-  .dev--laptop, .dev--tv { grid-column: 1 / -1; }
-  .dev--laptop ~ .dev--tv { grid-column: span 6; }
+  .devs { display: flex !important; flex-wrap: wrap; gap: 28px 12px; }
+  .devs { justify-content: center; }
+  .dev { grid-row: auto; display: grid; grid-template-rows: auto auto; row-gap: 14px; flex: 0 0 calc((100% - 12px) / 2); min-width: 0; }
+  .devs--s3 .dev:not(.dev--laptop):not(.dev--tv) { flex-basis: calc((100% - 24px) / 3); }
+  .dev--laptop, .dev--tv { order: -1; flex-basis: 100%; max-width: none; }
   .dev figcaption span:last-child { font-size: .8rem; }
 }
 @media (prefers-reduced-motion: reduce) { .dev.in .dev__prog i { animation: none; } }
